@@ -1,0 +1,9 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "layouts/app.html" %}
+
+{% block content %}
+    
+    {{ wtf.quick_form(form, method="post", action=url_for("registration")) }}
+    
+    <a href="{{ url_for('login') }}">登入</a>
+{% endblock %}
