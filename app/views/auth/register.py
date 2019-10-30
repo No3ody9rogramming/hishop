@@ -15,10 +15,9 @@ class RegisterView(MethodView):
         form = RegisterForm()
         
         if form.validate_on_submit():
-            print(bcrypt.generate_password_hash(form.password.data))
             user = User(name=form.name.data,
                         account=form.account.data,
-                        password=bcrypt.generate_password_hash(form.password.data),
+                        password=bcrypt.generate_password_hash(form.password.data).decode(),
                         phone=form.phone.data)
             user.save()
             login_user(user)

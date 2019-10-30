@@ -1,12 +1,12 @@
 {% import "bootstrap/wtf.html" as wtf %}
+
 {% extends "layouts/app.html" %}
 
-{% block content %}
-    
+{% block page %}
     {{ wtf.quick_form(form, method="post", action=url_for("login")) }}
     
     
     <br><br>
     
     <a href="{{ url_for('registration') }}">註冊</a>
-{% endblock %}
+{% endblock page %}

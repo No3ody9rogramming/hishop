@@ -1,0 +1,14 @@
+
+<h3>{{ current_user.name }}</h3>
+<hr>
+
+我的帳戶
+<ol>
+	<li><a href="{{ url_for('profile') }}">個人資料</a></li>
+	<li><a href="{{ url_for('password') }}">變更密碼</a></li>
+	<li><a href="{{ url_for('payment') }}">我的hi幣</a></li>
+</ol>
+我的賣場
+<ol>
+	<li><a href="{{ url_for('publish') }}">上架商品</a></li>
+</ol>

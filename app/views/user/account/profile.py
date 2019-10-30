@@ -13,7 +13,6 @@ class ProfileView(MethodView):
     
     def post(self):
         form = ProfileForm()
-        print('hello')
         if form.validate_on_submit():
             current_user.name = form.name.data
             current_user.save()

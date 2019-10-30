@@ -8,7 +8,8 @@
 		</div>
 
 	    <div class="col-md-10">
-		    {{ wtf.quick_form(form, method="post", action=url_for("profile")) }}
+	    	<p>目前有 {{ hicoin }} hicoin</p>
+		    {{ wtf.quick_form(form, method="post", action=url_for("payment")) }}
 		</div>
 	</div>
     <a href="{{ url_for('logout') }}">登出</a>

@@ -16,7 +16,7 @@ class RegisterForm(FlaskForm):
     name = StringField("名稱", validators=[InputRequired(), Length(max=50)])
     account = StringField('帳號', validators=[InputRequired(), Length(min=4, max=20), validate_account])
     password = PasswordField("密碼", validators=[InputRequired(), Length(min=6,max=20)])
-    confirm  = PasswordField("再輸入一次密碼", validators=[
+    confirm  = PasswordField("確認密碼", validators=[
         InputRequired(),
         Length(min=6,max=20),
         EqualTo('password', "Password must match")])

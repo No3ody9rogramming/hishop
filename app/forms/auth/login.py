@@ -8,7 +8,6 @@ from app import bcrypt
     
 def validate_account(form, account):
     user = User.objects(account=account.data).first()
-    print(user)
     if user == None:
         raise ValidationError('此帳號尚未註冊')
 
