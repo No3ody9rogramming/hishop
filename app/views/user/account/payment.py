@@ -1,12 +1,15 @@
 from flask import redirect, render_template, url_for, flash, request
 from flask.views import MethodView
 from flask_login import current_user
+from flask_wtf import FlaskForm
+
+from wtforms import IntegerField, SubmitField
+from wtforms.validators import InputRequired, NumberRange
 
 import uuid, json, requests, shelve
 
 from app import app
 from app.models.payment import Payment
-from app.forms.user.account.payment import PaymentForm
 
 class PaymentView(MethodView):
     def get(self):
@@ -54,3 +57,8 @@ class PaymentConfirmView(MethodView):
             current_user.hicoin += payment.amount
             current_user.save()
         return redirect(url_for('payment'))
+
+
+class PaymentForm(FlaskForm):
+    payment = IntegerField("儲值金額",  validators=[InputRequired(), NumberRange(min=1, max=100000)])
+    submit = SubmitField('確認')

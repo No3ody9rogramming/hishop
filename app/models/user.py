@@ -7,8 +7,9 @@ class User(UserMixin, db.Document):
     name = db.StringField(required=True, max_length=50)
     account = db.StringField(required=True, unique=True, min_length=4, max_length=20)
     password = db.StringField(required=True)
+    born = db.DateTimeField(required=True)
     phone = db.StringField(required=True, max_length=15)
-    hicoin = db.LongField(default=0)
+    hicoin = db.LongField(required=True, default=0)
     create_time = db.DateTimeField(default=datetime.datetime.utcnow())
     
 @login_manager.user_loader

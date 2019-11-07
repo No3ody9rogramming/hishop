@@ -1,9 +1,12 @@
 from flask import redirect, render_template, url_for, flash
 from flask.views import MethodView
 from flask_login import current_user
+from flask_wtf import FlaskForm
+
+from wtforms import SubmitField, PasswordField
+from wtforms.validators import InputRequired, Length, EqualTo, ValidationError
 
 from app import bcrypt
-from app.forms.user.account.password import PasswordForm
 
 class PasswordView(MethodView):
     def get(self):
@@ -18,3 +21,18 @@ class PasswordView(MethodView):
             current_user.save()
             flash('修改成功')
         return redirect(url_for('password'))
+
+
+
+def validate_old_password(form, oldPassword):
+    if bcrypt.check_password_hash(current_user.password, oldPassword.data) == False:
+        raise ValidationError('密碼錯誤')
+
+class PasswordForm(FlaskForm):
+    old_password = PasswordField("當前密碼", validators=[InputRequired(), Length(min=6,max=20), validate_old_password])
+    password = PasswordField("新密碼", validators=[InputRequired(), Length(min=6,max=20)])
+    confirm  = PasswordField("再輸入一次密碼", validators=[
+        InputRequired(),
+        Length(min=6,max=20),
+        EqualTo('password', "Password must match")])
+    submit = SubmitField('確認')
