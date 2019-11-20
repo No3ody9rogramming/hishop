@@ -4,13 +4,15 @@ import datetime
 from app import db, login_manager
 
 class User(UserMixin, db.Document):
-    name = db.StringField(required=True, max_length=50)
     account = db.StringField(required=True, unique=True, min_length=4, max_length=20)
     password = db.StringField(required=True)
-    born = db.DateTimeField(required=True)
+    name = db.StringField(required=True, max_length=50)
+    icon = db.StringField(required=True, default="default.png")
+    email = db.StringField(required=True, unique=True)
     phone = db.StringField(required=True, max_length=15)
+    birth = db.DateTimeField(required=True)
     hicoin = db.LongField(required=True, default=0)
-    create_time = db.DateTimeField(default=datetime.datetime.utcnow())
+    created_at = db.DateTimeField(default=datetime.datetime.utcnow())
     
 @login_manager.user_loader
 def load_user(user_id):
