@@ -19,11 +19,13 @@ class RegisterView(MethodView):
         form = RegisterForm()
         
         if form.validate_on_submit():
-            user = User(name=form.name.data,
-                        account=form.account.data,
+            user = User(account=form.account.data,
                         password=bcrypt.generate_password_hash(form.password.data).decode(),
-                        born = form.born.data,
-                        phone=form.phone.data)
+                        name=form.name.data,
+                        email=form.email.data,
+                        phone=form.phone.data,
+                        birth=form.birth.data)
+                        
             user.save()
             login_user(user)
             return redirect(url_for('profile'))
@@ -36,15 +38,22 @@ def validate_account(form, account):
     
     if user:
         raise ValidationError('此帳號已經有人使用')
+
+def validate_email(form, email):
+    user = User.objects(email=email.data).first()
+
+    if user:
+        raise ValidationError('此信箱已經有人使用')
         
 class RegisterForm(FlaskForm):
-    name = StringField("名稱", validators=[InputRequired(), Length(max=50)])
     account = StringField('帳號', validators=[InputRequired(), Length(min=4, max=20), validate_account])
     password = PasswordField("密碼", validators=[InputRequired(), Length(min=6,max=20)])
     confirm  = PasswordField("確認密碼", validators=[
         InputRequired(),
         Length(min=6,max=20),
         EqualTo('password', "Password must match")])
-    born = DateField('出生日期', validators=[InputRequired()])
+    name = StringField("姓名", validators=[InputRequired(), Length(min=2, max=20)])
+    email = EmailField("海大信箱", validators=[InputRequired(), validate_email])
     phone = StringField("電話號碼", validators=[InputRequired(), Length(max=15)])
+    birth = DateField('出生日期', validators=[InputRequired()])
     submit = SubmitField('註冊')

@@ -1,3 +1,4 @@
+from app.models.product import Product
 from app import db
 
 class Catogory(db.Document):
