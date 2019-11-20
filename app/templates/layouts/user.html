@@ -5,11 +5,26 @@
 我的帳戶
 <ol>
 	<li><a href="{{ url_for('profile') }}">個人資料</a></li>
-	<li><a href="{{ url_for('password') }}">變更密碼</a></li>
-	<li><a href="{{ url_for('payment') }}">我的hi幣</a></li>
+	<li><a href="{{ url_for('password') }}">密碼設定</a></li>
+</ol>
+追蹤資訊
+<ol>
+	<li>購買清單</li>
+	<li>瀏覽紀錄</li>
+	<li>點讚商品</li>
 </ol>
 我的賣場
 <ol>
 	<li><a href="{{ url_for('publish') }}">上架商品</a></li>
-	<li><a href="">未完成上架</a></li>
+	<li>商品資訊</li>
+</ol>
+我的Hi幣
+<ol>
+	<li><a href="{{ url_for('payment') }}">儲值Hi幣</a></li>
+	<li>交易紀錄</li>
+</ol>
+問題回報
+<ol>
+	<li><a href="{{ url_for('report') }}">問題回報</a></li>
+	<li>所有問題</li>
 </ol>

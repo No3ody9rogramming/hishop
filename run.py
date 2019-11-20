@@ -11,6 +11,9 @@ from app.views.user.account.payment import PaymentView, PaymentConfirmView
 
 from app.views.user.selling.publish import PublishView
 
+from app.views.user.question.report import ReportView
+
+
 app.add_url_rule(rule='/registration', endpoint='registration', view_func=RegisterView.as_view('register_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/login', endpoint='login', view_func=LoginView.as_view('login_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/logout', endpoint='logout', view_func=login_required(LogoutView.as_view('logout_view')), methods=['GET', 'POST'])
@@ -22,6 +25,8 @@ app.add_url_rule(rule='/user/account/payment', endpoint='payment', view_func=log
 app.add_url_rule(rule='/user/account/payment/confirm', endpoint='payment_confirm', view_func=login_required(PaymentConfirmView.as_view('payment_confirm_view')), methods=['GET'])
 
 app.add_url_rule(rule='/user/selling/publish', endpoint='publish', view_func=login_required(PublishView.as_view('publish_view')), methods=['GET', 'POST'])
+
+app.add_url_rule(rule='/user/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
 
 if __name__ == '__main__':
     app.run()

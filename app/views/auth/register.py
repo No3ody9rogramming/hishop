@@ -54,6 +54,6 @@ class RegisterForm(FlaskForm):
         EqualTo('password', "Password must match")])
     name = StringField("姓名", validators=[InputRequired(), Length(min=2, max=20)])
     email = EmailField("海大信箱", validators=[InputRequired(), validate_email])
-    phone = StringField("電話號碼", validators=[InputRequired(), Length(max=15)])
-    birth = DateField('出生日期', validators=[InputRequired()])
+    phone = StringField("電話", validators=[InputRequired(), Length(max=15)])
+    birth = DateField('生日', validators=[InputRequired()])
     submit = SubmitField('註冊')

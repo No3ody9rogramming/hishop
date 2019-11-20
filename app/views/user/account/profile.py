@@ -28,5 +28,5 @@ class ProfileView(MethodView):
 class ProfileForm(FlaskForm):
     name = StringField("姓名", validators=[InputRequired(), Length(min=2, max=20)])
     phone = StringField("電話號碼", validators=[InputRequired(), Length(max=15)])
-    birth = DateField("出生日期", validators=[InputRequired()])
+    birth = DateField("生日", validators=[InputRequired()])
     submit = SubmitField('修改')

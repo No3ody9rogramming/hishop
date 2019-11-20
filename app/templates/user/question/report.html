@@ -1,0 +1,15 @@
+{% extends "layouts/app.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page %}
+	<div class="row">
+		<div class="col-md-2">
+			{% include "layouts/user.html" %}
+		</div>
+
+	    <div class="col-md-10">
+		    {{ wtf.quick_form(form, method="post", action=url_for("report")) }}
+		</div>
+	</div>
+    <a href="{{ url_for('logout') }}">登出</a>
+{% endblock page %}

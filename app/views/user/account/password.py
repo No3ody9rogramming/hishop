@@ -29,9 +29,9 @@ def validate_old_password(form, oldPassword):
         raise ValidationError('密碼錯誤')
 
 class PasswordForm(FlaskForm):
-    old_password = PasswordField("當前密碼", validators=[InputRequired(), Length(min=6,max=20), validate_old_password])
+    old_password = PasswordField("舊密碼", validators=[InputRequired(), Length(min=6,max=20), validate_old_password])
     password = PasswordField("新密碼", validators=[InputRequired(), Length(min=6,max=20)])
-    confirm  = PasswordField("再輸入一次密碼", validators=[
+    confirm  = PasswordField("確認新密碼", validators=[
         InputRequired(),
         Length(min=6,max=20),
         EqualTo('password', "Password must match")])
