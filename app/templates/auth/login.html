@@ -15,6 +15,9 @@
                     <div class="col-md ">
                         <p class="text-center">會員登入</p>
                     </div>
+                    <div class="col-md-0 ">
+                            <p class="text-center">|</p>
+                    </div>
                     <div class="col-md">
                         <a href="{{ url_for('registration') }}">
                             <p class="text-center">立即註冊</p>
@@ -23,37 +26,38 @@
                 </div>
             </div>
     </div>
+
+
+    <form action="{{ url_for('login') }}" method="POST">
+        {{ form.csrf_token }}
+        <div class="row justify-content-center">
+            <div class="col-md-5 form-group required">
+                {% if form.account.errors %}
+                    {{ form.account(class="form-control is-invalid", placeholder="請輸入帳號") }}
+                    {% for error in form.account.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+                {% else %}
+                    {{ form.account(class="form-control", placeholder="請輸入帳號") }}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-5 form-group required">
+                {% if form.password.errors %}
+                    {{ form.password(class="form-control is-invalid", placeholder="請輸入密碼 ( 英文大小寫有差別 )") }}
+                    {% for error in form.password.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+                {% else %}
+                    {{ form.password(class="form-control", placeholder="請輸入密碼 ( 英文大小寫有差別 )") }}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-5 form-group required">
+                {{ form.submit(class="btn btn-primary col-12") }}
+            </div>
+        </div>
+    </form>
 </div>
-
-<form action="{{ url_for('login') }}" method="POST">
-    <div class="row justify-content-center">
-        <div class="col-md-5 form-group required">
-            {% if form.account.errors %}
-                {{ form.account(class="form-control is-invalid", placeholder="請輸入帳號") }}
-                {% for error in form.account.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-            {% else %}
-                {{ form.account(class="form-control", placeholder="請輸入帳號") }}
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="row justify-content-center">
-        <div class="col-md-5 form-group required">
-            {% if form.password.errors %}
-                {{ form.password(class="form-control is-invalid", placeholder="請輸入密碼 ( 英文大小寫有差別 )") }}
-                {% for error in form.password.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-            {% else %}
-                {{ form.password(class="form-control", placeholder="請輸入密碼 ( 英文大小寫有差別 )") }}
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="row justify-content-center">
-        <div class="col-md-5 form-group required">
-            {{ form.submit(class="btn btn-primary col-12") }}
-        </div>
-    </div>
-</form>
-    
     
 {% endblock page %}
