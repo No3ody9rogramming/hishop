@@ -7,7 +7,21 @@
     hishop
 {% endblock title %}
 
+{% block head %}
+
+{{super()}}
+<style type = "text/css">
+ #makeCenter {
+  position: relative;
+  transform: translate(0,30vh);
+  
+  
+}
+</style>
+{% endblock %}
+
 {% block page %}
+<div id="makeCenter">
     <div class="row align-items-center justify-content-center ">
             <div class="col-md-5 ">
                 <div class="row justify-content-center">
@@ -26,7 +40,7 @@
             </div>
     </div>
 
-
+    
     <form action="{{ url_for('login') }}" method="POST">
         {{ form.csrf_token }}
         <div class="row justify-content-center form-group">
@@ -57,5 +71,5 @@
             </div>
         </div>
     </form>
-    
+</div>
 {% endblock page %}
