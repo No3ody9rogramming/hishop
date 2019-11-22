@@ -7,17 +7,31 @@
     hishop
 {% endblock title %}
 
+{% block head %}
+
+{{super()}}
+<style type = "text/css">
+ #makeCenter {
+  position: relative;
+  transform: translate(0,30vh);
+}
+</style>
+{% endblock %}
+
 {% block page %}
+<div id="makeCenter">
     <div class="row align-items-center justify-content-center ">
             <div class="col-md-5 ">
                 <div class="row justify-content-center">
-                    <div class="col-md ">
+                    <div class="col-5 ">
+                        
                         <p class="text-center">會員登入</p>
+                        
                     </div>
-                    <div class="col-md-0 ">
+                    <div class="col-auto ">
                             <p class="text-center">|</p>
                     </div>
-                    <div class="col-md">
+                    <div class="col-5 ">
                         <a href="{{ url_for('registration') }}">
                             <p class="text-center">立即註冊</p>
                         </a>
@@ -26,7 +40,7 @@
             </div>
     </div>
 
-
+    
     <form action="{{ url_for('login') }}" method="POST">
         {{ form.csrf_token }}
         <div class="row justify-content-center form-group">
@@ -57,5 +71,5 @@
             </div>
         </div>
     </form>
-    
+</div>
 {% endblock page %}
