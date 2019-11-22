@@ -20,6 +20,7 @@ class PaymentView(MethodView):
         form = PaymentForm()
 
         if form.validate_on_submit():
+            print(url_for('static', filename='hicoin.png', _external=True))
             headers = {"X-LINE-ChannelId": app.config['CHANNEL_ID'],
                        "X-LINE-ChannelSecret": app.config['CHANNEL_SECRET'],
                        "Content-Type": "application/json; charset=UTF-8"}
