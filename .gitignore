@@ -1,4 +1,7 @@
 *.DS_Store
 *.pyc
+*.swo
+*.swp
+*.out
 .vscode/
 __pycache__/
