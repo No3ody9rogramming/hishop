@@ -7,61 +7,28 @@
     hishop
 {% endblock title %}
 
-{% block head %}
-
-{{super()}}
-<style type = "text/css">
-  .btn-login {background-color:#1B92EE;margin: 6px 0;width: 100%;padding:14px ;font: 18px/1 Verdana,Arial,"Helvetica Neue",Helvetica,sans-serif;padding: 14px;text-decoration: none;border-radius: 3px;color: #fff;;}
-  .form-submit {text-align:center;height:50px;} 
-  #main{
-            width: 100%;
-            height: 300px;
-            /*border: solid black 1px;*/
-            position: relative;
-        }
-  #one{
-            display: inline-block;
-            position: relative; 
-            width: 50%;
-            height: 40%;
-            word-wrap: break-word;
-            /*border-bottom: 3px solid red;*/
-            text-align:center; 
-	    box-sizing:border-box;
- } 
-  #two{ 
-           display: inline-block;
-           position: absolute; 
-           width: 50%;
-           height: 40%;
-           text-align:center;
-           /*border-bottom: 3px solid black;*/
- }
-  
-</style>
-{% endblock %}
-
-
-
-
 {% block page %}
-    <div id=main style="height:50px;color: #06c;font: bold 20px/1 Verdana,microsoft jhenghei;font-size: 36px;">
-        <div id="one"> 會員登入 </div>
-        <div id="two"> <a href="{{ url_for('registration') }}">註冊</a> </div>
-    </div>
-
-    <form action="/login" method="post" class="form" role="form">
-    <div class = "form-submit">
-        <input class="form-control" id="account" name="account" required="" type="text" placeholder="請輸入帳號...">
-    </div>
-    <div class = "form-submit">
-        <input class="form-control" id="password" name="password" required="" type="text" placeholder="請輸入密碼...">
-    </div>
-    <div class = "form-submit">
-        <input class="btn-login" id="submit" name="submit" type="submit" value="登入">
-    </div>
-    </form>
     
+        <form action="{{ url_for('login') }}" method="POST">
+            <div class="row justify-content-center">
+                <div class="col-md-4 form-group {% if form.account.errors %}has-error{% endif %} required">
+                    {{ form.account(class="form-control", placeholder="請輸入帳號") }}
+                    {% if form.account.errors %}
+                        {% for error in form.account.errors %}<p class="help-block">{{ error }}</p>{% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 form-group {% if form.password.errors %}has-error{% endif %} required">
+                    {{ form.password(class="form-control", placeholder="請輸入密碼 ( 英文大小寫有差別 )") }}
+                    {% if form.password.errors %}
+                        {% for error in form.password.errors %}<p class="help-block">{{ error }}</p>{% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
     <br><br>
     
     
