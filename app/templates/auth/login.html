@@ -1,12 +1,35 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
+
 {% extends "layouts/app.html" %}
 
+{% block title %}
+    hishop
+{% endblock title %}
+
 {% block page %}
-    {{ wtf.quick_form(form, method="post", action=url_for("login")) }}
     
-    
+        <form action="{{ url_for('login') }}" method="POST">
+            <div class="row justify-content-center">
+                <div class="col-md-4 form-group {% if form.account.errors %}has-error{% endif %} required">
+                    {{ form.account(class="form-control", placeholder="請輸入帳號") }}
+                    {% if form.account.errors %}
+                        {% for error in form.account.errors %}<p class="help-block">{{ error }}</p>{% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 form-group {% if form.password.errors %}has-error{% endif %} required">
+                    {{ form.password(class="form-control", placeholder="請輸入密碼 ( 英文大小寫有差別 )") }}
+                    {% if form.password.errors %}
+                        {% for error in form.password.errors %}<p class="help-block">{{ error }}</p>{% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
     <br><br>
     
-    <a href="{{ url_for('registration') }}">註冊</a>
+    
 {% endblock page %}
