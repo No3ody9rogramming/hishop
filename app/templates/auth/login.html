@@ -8,8 +8,7 @@
 {% endblock title %}
 
 {% block page %}
-<div class="container">
-    <div class="row justify-content-center">
+    <div class="row align-items-center justify-content-center ">
             <div class="col-md-5 ">
                 <div class="row justify-content-center">
                     <div class="col-md ">
@@ -30,8 +29,8 @@
 
     <form action="{{ url_for('login') }}" method="POST">
         {{ form.csrf_token }}
-        <div class="row justify-content-center">
-            <div class="col-md-5 form-group required">
+        <div class="row justify-content-center form-group">
+            <div class="col-md-5 required">
                 {% if form.account.errors %}
                     {{ form.account(class="form-control is-invalid", placeholder="請輸入帳號") }}
                     {% for error in form.account.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
@@ -41,8 +40,8 @@
             </div>
         </div>
 
-        <div class="row justify-content-center">
-            <div class="col-md-5 form-group required">
+        <div class="row justify-content-center form-group">
+            <div class="col-md-5 required">
                 {% if form.password.errors %}
                     {{ form.password(class="form-control is-invalid", placeholder="請輸入密碼 ( 英文大小寫有差別 )") }}
                     {% for error in form.password.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
@@ -58,6 +57,5 @@
             </div>
         </div>
     </form>
-</div>
     
 {% endblock page %}
