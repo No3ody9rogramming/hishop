@@ -3,8 +3,108 @@
 
 
 {% block page %}
-    
-    {{ wtf.quick_form(form, method="post", action=url_for("registration")) }}
-    
-    <a href="{{ url_for('login') }}">登入</a>
+<div class="row justify-content-center">
+    <div class="col-md-5 ">
+        <div class="row justify-content-center">
+            <div class="col-md ">
+                <a href="{{ url_for('login') }}">
+                	<p class="text-center">會員登入</p>
+                </a>
+            </div>
+            <div class="col-md-0 ">
+                    <p class="text-center">|</p>
+            </div>
+            <div class="col-md">
+                <p class="text-center">立即註冊</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form action="{{ url_for('login') }}" method="POST">
+    {{ form.csrf_token }}
+
+    <div class="row justify-content-center">
+        <div class="col-md-5 form-group required">
+            {% if form.account.errors %}
+                {{ form.account(class="form-control is-invalid", placeholder="請輸入帳號") }}
+                {% for error in form.account.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+            {% else %}
+                {{ form.account(class="form-control", placeholder="請輸入帳號") }}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-5 form-group required">
+            {% if form.password.errors %}
+                {{ form.password(class="form-control is-invalid", placeholder="請輸入密碼 ( 英文大小寫有差別 )") }}
+                {% for error in form.password.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+            {% else %}
+                {{ form.password(class="form-control", placeholder="請輸入密碼 ( 英文大小寫有差別 )") }}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-5 form-group required">
+            {% if form.confirm.errors %}
+                {{ form.confirm(class="form-control is-invalid", placeholder="請再輸入一次密碼") }}
+                {% for error in form.confirm.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+            {% else %}
+                {{ form.confirm(class="form-control", placeholder="請再輸入一次密碼") }}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-5 form-group required">
+            {% if form.name.errors %}
+                {{ form.name(class="form-control is-invalid", placeholder="請輸入姓名") }}
+                {% for error in form.name.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+            {% else %}
+                {{ form.name(class="form-control", placeholder="請輸入姓名") }}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-5 form-group required">
+            {% if form.email.errors %}
+                {{ form.email(class="form-control is-invalid", placeholder="請輸入海大信箱") }}
+                {% for error in form.email.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+            {% else %}
+                {{ form.email(class="form-control", placeholder="請輸入海大信箱") }}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-5 form-group required">
+            {% if form.phone.errors %}
+                {{ form.phone(class="form-control is-invalid", placeholder="請輸入電話號碼") }}
+                {% for error in form.phone.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+            {% else %}
+                {{ form.phone(class="form-control", placeholder="請輸入電話號碼") }}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-5 form-group required">
+            {% if form.birth.errors %}
+                {{ form.birth(class="form-control is-invalid", placeholder="請輸入生日") }}
+                {% for error in form.birth.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+            {% else %}
+                {{ form.birth(class="form-control", type="text", onfocus="(this.type='date')", placeholder="請輸入生日") }}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-5 form-group required">
+            {{ form.submit(class="btn btn-primary col-12") }}
+        </div>
+    </div>
+</form>
 {% endblock page %}
