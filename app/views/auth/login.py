@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, request
+from flask import redirect, render_template, url_for, request, abort
 from flask.views import MethodView
 from flask_login import login_user, current_user, login_required, logout_user
 from flask_wtf import FlaskForm
@@ -12,7 +12,10 @@ from app.models.user import User
 class LoginView(MethodView):
     def get(self):
         form = LoginForm()
-        return render_template('auth/login.html', form=form)
+        if current_user.is_active == False:
+            return render_template('auth/login.html', form=form)
+        else:
+            abort(403)
     
     def post(self):
         form = LoginForm()

@@ -1,6 +1,6 @@
-from flask import redirect, render_template, url_for
+from flask import redirect, render_template, url_for, abort
 from flask.views import MethodView
-from flask_login import login_user
+from flask_login import current_user
 from flask_wtf import FlaskForm
 
 from wtforms import StringField, SubmitField, PasswordField
@@ -13,7 +13,11 @@ from app.models.user import User
 class RegisterView(MethodView):
     def get(self):
         form = RegisterForm()
-        return render_template('auth/register.html', form=form)
+
+        if current_user.is_active == False:
+            return render_template('auth/register.html', form=form)
+        else:
+            abort(403)
     
     def post(self):
         form = RegisterForm()
