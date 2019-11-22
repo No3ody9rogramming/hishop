@@ -1,6 +1,6 @@
 from flask import redirect, render_template, url_for, abort
 from flask.views import MethodView
-from flask_login import current_user
+from flask_login import login_user, current_user
 from flask_wtf import FlaskForm
 
 from wtforms import StringField, SubmitField, PasswordField
