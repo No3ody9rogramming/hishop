@@ -31,4 +31,4 @@ app.add_url_rule(rule='/user/selling/bidding', endpoint='bidding', view_func=log
 app.add_url_rule(rule='/user/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0")
