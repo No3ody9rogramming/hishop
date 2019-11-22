@@ -20,9 +20,8 @@ class ProfileView(MethodView):
         if form.validate_on_submit():
             current_user.name = form.name.data
             current_user.phone = form.phone.data
-            current_user.birth = form.dirth.data
+            current_user.birth = form.birth.data
             current_user.save()
-            flash('修改成功')
         return redirect(url_for('profile'))
         
 class ProfileForm(FlaskForm):
