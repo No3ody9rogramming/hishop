@@ -34,7 +34,7 @@ def validate_password(form, password):
         pass
     else:
         if bcrypt.check_password_hash(user.password, password.data) == False:
-            raise ValidationError('密碼錯誤')
+            raise ValidationError('密碼輸入錯誤')
         
 class LoginForm(FlaskForm):
     account = StringField('帳號', validators=[InputRequired(), validate_account])
