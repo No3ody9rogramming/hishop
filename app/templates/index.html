@@ -1,0 +1,19 @@
+{% extends "layouts/app.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page %}
+	<div class="row" height="25vh"></div>
+	<form action="{{ url_for('search') }}" method="GET">
+        <div class="row justify-content-center form-group">
+            <div class="col-md-5 required">
+                {{ form.keyword(class="form-control", placeholder="輸入已加以搜尋") }}
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-5 form-group required">
+                <input class="btn btn-primary" type="submit">
+            </div>
+        </div>
+    </form>
+{% endblock page %}

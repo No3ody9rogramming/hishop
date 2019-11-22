@@ -19,6 +19,7 @@ class Product(db.Document):
     discount = db.FloatField(required=True, min_value=0., max_value=1., default=1.)
     detail = db.StringField(required=True, max_length=40000)
     image = db.StringField(required=True)
+    view = db.IntField(required=True, default=0)
     catogories = db.ListField(db.ReferenceField(Catogory), default=list)
     bidding = db.BooleanField(requried=True)
     status = db.IntField(requried=True, default=0)

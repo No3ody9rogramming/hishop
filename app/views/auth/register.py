@@ -9,6 +9,7 @@ from wtforms.validators import DataRequired, Email, InputRequired, Length, Equal
 
 from app import bcrypt
 from app.models.user import User
+from app.models.information import Information
 
 class RegisterView(MethodView):
     def get(self):
@@ -28,9 +29,11 @@ class RegisterView(MethodView):
                         name=form.name.data,
                         email=form.email.data,
                         phone=form.phone.data,
-                        birth=form.birth.data)
-                        
+                        birth=form.birth.data)      
             user.save()
+
+            information = Information(user_id = user.id)
+            information.save()
             login_user(user)
             return redirect(url_for('profile'))
         

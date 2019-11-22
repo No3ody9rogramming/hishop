@@ -6,20 +6,14 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import InputRequired, Length, ValidationError
 
-from app.models.user import User
+from app.models.product import Product
 
 class IndexView(MethodView):
     def get(self):
         form = SearchForm()
-
+        
         return render_template('index.html', form=form)
-    
-    def post(self):
-        form = SearchForm()
-        if form.validate_on_submit():
-            products = 
-        return redirect(url_for('profile'))
         
 class SearchForm(FlaskForm):
-    search = StringField("姓名", validators=[InputRequired(), Length(min=2, max=200)])
+    keyword = StringField("輸入搜尋", validators=[InputRequired(), Length(min=1, max=20)])
     submit = SubmitField("搜尋")

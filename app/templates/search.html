@@ -1,0 +1,8 @@
+{% extends "layouts/app.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page %}
+	{% for product in products %}
+		<p> 商品名稱:<a href="{{ url_for('show_normal', product_id=product.id|string) }}">{{ product.name }}</a></p>
+	{% endfor %}
+{% endblock page %}

@@ -1,6 +1,11 @@
 from flask_login import login_required
 
 from app import app, login_manager
+
+from app.views.index import IndexView
+from app.views.search import SearchView
+from app.views.product.normal import ShowNormalView
+
 from app.views.auth.login import LoginView
 from app.views.auth.logout import LogoutView
 from app.views.auth.register import RegisterView
@@ -14,6 +19,11 @@ from app.views.user.selling.bidding import BiddingView
 
 from app.views.user.question.report import ReportView
 
+
+app.add_url_rule(rule='/', endpoint='index', view_func=IndexView.as_view('index_view'), methods=['GET'])
+app.add_url_rule(rule='/index', view_func=IndexView.as_view('index_view'), methods=['GET'])
+app.add_url_rule(rule='/search', endpoint='search', view_func=SearchView.as_view('search_view'), methods=['GET'])
+app.add_url_rule(rule='/normal/<string:product_id>', endpoint='show_normal', view_func=ShowNormalView.as_view('show_normal_view'), methods=['GET', 'POST'])
 
 app.add_url_rule(rule='/registration', endpoint='registration', view_func=RegisterView.as_view('register_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/login', endpoint='login', view_func=LoginView.as_view('login_view'), methods=['GET', 'POST'])
