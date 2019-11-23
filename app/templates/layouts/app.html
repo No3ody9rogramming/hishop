@@ -9,6 +9,10 @@
     <script src="https://kit.fontawesome.com/71a9eb620b.js" crossorigin="anonymous"></script>
 {% endblock head %}
 
+{% block navbar %}
+	{% include 'layouts/navbar.html' %}
+{% endblock navbar %}
+
 {% block content %}
 	<div class="container">
 		{% block page %}{% endblock page %}
