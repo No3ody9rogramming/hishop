@@ -26,7 +26,7 @@ class PaymentView(MethodView):
                        "Content-Type": "application/json; charset=UTF-8"}
             data = {"amount": form.payment.data,
                     "productName": "Hi幣",
-                    "productImageUrl": url_for('static', filename='hicoin.png', _external=True),
+                    "productImageUrl": 'https://i.ibb.co/vqnRh4G/image.png',
                     "confirmUrl": app.config['APP_URL'] + url_for('payment_confirm'),
                     "orderId": uuid.uuid4().hex,
                     "currency": "TWD"}
