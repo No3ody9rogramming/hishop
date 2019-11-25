@@ -1,6 +1,6 @@
 from flask_login import login_required
 
-from app import app, login_manager
+from app import app, login_manager, mail
 
 from app.views.index import IndexView
 from app.views.search import SearchView
@@ -18,6 +18,8 @@ from app.views.user.selling.normal import NormalView
 from app.views.user.selling.bidding import BiddingView
 
 from app.views.user.question.report import ReportView
+
+from flask_mail import Message
 
 
 app.add_url_rule(rule='/', endpoint='index', view_func=IndexView.as_view('index_view'), methods=['GET'])
@@ -39,6 +41,27 @@ app.add_url_rule(rule='/user/selling/normal', endpoint='normal', view_func=login
 app.add_url_rule(rule='/user/selling/bidding', endpoint='bidding', view_func=login_required(BiddingView.as_view('bidding_view')), methods=['GET', 'POST'])
 
 app.add_url_rule(rule='/user/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
+
+@app.route("/message", endpoint="message")
+def index():
+    #  主旨
+    msg_title = 'Hello It is Flask-Mail'
+    #  收件者，格式為list，否則報錯
+    msg_recipients = ['00557043@email.ntou.edu.tw']
+    #  郵件內容
+    msg_body = 'Hey, I am mail body!'
+    #  也可以使用html
+    print(msg)
+    #  msg_html = '<h1>Hey,Flask-mail Can Use HTML</h1>'
+    msg = Message(msg_title,
+                  recipients=msg_recipients)
+    msg.body = msg_body
+    print(msg)
+    #  msg.html = msg_html
+    
+    #  mail.send:寄出郵件
+    mail.send(msg)
+    return 'You Send Mail by Flask-Mail Success!!'
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")

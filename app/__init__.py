@@ -4,6 +4,7 @@ from flask_login import UserMixin, LoginManager
 from flask_bootstrap import Bootstrap
 from flask_bcrypt import Bcrypt
 from flask_ckeditor import CKEditor
+from flask_mail import Mail
 
 app = Flask(__name__)
 app.config.from_pyfile('../config.cfg')
