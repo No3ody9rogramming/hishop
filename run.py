@@ -51,12 +51,11 @@ def index():
     #  郵件內容
     msg_body = 'Hey, I am mail body!'
     #  也可以使用html
-    print(msg)
     #  msg_html = '<h1>Hey,Flask-mail Can Use HTML</h1>'
     msg = Message(msg_title,
+				  sender="chu-yu",
                   recipients=msg_recipients)
     msg.body = msg_body
-    print(msg)
     #  msg.html = msg_html
     
     #  mail.send:寄出郵件
