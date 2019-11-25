@@ -3,9 +3,7 @@ from flask_login import login_required
 from app import app, login_manager, mail
 
 from app.views.index import IndexView
-from app.views.search import (
-    SearchView, LineChatbotSearch
-)
+from app.views.search import SearchView, LineChatbotSearch
 from app.views.product.normal import ShowNormalView
 
 from app.views.auth.login import LoginView
