@@ -29,8 +29,8 @@ class SearchView(MethodView):
 
         return render_template('search.html', products=products)
 
-line_bot_api = LineBotApi('Cwyu15lGK9SmCUcRhnLH/fzEwYDVhAd6v1Ek0QMVjQW5QJXkRBQq1dvL7WrodL3b4DIXvf1X0Vf9J1eANG9adL7vTYmEPJQWnUrBPi/VCdU5hAt500mIzOcsal3+5dTuPtB4n7F0KXWiiCBIA0QYoQdB04t89/1O/w1cDnyilFU=')
-handler = WebhookHandler('7aab942319bd22ade927a2e25b361a1e')
+line_bot_api = LineBotApi(app.config['LINE_CHATBOT_ACCESS_TOKEN'])
+handler = WebhookHandler(app.config['LINE_CHATBOT_SECRET'])
 
 class LineChatbotSearch(MethodView):
 	def get(self):
