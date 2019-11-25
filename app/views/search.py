@@ -30,7 +30,7 @@ line_bot_api = LineBotApi(app.config['LINE_CHATBOT_ACCESS_TOKEN'])
 handler = WebhookHandler(app.config['LINE_CHATBOT_SECRET'])
 
 class LineChatbotSearch(MethodView):
-	def get(self):
+	def post(self):
 
 		# if request.args.get_json() == None:
 		# 	products = Product.objects()
