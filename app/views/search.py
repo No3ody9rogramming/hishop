@@ -44,7 +44,9 @@ class LineChatbotSearch(MethodView):
 	    # get request body as text
 	    body = request.get_data(as_text=True)
 	    app.logger.info("Request body: " + body)
-
+	    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage("hello!"))
 	    # handle webhook body
 	    try:
 	        handler.handle(body, signature)
