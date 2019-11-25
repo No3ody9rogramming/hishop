@@ -4,6 +4,7 @@ from app import app, login_manager, mail
 
 from app.views.index import IndexView
 from app.views.search import SearchView
+from app.views.search import LineChatbotSearch
 from app.views.product.normal import ShowNormalView
 
 from app.views.auth.login import LoginView
@@ -25,6 +26,7 @@ from flask_mail import Message
 app.add_url_rule(rule='/', endpoint='index', view_func=IndexView.as_view('index_view'), methods=['GET'])
 app.add_url_rule(rule='/index', view_func=IndexView.as_view('index_view'), methods=['GET'])
 app.add_url_rule(rule='/search', endpoint='search', view_func=SearchView.as_view('search_view'), methods=['GET'])
+app.add_url_rule(rule='/linesearch', endpoint='linesearch', view_func=LineChatbotSearch.as_view('line_chatbot_search'), methods=['GET'])
 app.add_url_rule(rule='/normal/<string:product_id>', endpoint='show_normal', view_func=ShowNormalView.as_view('show_normal_view'), methods=['GET', 'POST'])
 
 app.add_url_rule(rule='/registration', endpoint='registration', view_func=RegisterView.as_view('register_view'), methods=['GET', 'POST'])

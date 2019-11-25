@@ -18,3 +18,14 @@ class SearchView(MethodView):
             products = Product.objects(name__icontains=request.args.get('keyword'), bidding=False)
 
         return render_template('search.html', products=products)
+
+class LineChatbotSearch(MethodView):
+	def get(self):
+
+		#print(request.args.get('keyword'))
+
+		if request.args.get('keyword') == None:
+			return "";
+		else:
+			products = Product.objects(name__icontains=request.args.get('keyword'), bidding=False)
+			return products.to_json()
