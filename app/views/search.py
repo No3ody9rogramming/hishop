@@ -9,7 +9,7 @@ from wtforms.validators import InputRequired, Length, ValidationError
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import ( 
-	MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate, PostbackTemplateAction, MessageTemplateAction, URITemplateAction
+	MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate, CarouselColumn, CarouselTemplate, URITemplateAction
 )
 
 from app.models.product import Product
@@ -54,19 +54,25 @@ def handle_message(event):
 	else:
 		products = Product.objects(name__icontains=event.message.text, bidding=False)
 
+	carouselColumns = [];
+
+	for product in products:
+		carouselColumns.append(
+			CarouselColumn(
+		        thumbnail_image_url='https://miro.medium.com/max/2834/0*f81bU2qWpP51WWWC.jpg',
+		        title=product.name,
+		        text="NT$" + str(product.price),
+		        actions=[
+		            URITemplateAction(
+		                label='Take a look!',
+		                uri=request.url_root[:-1] + url_for('show_normal', product_id=product.id)
+		            )
+		        ]				
+			))
+
 	message = TemplateSendMessage(
-	    alt_text='Buttons template',
-	    template=ButtonsTemplate(
-	        thumbnail_image_url='https://miro.medium.com/max/2834/0*f81bU2qWpP51WWWC.jpg',
-	        title=products[0].name,
-	        text="NT$" + str(products[0].price),
-	        actions=[
-	            URITemplateAction(
-	                label='Take a look!',
-	                uri=request.url_root[:-1] + url_for('show_normal', product_id=products[0].id)
-	            )
-	        ]
-	    )
+	    alt_text="複製 "+ request.url_root[:-1] + url_for('search', keyword=event.message.text) + " 或",
+	    template=CarouselTemplate(columns=carouselColumns)
 	)
 	line_bot_api.reply_message(event.reply_token, message)
 
