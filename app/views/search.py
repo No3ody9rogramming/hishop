@@ -9,7 +9,7 @@ from wtforms.validators import InputRequired, Length, ValidationError
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import ( 
-	MessageEvent, TextMessage, TextSendMessage
+	MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate, PostbackTemplateAction, MessageTemplateAction, URITemplateAction
 )
 
 from app.models.product import Product
@@ -32,21 +32,12 @@ handler = WebhookHandler(app.config['LINE_CHATBOT_SECRET'])
 class LineChatbotSearch(MethodView):
 	def post(self):
 
-		# if request.args.get_json() == None:
-		# 	products = Product.objects()
-		# else:
-		# 	products = Product.objects(name__icontains=request.args.get_json(), bidding=False)
-		# 	return products.to_json()
-
 		# get X-Line-Signature header value
 	    signature = request.headers['X-Line-Signature']
 
 	    # get request body as text
 	    body = request.get_data(as_text=True)
 	    app.logger.info("Request body: " + body)
-	    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage("hello!"))
 	    # handle webhook body
 	    try:
 	        handler.handle(body, signature)
@@ -58,9 +49,26 @@ class LineChatbotSearch(MethodView):
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.message.text))
+	if event.message.text == None:
+		products = Product.objects()
+	else:
+		products = Product.objects(name__icontains=event.message.text, bidding=False)
+
+	message = TemplateSendMessage(
+	    alt_text='Buttons template',
+	    template=ButtonsTemplate(
+	        thumbnail_image_url='https://miro.medium.com/max/2834/0*f81bU2qWpP51WWWC.jpg',
+	        title=products[0].name,
+	        text="NT$" + products[0].price
+	        actions=[
+	            URITemplateAction(
+	                label='Take a look!',
+	                uri=request.url_root[:-1] + url_for('show_normal', product_id=products[0].id)
+	            )
+	        ]
+	    )
+	)
+	line_bot_api.reply_message(event.reply_token, message)
 
 # @LineChatbotSearch.handler.add(MessageEvent, message=TextMessage)
 # def handle_message(event):

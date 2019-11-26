@@ -19,7 +19,7 @@ class ShowNormalView(MethodView):
         
         if product == None:
             abort(404)
-        else:
+        if current_user.is_active:
             #update history
             information = Information.objects(user_id=current_user.id).first()
             update = False
@@ -35,7 +35,9 @@ class ShowNormalView(MethodView):
             #update view times
             product.view += 1
             product.save()
-        return "test"
+        return product.to_json()
+
+
     
     def post(self, product_id):
         form = ReportForm()
