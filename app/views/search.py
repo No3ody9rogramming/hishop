@@ -59,7 +59,7 @@ def handle_message(event):
 	    template=ButtonsTemplate(
 	        thumbnail_image_url='https://miro.medium.com/max/2834/0*f81bU2qWpP51WWWC.jpg',
 	        title=products[0].name,
-	        text="NT$" + products[0].price,
+	        text="NT$" + str(products[0].price),
 	        actions=[
 	            URITemplateAction(
 	                label='Take a look!',
