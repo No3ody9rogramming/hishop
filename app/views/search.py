@@ -17,8 +17,6 @@ from app import app
 
 class SearchView(MethodView):
     def get(self):
-        print(request.args.get('keyword'))
-
         if request.args.get('keyword') == None:
             products = Product.objects()
         else:

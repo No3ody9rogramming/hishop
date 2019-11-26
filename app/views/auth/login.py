@@ -13,7 +13,7 @@ class LoginView(MethodView):
     def get(self):
         form = LoginForm()
         if current_user.is_active == False:
-            return render_template('auth/login.html', form=form)
+            return render_template('auth/login.html', form=form, next=request.args.get('next'))
         else:
             abort(403)
     
@@ -22,7 +22,11 @@ class LoginView(MethodView):
         if form.validate_on_submit():
             user = User.objects(account=form.account.data).first()
             login_user(user)
-            return redirect(url_for('profile'))
+
+            if request.args.get('next') == None:
+                return redirect(url_for('profile'))
+            else:
+                return redirect(request.args.get('next'))
         return render_template('auth/login.html', form=form)
 
     

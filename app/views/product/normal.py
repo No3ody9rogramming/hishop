@@ -35,7 +35,7 @@ class ShowNormalView(MethodView):
             #update view times
             product.view += 1
             product.save()
-        return product.to_json()
+        return render_template('product/normal.html', form=form, product=product, product_json=product.to_json())
 
 
     
@@ -50,6 +50,5 @@ class ShowNormalView(MethodView):
         return render_template('user/question/report.html', form=form)
         
 class ReportForm(FlaskForm):
-    title = StringField("問題主旨", validators=[InputRequired(), Length(max=20)])
-    detail = TextAreaField("問題描述", render_kw={'rows': 7}, validators=[InputRequired(), Length(max=40)])
-    submit = SubmitField('提交')
+    like = SubmitField('喜歡')
+    cart = SubmitField('加入購物車')
