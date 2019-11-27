@@ -66,10 +66,13 @@ def handle_message(event):
 		        ]				
 			))
 
-	message = TemplateSendMessage(
-	    alt_text="複製 "+ request.url_root[:-1] + url_for('search', keyword=event.message.text) + " 或",
-	    template=CarouselTemplate(columns=carouselColumns)
-	)
+	if carouselColumns:
+		message = TextSendMessage(text="找不到相關商品")
+	else:
+		message = TemplateSendMessage(
+		    alt_text="請到 "+ request.url_root[:-1] + url_for('search', keyword=event.message.text) + " 或",
+		    template=CarouselTemplate(columns=carouselColumns)
+		)
 	line_bot_api.reply_message(event.reply_token, message)
 
 # @LineChatbotSearch.handler.add(MessageEvent, message=TextMessage)
