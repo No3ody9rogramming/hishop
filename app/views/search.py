@@ -52,6 +52,7 @@ def handle_message(event):
 
 	carouselColumns = [];
 
+	count = 0
 	for product in products:
 		carouselColumns.append(
 			CarouselColumn(
@@ -65,6 +66,9 @@ def handle_message(event):
 		            )
 		        ]				
 			))
+		count += 1
+		if count > 5:
+			break
 
 	if carouselColumns:
 		message = TemplateSendMessage(
