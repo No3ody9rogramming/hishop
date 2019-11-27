@@ -18,6 +18,7 @@ class User(UserMixin, db.Document):
     birth = db.DateTimeField(required=True)
     address = db.ListField(db.EmbeddedDocumentField(Address), default=list)
     hicoin = db.LongField(required=True, default=0)
+    reset_token = db.StringField(null=True)
     create_time = db.DateTimeField(default=datetime.datetime.utcnow())
     
 @login_manager.user_loader

@@ -41,7 +41,7 @@
     </div>
 
     
-    <form action="{{ url_for('login', next=next) }}" method="POST">
+    <form action="{{ url_for('forgot') }}" method="POST">
         {{ form.csrf_token }}
         <div class="row justify-content-center form-group">
             <div class="col-md-5 required">
@@ -54,26 +54,15 @@
             </div>
         </div>
 
-        <div class="row justify-content-center form-group">
-            <div class="col-md-5 required">
-                {% if form.password.errors %}
-                    {{ form.password(class="form-control is-invalid", placeholder="請輸入密碼 ( 英文大小寫有差別 )") }}
-                    {% for error in form.password.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-                {% else %}
-                    {{ form.password(class="form-control", placeholder="請輸入密碼 ( 英文大小寫有差別 )") }}
-                {% endif %}
-            </div>
-        </div>
-
-        <div class="row justify-content-center form-group">
-            <div class="col-md-5">
-                <a href="{{ url_for('forgot') }}">忘記密碼?</a>
-            </div>
-        </div>
-
         <div class="row justify-content-center">
             <div class="col-md-5 form-group required">
                 {{ form.submit(class="btn btn-primary col-12") }}
+            </div>
+        </div>
+
+        <div class="row justify-content-center form-group">
+            <div class="col-md-5 text-center">
+                <a href="{{ url_for('login') }}">返回登入頁</a>
             </div>
         </div>
     </form>
