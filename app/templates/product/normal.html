@@ -10,6 +10,13 @@
 	{{ super() }}
 	<script type="text/javascript">
 		$("#cart").click(function(e){
+			e.preventDefault();
+			{% if current_user.is_anonymous %}
+				window.location = "{{ url_for('login', _external=True, next=url_for('show_normal', product_id=product.id|string)) }}";
+			{% endif %}
+
+			console.log(123);
+
 			var data = {
 				csrf_token: $("#csrf_token").val(),
 				cart: true,
@@ -20,13 +27,17 @@
 				url: "{{ url_for('show_normal', product_id=product.id|string) }}",
 				data: data,
 				success: function(data) {
-					console.log(data);
+					$("#cart").text(data);
 				}
 			});
-			e.preventDefault();
 		});
 
 		$("#like").click(function(e){
+			e.preventDefault();
+			{% if current_user.is_anonymous %}
+				window.location = "{{ url_for('login', _external=True, next=url_for('show_normal', product_id=product.id|string)) }}";
+			{% endif %}
+
 			var data = {
 				csrf_token: $("#csrf_token").val(),
 				like: true,
@@ -37,33 +48,10 @@
 				url: "{{ url_for('show_normal', product_id=product.id|string) }}",
 				data: data,
 				success: function(data) {
-					console.log(data);
+					$("#like-icon").attr('class', data);
 				}
 			});
-			e.preventDefault();
 		});
-		/*
-		$("#form").submit(function(e) {
-			var form = $(this);
-
-			$( "#cart" ).click(function() {
-				alert( "Handler for .click() called." );
-			});
-
-			console.log(form.serialize());
-
-			$.ajax({
-				type:"POST",
-				url: "{{ url_for('show_normal', product_id=product.id|string) }}",
-				data: form.serialize(),
-				success: function(data) {
-					console.log(data);
-				}
-			});*/
-
-			/* stop form from submitting normally */
-			//e.preventDefault();
-	    //});
 	</script>
 {% endblock scripts %}
 
@@ -72,7 +60,11 @@
 		<div class="col-lg-12">
 	    	{{ product_json }}
 
-	    	{{ wtf.quick_form(form, id="form") }}
+	    	<form id="form" role="form">
+        		{{ form.csrf_token }}
+	    		<button id="like" name="like" type="submit" class="btn btn-link" style="color: red;"><i id="like-icon" class="{{ like }}"></i></button>
+	    		<button id="cart" name="cart" type="submit" class="btn btn-sencondary">{{ cart }}</button>
+	    	</form>
 	    </div>
 	</div>
 {% endblock page %}

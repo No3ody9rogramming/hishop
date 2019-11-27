@@ -10,6 +10,7 @@ from app.views.auth.login import LoginView
 from app.views.auth.logout import LogoutView
 from app.views.auth.register import RegisterView
 from app.views.auth.forgot import ForgotPasswordView
+from app.views.auth.reset import ResetPasswordView
 
 from app.views.user.account.profile import ProfileView
 from app.views.user.account.password import PasswordView
@@ -33,6 +34,7 @@ app.add_url_rule(rule='/registration', endpoint='registration', view_func=Regist
 app.add_url_rule(rule='/login', endpoint='login', view_func=LoginView.as_view('login_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/logout', endpoint='logout', view_func=login_required(LogoutView.as_view('logout_view')), methods=['GET', 'POST'])
 app.add_url_rule(rule='/password/reset', endpoint='forgot', view_func=ForgotPasswordView.as_view('forgot_password_view'), methods=['GET', 'POST'])
+app.add_url_rule(rule='/password/reset/<string:reset_token>', endpoint='reset', view_func=ResetPasswordView.as_view('reset_password_view'), methods=['GET', 'POST'])
 
 app.add_url_rule(rule='/user/account/profile', endpoint='profile', view_func=login_required(ProfileView.as_view('profile_view')), methods=['GET', 'POST'])
 app.add_url_rule(rule='/user/account/password', endpoint='password', view_func=login_required(PasswordView.as_view('password_view')), methods=['GET', 'POST'])

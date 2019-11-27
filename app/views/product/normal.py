@@ -16,6 +16,8 @@ class ShowNormalView(MethodView):
     def get(self, product_id):
         form = NormalForm()
         product = Product.objects(id=product_id).first()
+        like = "far fa-heart"
+        cart = "加入購物車"
         
         if product == None:
             abort(404)
@@ -32,19 +34,54 @@ class ShowNormalView(MethodView):
                 information.history.append(History(product_id=product.id))
             information.save()
 
+            for like in information.like:
+                if like.id == product.id:
+                    like = "fas fa-heart"
+
+            for cart in information.cart:
+                if cart.id == product.id:
+                    cart = "移出購物車"
+
             #update view times
             product.view += 1
             product.save()
-        return render_template('product/normal.html', form=form, product=product, product_json=product.to_json())
+        return render_template('product/normal.html', form=form, product=product, like=like, cart=cart, product_json=product.to_json())
 
 
     
     def post(self, product_id):
         form = NormalForm()
+        product = Product.objects(id=product_id).first()
+
+        if product == None:
+            abort(404)
         if form.validate_on_submit():
-            print(form.like.data)
-            print(form.cart.data)
-        return "123";
+            if form.like.data == True:
+                information = Information.objects(user_id=current_user.id).first()
+                for (idx, like) in enumerate(information.like):
+                    if product.id == like.id:
+                        del information.like[idx]
+                        information.save()
+                        return "far fa-heart"
+
+                information.like.append(product.id)
+                information.save()
+                return "fas fa-heart"
+
+            elif form.cart.data == True:
+                information = Information.objects(user_id=current_user.id).first()
+                for (idx, cart) in enumerate(information.cart):
+                    if product.id == cart.id:
+                        del information.cart[idx]
+                        information.save()
+                        return "加入購物車"
+
+                information.cart.append(product.id)
+                information.save()
+                return "移出購物車"
+            #print(form.like.data)
+            #print(form.cart.data)
+        return abort(404);
         
 class NormalForm(FlaskForm):
     like = SubmitField('喜歡')

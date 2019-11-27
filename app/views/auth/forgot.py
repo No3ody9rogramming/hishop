@@ -1,9 +1,9 @@
-from flask import redirect, render_template, url_for, request, abort
+from flask import redirect, render_template, url_for, request, flash
 from flask.views import MethodView
-from flask_login import login_user, current_user, login_required, logout_user
+from flask_login import current_user
 from flask_wtf import FlaskForm
 
-from wtforms import StringField, SubmitField, PasswordField
+from wtforms import StringField, SubmitField
 from wtforms.validators import InputRequired, ValidationError
 
 from app import bcrypt, send_mail
@@ -15,7 +15,7 @@ class ForgotPasswordView(MethodView):
     def get(self):
         form = ForgotPasswordForm()
         if current_user.is_active == False:
-            return render_template('auth/forgot.html', form=form, next=request.args.get('next'))
+            return render_template('auth/forgot.html', form=form)
         else:
             return redirect(url_for('profile'))
     
@@ -26,7 +26,9 @@ class ForgotPasswordView(MethodView):
             user.reset_token = str(uuid.uuid4()).replace('-', '') + str(uuid.uuid4()).replace('-', '')
             user.save()
 
-            send_mail("重設密碼", [user.email], url_for('forgot', _external=True) + "/" + user.reset_token + "?email=" + user.email)
+            send_mail("重設密碼", [user.email], url_for('reset', reset_token=user.reset_token, email=user.email, _external=True))
+
+            flash('重設密碼連結已發送', 'success')
 
         return render_template('auth/forgot.html', form=form)
     
