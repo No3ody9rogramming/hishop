@@ -17,6 +17,4 @@ bootstrap = Bootstrap(app)
 bcrypt = Bcrypt(app)
 ckeditor = CKEditor(app)
 mail = Mail(app)
-
-app.config['REVERSE_PROXY_PATH'] = '/hishop'
 ReverseProxyPrefixFix(app)
