@@ -14,7 +14,7 @@ from app.models.information import Information, History
 
 class ShowNormalView(MethodView):
     def get(self, product_id):
-        form = ReportForm()
+        form = NormalForm()
         product = Product.objects(id=product_id).first()
         
         if product == None:
@@ -40,15 +40,12 @@ class ShowNormalView(MethodView):
 
     
     def post(self, product_id):
-        form = ReportForm()
+        form = NormalForm()
         if form.validate_on_submit():
-            question = Question(user_id=current_user.id,
-                                title=form.title.data,
-                                detail=form.detail.data)
-            question.save()
-            return redirect(url_for('report'))
-        return render_template('user/question/report.html', form=form)
+            print(form.like.data)
+            print(form.cart.data)
+        return "123";
         
-class ReportForm(FlaskForm):
+class NormalForm(FlaskForm):
     like = SubmitField('喜歡')
     cart = SubmitField('加入購物車')

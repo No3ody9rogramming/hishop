@@ -9,11 +9,33 @@
 {% block scripts %}
 	{{ super() }}
 	<script type="text/javascript">
-		$("#test").submit(function(event) {
+		$("#cart").click(function(e){
+			var data = $("#form").serialize();
+			console.log(data);
+			e.preventDefault();
+		});
+		/*
+		$("#form").submit(function(e) {
+			var form = $(this);
+
+			$( "#cart" ).click(function() {
+				alert( "Handler for .click() called." );
+			});
+
+			console.log(form.serialize());
+
+			$.ajax({
+				type:"POST",
+				url: "{{ url_for('show_normal', product_id=product.id|string) }}",
+				data: form.serialize(),
+				success: function(data) {
+					console.log(data);
+				}
+			});*/
 
 			/* stop form from submitting normally */
-			event.preventDefault();
-	    });
+			//e.preventDefault();
+	    //});
 	</script>
 {% endblock scripts %}
 
@@ -22,7 +44,7 @@
 		<div class="col-lg-12">
 	    	{{ product_json }}
 
-	    	{{ wtf.quick_form(form, id="test", method="post", action=url_for('show_normal', product_id=product.id|string)) }}
+	    	{{ wtf.quick_form(form, id="form") }}
 	    </div>
 	</div>
 {% endblock page %}
