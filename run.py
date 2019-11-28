@@ -16,6 +16,8 @@ from app.views.user.account.profile import ProfileView
 from app.views.user.account.password import PasswordView
 from app.views.user.account.payment import PaymentView, PaymentConfirmView
 
+from app.views.user.product.like import LikeView
+
 from app.views.user.selling.normal import NormalView
 from app.views.user.selling.bidding import BiddingView
 
@@ -38,34 +40,15 @@ app.add_url_rule(rule='/password/reset/<string:reset_token>', endpoint='reset', 
 
 app.add_url_rule(rule='/user/account/profile', endpoint='profile', view_func=login_required(ProfileView.as_view('profile_view')), methods=['GET', 'POST'])
 app.add_url_rule(rule='/user/account/password', endpoint='password', view_func=login_required(PasswordView.as_view('password_view')), methods=['GET', 'POST'])
-
 app.add_url_rule(rule='/user/account/payment', endpoint='payment', view_func=login_required(PaymentView.as_view('payment_view')), methods=['GET', 'POST'])
 app.add_url_rule(rule='/user/account/payment/confirm', endpoint='payment_confirm', view_func=login_required(PaymentConfirmView.as_view('payment_confirm_view')), methods=['GET'])
+
+app.add_url_rule(rule='/user/product/like', endpoint='like', view_func=login_required(LikeView.as_view('like_view')), methods=['GET', 'POST'])
 
 app.add_url_rule(rule='/user/selling/normal', endpoint='normal', view_func=login_required(NormalView.as_view('normal_view')), methods=['GET', 'POST'])
 app.add_url_rule(rule='/user/selling/bidding', endpoint='bidding', view_func=login_required(BiddingView.as_view('bidding_view')), methods=['GET', 'POST'])
 
 app.add_url_rule(rule='/user/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
-
-@app.route("/message", endpoint="message")
-def index():
-    #  主旨
-    msg_title = 'Hello It is Flask-Mail'
-    #  收件者，格式為list，否則報錯
-    msg_recipients = ['00557043@email.ntou.edu.tw']
-    #  郵件內容
-    msg_body = 'Hey, I am mail body!'
-    #  也可以使用html
-    #  msg_html = '<h1>Hey,Flask-mail Can Use HTML</h1>'
-    msg = Message(msg_title,
-				  sender="chu-yu",
-                  recipients=msg_recipients)
-    msg.body = msg_body
-    #  msg.html = msg_html
-    
-    #  mail.send:寄出郵件
-    mail.send(msg)
-    return 'You Send Mail by Flask-Mail Success!!'
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
