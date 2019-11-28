@@ -13,6 +13,8 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage, TemplateS
 from app.models.product import Product
 from app import app
 
+import os
+
 class SearchView(MethodView):
     def get(self):
         if request.args.get('keyword') == None:
@@ -54,9 +56,15 @@ def handle_message(event):
 
 	count = 0
 	for product in products:
+		# imagePath ='./app/static/image/' + str(product.id) + '/' + product.image
+		# if os.path.isfile(imagePath):
+		# 	image = imagePath
+		# else:
+		# 	image = "https://miro.medium.com/max/2834/0*f81bU2qWpP51WWWC.jpg"
+		filePath = 'image/' + str(product.id) + '/' + product.image;
 		carouselColumns.append(
 			CarouselColumn(
-		        thumbnail_image_url='https://miro.medium.com/max/2834/0*f81bU2qWpP51WWWC.jpg',
+		        thumbnail_image_url=request.url_root[:-1] + url_for('static', filename=filePath),
 		        title=product.name,
 		        text="NT$" + str(product.price),
 		        actions=[
@@ -69,6 +77,7 @@ def handle_message(event):
 		count += 1
 		if count > 5:
 			break
+		#print(request.url_root[:-1] + url_for('show_normal', product_id=product.id))
 
 	if carouselColumns:
 		message = TemplateSendMessage(
