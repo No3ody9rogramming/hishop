@@ -6,36 +6,36 @@
 	<hr>
 
     <div class="list-group panel">
-        <a href="#account" class="list-group-item collapsed bg-warning" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down">我的帳戶</span> </a>
+        <a href="#account" class="list-group-item collapsed bg-warning text-muted font-weight-bold" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down text-dark">我的帳戶</span> </a>
         <div class="collapse" id="account">
-            <a href="{{ url_for('profile') }}" class="list-group-item text-center" data-parent="#account">個人資料</a>
-            <a href="{{ url_for('password') }}" class="list-group-item text-center" data-parent="#account">密碼設定</a>
+            <a href="{{ url_for('profile') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#account">個人資料</a>
+            <a href="{{ url_for('password') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#account">密碼設定</a>
         </div>
         
-        <a href="#info" class="list-group-item collapsed bg-warning" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down">追蹤資訊</span> </a>
+        <a href="#info" class="list-group-item collapsed bg-warning text-muted font-weight-bold" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down text-dark">追蹤資訊</span> </a>
         <div class="collapse" id="info">
-            <a href="#" class="list-group-item text-center" data-parent="#info">購買清單</a>
-            <a href="#" class="list-group-item text-center" data-parent="#info">瀏覽商品</a>
-            <a href="{{ url_for('like') }}" class="list-group-item text-center" data-parent="#info">點讚紀錄</a>
+            <a href="#" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#info">購買清單</a>
+            <a href="#" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#info">瀏覽商品</a>
+            <a href="{{ url_for('like') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#info">點讚紀錄</a>
         </div>
         
-        <a href="#selling" class="list-group-item collapsed bg-warning" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down">我的賣場</span> </a>
+        <a href="#selling" class="list-group-item collapsed bg-warning text-muted font-weight-bold" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down text-dark">我的賣場</span> </a>
         <div class="collapse" id="selling">
-            <a href="{{ url_for('normal') }}" class="list-group-item text-center" data-parent="#selling">一般上架</a>
-            <a href="{{ url_for('bidding') }}" class="list-group-item text-center" data-parent="#selling">開啟競標</a>
-            <a href="#" class="list-group-item" data-parent="#selling text-center">商品資訊</a>
+            <a href="{{ url_for('normal') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#selling">一般上架</a>
+            <a href="{{ url_for('bidding') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#selling">開啟競標</a>
+            <a href="#" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#selling">商品資訊</a>
         </div>
         
-        <a href="#pocket" class="list-group-item collapsed bg-warning" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down">我的Hi幣</span> </a>
+        <a href="#pocket" class="list-group-item collapsed bg-warning text-muted font-weight-bold" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down text-dark">我的Hi幣</span> </a>
         <div class="collapse" id="pocket">
-            <a href="{{ url_for('payment') }}" class="list-group-item text-center" data-parent="#pocket">儲值Hi幣</a>
-            <a href="#" class="list-group-item text-center" data-parent="#pocket">交易紀錄</a>
+            <a href="{{ url_for('payment') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#pocket">儲值Hi幣</a>
+            <a href="#" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#pocket">交易紀錄</a>
         </div>
         
-        <a href="#question" class="list-group-item collapsed bg-warning" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down">問題回報</span> </a>
+        <a href="#question" class="list-group-item collapsed bg-warning text-muted font-weight-bold" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down text-dark">問題回報</span> </a>
         <div class="collapse" id="question">
-            <a href="{{ url_for('report') }}" class="list-group-item text-center" data-parent="#question">問題回報</a>
-            <a href="#" class="list-group-item text-center" data-parent="#question">所有問題</a>
+            <a href="{{ url_for('report') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#question">問題回報</a>
+            <a href="#" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#question">所有問題</a>
         </div>
     </div>
 </div>
