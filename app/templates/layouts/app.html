@@ -7,19 +7,33 @@
 {% block head %}
 	{{ super() }}
 	<script src="https://kit.fontawesome.com/71a9eb620b.js" crossorigin="anonymous"></script>
-	<style type = "text/css">
- body {
-	background-color: #F0F0F0
-}
-</style>
 {% endblock head %}
+
+{% block styles %}
+	{{ super() }}
+	<style type = "text/css">
+		body {
+            padding-top: 0px;
+            background-color: #f4f4f4;
+			height: 100vh;
+		}
+
+		#header {
+			height: 10%;
+		}
+
+		#content {
+			height: 90%;
+		}
+	</style>
+{% endblock styles %}
 
 {% block navbar %}
 	{% include 'layouts/navbar.html' %}
 {% endblock navbar %}
 
 {% block content %}
-	<div class="container">
+	<div id="content" class="container">
 		{% block page %}{% endblock page %}
 	</div>
 {% endblock content %}
