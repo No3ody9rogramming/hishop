@@ -1,6 +1,10 @@
 {% extends "layouts/app.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block head %}
+	{{ super() }}
+{% endblock head %}
+
 {% block page %}
 	<div class="row">
 		<div class="col-md-2">
