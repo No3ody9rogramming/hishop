@@ -1,31 +1,36 @@
 
-<h3>{{ current_user.name }}</h3>
-<hr>
-
-我的帳戶
-<ol>
-	<li><a href="{{ url_for('profile') }}">個人資料</a></li>
-	<li><a href="{{ url_for('password') }}">密碼設定</a></li>
-</ol>
-追蹤資訊
-<ol>
-	<li>購買清單</li>
-	<li>瀏覽紀錄</li>
-	<li>點讚商品</li>
-</ol>
-我的賣場
-<ol>
-	<li><a href="{{ url_for('normal') }}">一般上架</a></li>
-	<li><a href="{{ url_for('bidding') }}">開啟競標</a></li>
-	<li>商品資訊</li>
-</ol>
-我的Hi幣
-<ol>
-	<li><a href="{{ url_for('payment') }}">儲值Hi幣</a></li>
-	<li>交易紀錄</li>
-</ol>
-問題回報
-<ol>
-	<li><a href="{{ url_for('report') }}">問題回報</a></li>
-	<li>所有問題</li>
-</ol>
+<div class="p-3 " style="background-color: silver;">
+	<div class="text-right">
+	<p>{{ current_user.name }}</p>
+	</div>
+	<hr>
+	<div class="">
+		<p class="list-group-item font-weight-bold ">我的帳戶</p>
+		<ol>
+			<li><a href="{{ url_for('profile') }}">個人資料</a></li>
+			<li><a href="{{ url_for('password') }}">密碼設定</a></li>
+		</ol>
+		<p class="font-weight-bold">追蹤資訊</p>
+		<ol>
+			<li>購買清單</li>
+			<li>瀏覽紀錄</li>
+			<li>點讚商品</li>
+		</ol>
+		<p class="font-weight-bold">我的賣場</p>
+		<ol>
+			<li><a href="{{ url_for('normal') }}">一般上架</a></li>
+			<li><a href="{{ url_for('bidding') }}">開啟競標</a></li>
+			<li>商品資訊</li>
+		</ol>
+		<p class="font-weight-bold">我的Hi幣</p>
+		<ol>
+			<li><a href="{{ url_for('payment') }}">儲值Hi幣</a></li>
+			<li>交易紀錄</li>
+		</ol>
+		<p class="font-weight-bold">問題回報</p>
+		<ol>
+			<li><a href="{{ url_for('report') }}">問題回報</a></li>
+			<li>所有問題</li>
+		</ol>
+	</div>
+</div>
