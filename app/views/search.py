@@ -77,7 +77,7 @@ def handle_message(event):
 		count += 1
 		if count > 5:
 			break
-		#print(request.url_root[:-1] + url_for('show_normal', product_id=product.id))
+		print(request.url_root[:-1] + url_for('show_normal', product_id=product.id))
 
 	if carouselColumns:
 		message = TemplateSendMessage(
