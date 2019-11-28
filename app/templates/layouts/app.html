@@ -17,7 +17,14 @@
 			height: 100vh;
 		}
 
-		
+		#header {
+			height: 10%;
+		}
+
+		#content {
+			height: 90%;
+		}
+
 	</style>
 {% endblock styles %}
 
@@ -26,7 +33,7 @@
 {% endblock navbar %}
 
 {% block content %}
-	<div class="container">
+	<div id="content" class="container">
 		{% block page %}{% endblock page %}
 	</div>
 {% endblock content %}
