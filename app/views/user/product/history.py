@@ -6,10 +6,10 @@ from app.models.product import Product
 from app.models.information import Information
 
 
-class LikeView(MethodView):
+class HistoryView(MethodView):
     def get(self):
-        products = Information.objects(user_id=current_user.id).first().like
+        products = Information.objects(user_id=current_user.id).first().history
 
-        return render_template('user/product/like.html', products=products)
+        return render_template('user/information/history.html', products=products)
     def post(self):
     	pass

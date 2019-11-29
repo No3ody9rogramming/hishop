@@ -17,6 +17,7 @@ from app.views.user.account.password import PasswordView
 from app.views.user.account.payment import PaymentView, PaymentConfirmView
 
 from app.views.user.product.like import LikeView
+from app.views.user.product.history import HistoryView
 
 from app.views.user.selling.normal import NormalView
 from app.views.user.selling.bidding import BiddingView
@@ -44,6 +45,7 @@ app.add_url_rule(rule='/user/account/payment', endpoint='payment', view_func=log
 app.add_url_rule(rule='/user/account/payment/confirm', endpoint='payment_confirm', view_func=login_required(PaymentConfirmView.as_view('payment_confirm_view')), methods=['GET'])
 
 app.add_url_rule(rule='/user/product/like', endpoint='like', view_func=login_required(LikeView.as_view('like_view')), methods=['GET', 'POST'])
+app.add_url_rule(rule='/user/product/history', endpoint='history', view_func=login_required(HistoryView.as_view('history_view')), methods=['GET', 'POST'])
 
 app.add_url_rule(rule='/user/selling/normal', endpoint='normal', view_func=login_required(NormalView.as_view('normal_view')), methods=['GET', 'POST'])
 app.add_url_rule(rule='/user/selling/bidding', endpoint='bidding', view_func=login_required(BiddingView.as_view('bidding_view')), methods=['GET', 'POST'])

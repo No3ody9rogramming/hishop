@@ -1,11 +1,6 @@
 {% extends "layouts/app.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block head %}
-	{{ super() }}
-	{{ ckeditor.load() }}
-{% endblock head %}
-
 {% block page %}
 	{% for product in products %}
 		{{ product.to_json() }}<br>
