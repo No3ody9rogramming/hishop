@@ -34,7 +34,7 @@ class NormalView(MethodView):
                               status=0)
             product.save()
 
-            image_path = os.path.join(os.getcwd(), 'app\\static\\image', str(product.id))
+            image_path = os.path.join(os.getcwd(), 'app/static/image', str(product.id))
             os.makedirs(image_path)
             form.image.data.save(os.path.join(image_path, product.image))
 
