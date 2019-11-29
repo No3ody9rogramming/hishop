@@ -20,7 +20,7 @@ class Product(db.Document):
     detail = db.StringField(required=True, max_length=40000)
     image = db.StringField(required=True)
     view = db.IntField(required=True, default=0)
-    catogories = db.ListField(db.ReferenceField(Catogory), default=list)
+    categories = db.ListField(db.ReferenceField(Catogory), default=list)
     bidding = db.BooleanField(requried=True)
     status = db.IntField(requried=True, default=0)
     create_time = db.DateTimeField(default=datetime.datetime.utcnow())
