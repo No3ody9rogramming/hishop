@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, flash
+from flask import redirect, render_template, url_for, flash ,request
 from flask.views import MethodView
 from flask_login import login_user, current_user, logout_user
 from flask_wtf import FlaskForm
