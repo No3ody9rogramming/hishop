@@ -10,6 +10,8 @@ class HistoryView(MethodView):
     def get(self):
         products = Information.objects(user_id=current_user.id).first().history
 
-        return render_template('user/information/history.html', products=products)
+        products = sorted(products, key=lambda k: k.create_time, reverse=False)
+
+        return render_template('user/product/history.html', products=products)
     def post(self):
     	pass

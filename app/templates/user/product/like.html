@@ -2,7 +2,15 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block page %}
-	{% for product in products %}
-		{{ product.to_json() }}<br>
-	{% endfor %}
+	<div class="row">
+		<div class="col-md-2">
+			{% include "layouts/user.html" %}
+		</div>
+
+	    <div class="col-md-10">
+			{% for product in products %}
+				{{ product.to_json() }}<br>
+			{% endfor %}
+		</div>
+	</div>
 {% endblock page %}

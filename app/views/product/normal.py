@@ -26,20 +26,20 @@ class ShowNormalView(MethodView):
             information = Information.objects(user_id=current_user.id).first()
             update = False
             for history in information.history:
-                if history.product_id.id == product.id:
+                if history.product.id == product.id:
                     history.create_time = datetime.datetime.utcnow()
                     update = True
                     break
             if update == False:
-                information.history.append(History(product_id=product.id))
+                information.history.append(History(product=product.id))
             information.save()
 
-            for like in information.like:
-                if like.id == product.id:
+            for like_product in information.like:
+                if like_product.id == product.id:
                     like = "fas fa-heart"
 
-            for cart in information.cart:
-                if cart.id == product.id:
+            for cart_product in information.cart:
+                if cart_product.id == product.id:
                     cart = "移出購物車"
 
             #update view times

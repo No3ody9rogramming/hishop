@@ -6,7 +6,7 @@ from app.models.coupon import Coupon
 from app import db, login_manager
 
 class History(db.EmbeddedDocument):
-    product_id = db.ReferenceField(Product, required=True)
+    product = db.ReferenceField(Product, required=True)
     create_time = db.DateTimeField(default=datetime.datetime.utcnow())
 
 class Information(db.Document):
