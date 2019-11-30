@@ -9,6 +9,7 @@ from wtforms.validators import DataRequired, Email, InputRequired, Length, Equal
 
 from app.models.user import User
 
+
 class ProfileView(MethodView):
     def get(self):
         form = ProfileForm(name=current_user.name, birth=current_user.birth, phone=current_user.phone)

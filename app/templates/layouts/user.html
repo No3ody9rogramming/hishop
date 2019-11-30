@@ -7,7 +7,7 @@
         <hr>
 	</div>
     
-    {% if request.user_agent.is_mobile %}
+    {% if request.user_agent.platform not in config['PC_PLATFORM'] %}
     <a href="#sidebar" data-toggle="collapse"><i class="fa fa-navicon fa-lg"></i></a>
     
     <div class="row collapse in" id="sidebar">
@@ -47,7 +47,7 @@
             </div>
             
         </div>
-    {% if request.user_agent.is_mobile %}
+    {% if request.user_agent.platform not in config['PC_PLATFORM'] %}
     </div>
     {% endif %}
 </div>
