@@ -3,11 +3,13 @@
 
 {% block page %}	
 	<div class="row">
-		<div class="col-md-2">
+		<div class="col-auto">
+			<br>
 			{% include "layouts/user.html" %}
 		</div>
 
 	    <div class="col-md-10">
+			<br>
 			{% for product in products %}
 				{{ product.product.to_json() }} {{ product.create_time }}<br>
 			{% endfor %}

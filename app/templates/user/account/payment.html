@@ -3,11 +3,13 @@
 
 {% block page %}
 	<div class="row">
-		<div class="col-md-2">
+		<div class="col-auto">
+			<br>
 			{% include "layouts/user.html" %}
 		</div>
 
 	    <div class="col-md-10">
+			<br>
 	    	<p>目前有 {{ hicoin }} hicoin</p>
 		    {{ wtf.quick_form(form, method="post", action=url_for("payment")) }}
 		</div>
