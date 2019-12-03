@@ -2,18 +2,67 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block page %}
-	<div class="row" height="25vh"></div>
-	<form action="{{ url_for('search') }}" method="GET">
-        <div class="row justify-content-center form-group">
-            <div class="col-md-5 required">
-                {{ form.keyword(class="form-control", placeholder="輸入已加以搜尋") }}
-            </div>
+    <div class="row">
+        <div class="col-auto">
+            <br>
+            {% include "layouts/category.html" %}
         </div>
+        <div class="col-md-10">
+            <br>
+            <div class="card">
+                <div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">熱門商品 \\</div>
+                <div class="card-body">
+                    <div id="hotProductIndicators" class="carousel slide" data-ride="carousel">
+                            {% include "layouts/slick.html" %}
+                        <a class="carousel-control-prev" href="#hotProductIndicators" role="button" data-slide="prev" style="width: auto;">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#hotProductIndicators" role="button" data-slide="next" style="width: auto;">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-        <div class="row justify-content-center">
-            <div class="col-md-5 form-group required">
-                <input class="btn btn-primary" type="submit">
+            <br>
+
+            <div class="card">
+                <div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">最新一般商品 \\</div>
+                <div class="card-body">
+                    <div id="newProductIndicators" class="carousel slide" data-ride="false" data-interval="false">
+                            {% include "layouts/slick.html" %}
+                        <a class="carousel-control-prev" href="#newProductIndicators" role="button" data-slide="prev" style="width: auto;">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#newProductIndicators" role="button" data-slide="next" style="width: auto;">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="card">
+                <div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">最新競標商品 \\</div>
+                <div class="card-body">
+                    <div id="bidProductIndicators" class="carousel slide" data-ride="false"  data-interval="false">
+                            {% include "layouts/slick.html" %}
+                        <a class="carousel-control-prev" href="#bidProductIndicators" role="button" data-slide="prev" style="width: auto;">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#bidProductIndicators" role="button" data-slide="next" style="width: auto;">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-    </form>
+    </div>
 {% endblock page %}

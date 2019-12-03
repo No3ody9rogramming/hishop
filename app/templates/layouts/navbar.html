@@ -1,24 +1,32 @@
 <nav id="header" class="navbar navbar-expand-lg navbar-light bg-warning">
     <div class="container">
-        <img src="{{ url_for('static',filename='hicoin.png') }}" alt="Logo" style="width: 60px;height: 60px;">
+        <a class="navbar-brand" href="{{ url_for('index') }}">
+            <img src="{{ url_for('static',filename='logo.svg') }}" alt="Logo" style="width: 180px;height: 60px;">
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ url_for('index') }}">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-            </ul>
+            <div class="col">
+                <ul class="nav flex-column">
+                    <li class="nav-item pt-md">
+                        <form class="form-inline  required" action="{{ url_for('search') }}" method="GET">
+                        {{ form.keyword(class="form-control  w-50 ml-sm-2 mr-sm-2 ", placeholder="輸入關鍵字加以搜尋") }}
+                        <button class="btn btn-secondary" type="submit"><i class="fas fa-search"></i></button>
+                        </form> 
+                    </li>
+                    <li class="nav-item pt-md">
+                        <a class="col">熱</a>
+                        <a class="col">門</a>
+                        <a class="col">關</a>
+                        <a class="col">鍵</a>
+                        <a class="col">字</a>
+                    </li>            
+                </ul>
+            </div>
 
-            <ul class="navbar-nav">
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i></a>
                 </li>
