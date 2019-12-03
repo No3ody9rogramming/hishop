@@ -12,7 +12,7 @@
                 <ul class="nav flex-column">
                     <li class="nav-item pt-md">
                         <form class="form-inline  required" action="{{ url_for('search') }}" method="GET">
-                        {{ form.keyword(class="form-control  w-50 ml-sm-2 mr-sm-2 ", placeholder="輸入關鍵字加以搜尋") }}
+                            <input name="keyword" class="form-control  w-50 ml-sm-2 mr-sm-2" placeholder="輸入關鍵字加以搜尋">
                         <button class="btn btn-secondary" type="submit"><i class="fas fa-search"></i></button>
                         </form> 
                     </li>
