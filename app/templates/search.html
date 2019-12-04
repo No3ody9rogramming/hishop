@@ -2,7 +2,49 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block page %}
-	{% for product in products %}
-		<p> 商品名稱:<a href="{{ url_for('show_normal', product_id=product.id|string) }}">{{ product.name }}</a></p>
-	{% endfor %}
+	<div class = "container">
+		<div class = "row">
+			<div class="col-md-2">
+				<br>
+				{% include "layouts/category.html" %}
+			</div>
+			<div class="col-md-10">
+					<br>
+					<div class="card">
+						<div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">搜尋結果 \\</div>
+						<div class="card-body">
+							<!--div class = "card-columns"-->
+								{% for product in products %}						
+								{% if loop.index == 1 %}
+								<div class = "card-deck">
+								{% endif %}
+								{% if loop.index % 4 == 1 and loop.index > 1 %}
+								</div>
+								<div class = "card-deck">
+								{% endif %}
+								
+										<div class="card" style="width: 18rem;">
+											<img class="card-img-top" src="{{url_for('static', filename = 'image/'+
+												product.id|string +'/product.png')}}" alt="Card image" style = "height:250px;width:100%;">
+											<div class="card-footer ">
+												<a href="{{ url_for('show_normal', product_id=product.id|string) }}">{{ product.name }}</a>
+												<a style = "float:right;">{{product.price}}</a>
+											</div>
+										</div>	
+								{% if loop.index == loop.length %}
+									{% for i in range(0, 4 - loop.length % 4 )%}
+										<div class="card" style="width: 18rem;">
+										</div>
+									{% endfor%}
+								{% endif %}
+								{% endfor %}
+								</div>
+							<!--/div-->
+						</div>
+					</div>
+			</div>
+			
+		</div>
+	</div>
+	
 {% endblock page %}
