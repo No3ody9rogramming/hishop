@@ -25,7 +25,7 @@
 								
 										<div class="card" style="width: 18rem;">
 											<img class="card-img-top" src="{{url_for('static', filename = 'image/'+
-												product.id|string +'/product.png')}}" alt="Card image" style = "height:250px;width:100%;">
+												product.id|string +'/' + product.image)}}" alt="Card image" style = "height:250px;width:100%;">
 											<div class="card-footer ">
 												<a href="{{ url_for('show_normal', product_id=product.id|string) }}">{{ product.name }}</a>
 												<a style = "float:right;">{{product.price}}</a>
