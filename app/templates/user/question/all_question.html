@@ -1,0 +1,32 @@
+{% extends "layouts/app.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page %}
+	<div class="row">
+		<div class="col-auto">
+			<br>
+			{% include "layouts/user.html" %}
+		</div>
+
+	    <div class="col-md-9">
+			<br>
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th scope="col">問題主旨</th>
+			      <th scope="col">解決辦法</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	{% for question in questions %}
+				    <tr>
+				      <th scope="row"><a href="" target=_blank>{{question.title}}</a></th>
+				      <td>{{question.detail}}</td>
+				    </tr>
+				{% endfor %}	    
+			  </tbody>
+			</table>
+			<hr>
+		</div>
+	</div>
+{% endblock page %}
