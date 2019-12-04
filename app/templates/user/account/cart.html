@@ -13,7 +13,7 @@
 			<table class="table">
 			  <thead>
 			    <tr>
-			      <th scope="col">商品名稱</th>
+			      <th scope="col">商品</th>
 			      <th scope="col">賣家</th>
 			      <th scope="col">售價</th>
 			      <th scope="col">折價券</th>
@@ -23,8 +23,8 @@
 			  <tbody>
 			  	{% for product in products %}
 				    <tr>
-				      <th scope="row">{{product.name}}</th>
-				      <td><a href="#">{{product.seller_id.name}}</a></td>
+				      <th scope="row"><a href="{{ url_for('show_normal', product_id=product.id|string) }}" target=_blank>{{product.name}}</a></th>
+				      <td>{{product.seller_id.name}}</td>
 				      <td>{{product.price}}</td>
 				      <td>select option</td>
 				      <td>{{ wtf.quick_form(form, method="post", action=url_for("payment")) }}</td>
@@ -32,6 +32,7 @@
 				{% endfor %}	    
 			  </tbody>
 			</table>
+			<hr>
 	    	<p>目前有 {{ hicoin }} hicoin</p>
 		</div>
 	</div>

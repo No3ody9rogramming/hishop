@@ -61,7 +61,7 @@ def handle_message(event):
 		# 	image = imagePath
 		# else:
 		# 	image = "https://miro.medium.com/max/2834/0*f81bU2qWpP51WWWC.jpg"
-		filePath = 'image/' + str(product.id) + '/' + product.image;
+		filePath = 'image/' + str(product.id) + '/' + product.image
 		carouselColumns.append(
 			CarouselColumn(
 		        thumbnail_image_url=request.host_url[:-1] + url_for('static', filename=filePath),
