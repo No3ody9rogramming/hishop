@@ -1,34 +1,97 @@
 {% extends "layouts/app.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block styles %}
+	{{ super() }}
+	<style type = "text/css">
+		img {
+			height: 80px;
+			width: 80px;
+		}
+
+	</style>
+{% endblock styles %}
+
+{% block scripts %}
+	{{ super() }}
+	<script type="text/javascript">
+
+		function check_all(obj,cName1, cName2){
+			var checkbox1 = document.getElementsByName(cName1);
+			var checkbox2 = document.getElementsByName(cName2);
+			for(var i=0; i<checkbox1.length; i++){
+				checkbox1[i].checked = obj.checked;
+			}
+
+			for(var i=0; i<checkbox2.length; i++){
+				checkbox2[i].checked = obj.checked;
+			}
+		}
+
+		function check_seller(obj,cName){
+			var checkbox = document.getElementsByName(cName);
+			for(var i=0; i<checkbox.length; i++){
+				checkbox[i].checked = obj.checked;
+			}
+		}
+
+		$('input:checkbox').change(function (){
+      		var total = 0;
+      		$('input:checkbox:checked').each(function(){
+        		total += isNaN(parseInt($(this).val())) ? 0 : parseInt($(this).val());
+      		});     
+	  			total.toString();
+      			$("#total").text(total);
+		});
+
+	</script>
+{% endblock scripts %}
+
 {% block page %}
+
 	<div class="row">
 	    <div class="col-md-12">
 			<br>
 			<table class="table">
 			  	<thead>
 			    	<tr>
+						<th>
+							<form>
+								<input type="checkbox" value="" name="checkall" onclick="check_all(this,'checkFormSeller', 'c')"  id="checkbox">
+							</form>
+						</th>
 			      		<th scope="col">商品</th>
 			      		<th scope="col">賣家</th>
 			      		<th scope="col">售價</th>
 			      		<th scope="col">折價券</th>
-			      		<th scope="col">結帳</th>
 			    	</tr>
 			  	</thead>
 			  	<tbody>
+					<input type="checkbox" value="123" name="checkFormSeller" onclick="check_seller(this, 'c')"  id="checkbox">全選賣家
+					<input type="checkbox" value="" name="c" id="checkbox">賣家
 			  		{% for product in products %}
 				    	<tr>
-				      		<th scope="row"><a href="{{ url_for('show_normal', product_id=product.id|string) }}" target=_blank>{{product.name}}</a></th>
-				      		<td>{{product.seller_id.name}}</td>
-				      		<td>{{product.price}}</td>
-				      		<td>select option</td>
-				      		<td>{{ wtf.quick_form(form, method="post", action=url_for("payment")) }}</td>
+							<td class="align-middle">
+								<form>
+									<input type="checkbox" value="{{product.price}}" name="c"  id="{{product.id}}">
+								</form>
+							</td>
+							<th scope="row" class="align-middle">
+								<img src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}"> 
+								<a href="{{ url_for('show_normal', product_id=product.id|string) }}" target=_blank>{{product.name}}</a>
+							</th>
+				      		<td class="align-middle">{{product.seller_id.name}}</td>
+				      		<td class="align-middle">{{product.price}}</td>
+				      		<td class="align-middle">select option</td>
 				    	</tr>
 					{% endfor %}	    
 			  	</tbody>
 			</table>
-			<hr>
-	    	<p>目前有 {{ hicoin }} hicoin</p>
+			<br>
+
+			<p>目前有 {{ hicoin }} hicoin</p>
+			<p id="total">
+			{{ wtf.quick_form(form, method="post", action=url_for("payment")) }}
 		</div>
 	</div>
 {% endblock page %}
