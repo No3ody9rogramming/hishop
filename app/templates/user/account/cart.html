@@ -1,0 +1,38 @@
+{% extends "layouts/app.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page %}
+	<div class="row">
+		<div class="col-auto">
+			<br>
+			{% include "layouts/user.html" %}
+		</div>
+
+	    <div class="col-md-9">
+			<br>
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th scope="col">商品名稱</th>
+			      <th scope="col">賣家</th>
+			      <th scope="col">售價</th>
+			      <th scope="col">折價券</th>
+			      <th scope="col">結帳</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	{% for product in products %}
+				    <tr>
+				      <th scope="row">{{product.name}}</th>
+				      <td><a href="#">{{product.seller_id.name}}</a></td>
+				      <td>{{product.price}}</td>
+				      <td>select option</td>
+				      <td>{{ wtf.quick_form(form, method="post", action=url_for("payment")) }}</td>
+				    </tr>
+				{% endfor %}	    
+			  </tbody>
+			</table>
+	    	<p>目前有 {{ hicoin }} hicoin</p>
+		</div>
+	</div>
+{% endblock page %}
