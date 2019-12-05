@@ -44,6 +44,29 @@
       			$("#total").text(total);
 		});
 
+		$("#remove").click(function(e){
+			e.preventDefault();
+			{% if current_user.is_anonymous %}
+				window.location = "{{ url_for('login', _external=True, next=url_for('show_normal', product_id=product.id|string)) }}";
+			{% endif %}
+
+			console.log(123);
+
+			var data = {
+				csrf_token: $("#csrf_token").val(),
+				cart: true,
+			};
+
+			$.ajax({
+				type:"POST",
+				url: "{{ url_for('cartOperation') }}",
+				data: { product_id : $("#remove").val()},
+				success: function(data) {
+					$("#remove").text(data);
+				}
+			});
+		});
+
 	</script>
 {% endblock scripts %}
 
@@ -64,10 +87,11 @@
 			      		<th scope="col">賣家</th>
 			      		<th scope="col">售價</th>
 			      		<th scope="col">折價券</th>
+			      		<th scope="col">移出購物車</th>
 			    	</tr>
 			  	</thead>
 			  	<tbody>
-					<input type="checkbox" value="123" name="checkFormSeller" onclick="check_seller(this, 'c')"  id="checkbox">全選賣家
+					<input type="checkbox" value="" name="checkFormSeller" onclick="check_seller(this, 'c')"  id="checkbox">全選賣家
 					<input type="checkbox" value="" name="c" id="checkbox">賣家
 			  		{% for product in products %}
 				    	<tr>
@@ -83,6 +107,7 @@
 				      		<td class="align-middle">{{product.seller_id.name}}</td>
 				      		<td class="align-middle">{{product.price}}</td>
 				      		<td class="align-middle">select option</td>
+				      		<td class="align-middle"><button id="remove" value="{{ product.id }}" class="btn btn-sencondary">移出購物車</button></td>
 				    	</tr>
 					{% endfor %}	    
 			  	</tbody>
