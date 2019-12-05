@@ -12,7 +12,14 @@ class IndexView(MethodView):
     def get(self):
         form = SearchForm()
         
-        return render_template('index.html', form=form)
+        popular_products = Product.objects(bidding=False).order_by('-view')
+        normal_products = Product.objects(bidding=False).order_by('-create_time')
+        bidding_products = Product.objects(bidding=True).order_by('-create_time')
+
+        return render_template('index.html', form=form,
+         				popular_products=popular_products,
+         				normal_products=normal_products,
+         				bidding_products=bidding_products)
         
 class SearchForm(FlaskForm):
     keyword = StringField("輸入搜尋", validators=[InputRequired(), Length(min=1, max=20)])
