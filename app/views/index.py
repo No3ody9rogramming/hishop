@@ -12,9 +12,9 @@ class IndexView(MethodView):
     def get(self):
         form = SearchForm()
         
-        popular_products = Product.objects(bidding=False).order_by('-view')
-        normal_products = Product.objects(bidding=False).order_by('-create_time')
-        bidding_products = Product.objects(bidding=True).order_by('-create_time')
+        popular_products = Product.objects(bidding=False).order_by('-view')[:12]
+        normal_products = Product.objects(bidding=False).order_by('-create_time')[:12]
+        bidding_products = Product.objects(bidding=True).order_by('-create_time')[:12]
 
         return render_template('index.html', form=form,
          				popular_products=popular_products,
