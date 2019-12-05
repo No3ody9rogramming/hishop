@@ -4,7 +4,7 @@
 {% block styles %}
 	{{ super() }}
 	<style type = "text/css">
-		img {
+		.productImg {
 			max-width: 100px;
 		    max-height:200px;
 		}
@@ -38,7 +38,7 @@
 		$('input:checkbox').change(function (){
       		var total = 0;
       		$('input:checkbox:checked').each(function(){
-        		total += isNaN(parseInt($(this).val())) ? 0 : parseInt($(this).val());
+        		total += isNaN(parseInt($(this).attr('price'))) ? 0 : parseInt($(this).attr('price'));
       		});     
 	  			total.toString();
       			$("#total").text(total);
@@ -70,52 +70,56 @@
 {% endblock scripts %}
 
 {% block page %}
-
-	<div class="row">
-	    <div class="col-md-12">
-			<br>
-			<table class="table">
-			  	<thead>
-			    	<tr>
-						<th>
-							<form>
-								<input type="checkbox" value="" name="checkall" onclick="check_all(this,'checkFormSeller', 'c')"  id="checkbox">
-							</form>
-						</th>
-			      		<th scope="col">商品</th>
-			      		<th scope="col">賣家</th>
-			      		<th scope="col">售價</th>
-			      		<th scope="col">折價券</th>
-			      		<th scope="col">移出購物車</th>
-			    	</tr>
-			  	</thead>
-			  	<tbody>
-					<input type="checkbox" value="" name="checkFormSeller" onclick="check_seller(this, 'c')"  id="checkbox">全選賣家
-					<input type="checkbox" value="" name="c" id="checkbox">賣家
-			  		{% for product in products %}
+	<form action="{{ url_for('cart') }}" method="post">
+		<div class="row">
+		    <div class="col-md-12">
+				<br>
+				<table class="table">
+				  	<thead>
 				    	<tr>
-							<td class="align-middle">
-								<form>
-									<input type="checkbox" value="{{product.price}}" name="c"  id="{{product.id}}">
-								</form>
-							</td>
-							<th scope="row" class="align-middle">
-								<img src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}"> 
-								<a href="{{ url_for('show_normal', product_id=product.id|string) }}" target=_blank>{{product.name}}</a>
+							<th>
+								<input type="checkbox" value="" name="checkall" onclick="check_all(this,'checkFormSeller', 'productCheck')"  id="checkbox">
 							</th>
-				      		<td class="align-middle">{{product.seller_id.name}}</td>
-				      		<td class="align-middle">{{product.price}}</td>
-				      		<td class="align-middle">select option</td>
-				      		<td class="align-middle"><button id="remove" value="{{ product.id }}" onclick="moveCart(this)" class="btn btn-sencondary">移出購物車</button></td>
+				      		<th scope="col">商品</th>
+				      		<th scope="col">賣家</th>
+				      		<th scope="col">售價</th>
+				      		<th scope="col">折價券</th>
+				      		<th scope="col">移出購物車</th>
 				    	</tr>
-					{% endfor %}	    
-			  	</tbody>
-			</table>
-			<br>
-
+				  	</thead>
+				  	<tbody>
+				  		<tr>
+						<input type="checkbox" value="" name="checkFormSeller" onclick="check_seller(this, 'productCheck')"  id="checkbox">全選賣家
+						<input type="checkbox" value="" name="c" id="checkbox">賣家</tr>					
+				  		{% for product in products %}
+					    	<tr>
+								<td class="align-middle">
+									{{ form.csrf_token }}
+									<input type="checkbox" value="{{product.id}}" name="productCheck"  id="{{product.id}}" price="{{product.price}}">
+								</td>
+								<th scope="row" class="align-middle">
+									<img class="productImg" src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}"> 
+									<a href="{{ url_for('show_normal', product_id=product.id|string) }}" target=_blank>{{product.name}}</a>
+								</th>
+					      		<td class="align-middle">{{product.seller_id.name}}</td>
+					      		<td class="align-middle">{{product.price}}</td>
+					      		<td class="align-middle">select option</td>
+					      		<td class="align-middle"><button id="remove" value="{{ product.id }}" onclick="moveCart(this)" class="btn btn-sencondary">移出購物車</button></td>
+					    	</tr>
+						{% endfor %}
+							<tr></tr>
+						</form>  
+				  	</tbody>
+				</table>
+				<br>			
+			</div>		
+		</div>
+		<div class="float-right">
 			<p>目前有 {{ hicoin }} hicoin</p>
 			<p id="total">
-			{{ wtf.quick_form(form, method="post", action=url_for("payment")) }}
+				0
+			</p>
+			{{ form.submit }}
 		</div>
-	</div>
+	</form>
 {% endblock page %}
