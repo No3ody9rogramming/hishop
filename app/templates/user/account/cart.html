@@ -44,13 +44,12 @@
       			$("#total").text(total);
 		});
 
-		$("#remove").click(function(e){
-			e.preventDefault();
+		function moveCart(obj){
 			{% if current_user.is_anonymous %}
-				window.location = "{{ url_for('login', _external=True, next=url_for('show_normal', product_id=product.id|string)) }}";
+				window.location = "{{ url_for('login', _external=True, next=url_for('cart')) }}";
 			{% endif %}
 
-			console.log(123);
+			var thisObj=$(obj);
 
 			var data = {
 				csrf_token: $("#csrf_token").val(),
@@ -60,12 +59,12 @@
 			$.ajax({
 				type:"POST",
 				url: "{{ url_for('cartOperation') }}",
-				data: { product_id : $("#remove").val()},
+				data: { product_id : thisObj.val()},
 				success: function(data) {
-					$("#remove").text(data);
+					thisObj.text(data);
 				}
 			});
-		});
+		}
 
 	</script>
 {% endblock scripts %}
@@ -107,7 +106,7 @@
 				      		<td class="align-middle">{{product.seller_id.name}}</td>
 				      		<td class="align-middle">{{product.price}}</td>
 				      		<td class="align-middle">select option</td>
-				      		<td class="align-middle"><button id="remove" value="{{ product.id }}" class="btn btn-sencondary">移出購物車</button></td>
+				      		<td class="align-middle"><button id="remove" value="{{ product.id }}" onclick="moveCart(this)" class="btn btn-sencondary">移出購物車</button></td>
 				    	</tr>
 					{% endfor %}	    
 			  	</tbody>
