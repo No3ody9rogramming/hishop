@@ -31,13 +31,17 @@
 							<div class="row">
 							<img src="{{ url_for('static',filename='logo.svg') }}" alt="Logo" style="width: 180px;height: 180px;">
 							</div>
-							<div class=" row btn btn-primary "> 上傳圖片</div>
+							<div class=" row btn btn-primary " style="transform: translate(100%,0);">
+								<div class="col-10" >
+								上傳圖片
+								</div>
+							</div>
 						</div>
 						
 						<div class="col-auto">
-							<div style="transform: translate(0,5vh);">	
+							<div style="transform: translate(0,8vh);">	
 								<h1>{{ current_user.account }}</h1>
-								<p>評價星星</p>
+								<p class="text-center">評價星星</p>
 							</div>
 						</div>
 
@@ -77,15 +81,60 @@
 										{% endif %}
 									</div>
 							</div>
-
-
-							<div class="row justify-content-center">
-								<div class="col-5 form-group required">
-									{{ form.submit(class="btn btn-primary col-12") }}
-								</div>
-							</div>
+							
 						</div>
 							
+						
+						<div class="col-10 border border-dark bg-dark">
+							<p class="text-center text-light" style="margin: 5px 5px 5px;"> 個人資料 </p>
+						</div>
+						<div class="col-10 border border-dark " style="margin: 0px 5px 5vh;">
+								<div class="row justify-content-center">
+										<div class="col-lg-10 form-group required">
+											<p>賣場名稱:</p>
+											{% if form.name.errors %}
+												{{ form.name(class="form-control is-invalid") }}
+												{% for error in form.name.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+											{% else %}
+												{{ form.name(class="form-control") }}
+											{% endif %}
+										</div>
+									</div>
+		
+									<div class="row justify-content-center">
+										<div class="col-lg-10 form-group required">
+											<p>交易地點:</p>
+											{% if form.phone.errors %}
+												{{ form.phone(class="form-control is-invalid") }}
+												{% for error in form.phone.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+											{% else %}
+												{{ form.phone(class="form-control") }}
+											{% endif %}
+										</div>
+									</div>
+		
+									<div class="row justify-content-center">
+											<div class="col-lg-10 form-group required">
+												<p>交易時間:</p>
+												{% if form.birth.errors %}
+													{{ form.birth(class="form-control is-invalid" ) }}
+													{% for error in form.birth.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+												{% else %}
+													{{ form.birth(class="form-control") }}
+												{% endif %}
+											</div>
+									</div>
+
+									
+								</div>
+								<div class="col-7 form-group required">
+										
+								</div>
+								<div class="col-3 form-group required">
+										{{ form.submit(class="btn btn-primary col-12") }}
+								</div>
+						</div>
+						<br>
 					</div>
 				</form>
 			
