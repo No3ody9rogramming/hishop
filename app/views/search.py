@@ -17,10 +17,11 @@ import os
 
 class SearchView(MethodView):
     def get(self):
-        if request.args.get('keyword') == None:
-            products = Product.objects()
+        print(request.args.get('type'))
+        if request.args.get('type') == "bidding":
+            products = Product.objects(name__icontains=request.args.get('keyword'), status=0, bidding=True)
         else:
-            products = Product.objects(name__icontains=request.args.get('keyword'), bidding=False)
+            products = Product.objects(name__icontains=request.args.get('keyword'), status=0, bidding=False)
 
         return render_template('search.html', products=products)
 
@@ -28,64 +29,64 @@ line_bot_api = LineBotApi(app.config['LINE_CHATBOT_ACCESS_TOKEN'])
 handler = WebhookHandler(app.config['LINE_CHATBOT_SECRET'])
 
 class LineChatbotSearch(MethodView):
-	def post(self):
+    def post(self):
 
-		# get X-Line-Signature header value
-	    signature = request.headers['X-Line-Signature']
+        # get X-Line-Signature header value
+        signature = request.headers['X-Line-Signature']
 
-	    # get request body as text
-	    body = request.get_data(as_text=True)
-	    app.logger.info("Request body: " + body)
-	    # handle webhook body
-	    try:
-	        handler.handle(body, signature)
-	    except InvalidSignatureError:
-	        print("Invalid signature. Please check your channel access token/channel secret.")
-	        abort(400)
+        # get request body as text
+        body = request.get_data(as_text=True)
+        app.logger.info("Request body: " + body)
+        # handle webhook body
+        try:
+            handler.handle(body, signature)
+        except InvalidSignatureError:
+            print("Invalid signature. Please check your channel access token/channel secret.")
+            abort(400)
 
-	    return 'OK'
+        return 'OK'
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-	if event.message.text == None:
-		products = Product.objects()
-	else:
-		products = Product.objects(name__icontains=event.message.text, bidding=False)
+    if event.message.text == None:
+        products = Product.objects(status=0, bidding=False)
+    else:
+        products = Product.objects(name__icontains=event.message.text, status=0, bidding=False)
 
-	carouselColumns = [];
+    carouselColumns = [];
 
-	count = 0
-	for product in products:
-		# imagePath ='./app/static/image/' + str(product.id) + '/' + product.image
-		# if os.path.isfile(imagePath):
-		# 	image = imagePath
-		# else:
-		# 	image = "https://miro.medium.com/max/2834/0*f81bU2qWpP51WWWC.jpg"
-		filePath = 'image/' + str(product.id) + '/' + product.image
-		carouselColumns.append(
-			CarouselColumn(
-		        thumbnail_image_url=request.host_url[:-1] + url_for('static', filename=filePath),
-		        title=product.name,
-		        text="NT$" + str(product.price),
-		        actions=[
-		            URITemplateAction(
-		                label='Take a look!',
-		                uri=request.host_url[:-1] + url_for('show_normal', product_id=product.id)
-		            )
-		        ]				
-			))
-		count += 1
-		if count > 5:
-			break
+    count = 0
+    for product in products:
+        # imagePath ='./app/static/image/' + str(product.id) + '/' + product.image
+        # if os.path.isfile(imagePath):
+        #   image = imagePath
+        # else:
+        #   image = "https://miro.medium.com/max/2834/0*f81bU2qWpP51WWWC.jpg"
+        filePath = 'image/' + str(product.id) + '/' + product.image
+        carouselColumns.append(
+            CarouselColumn(
+                thumbnail_image_url=request.host_url[:-1] + url_for('static', filename=filePath),
+                title=product.name,
+                text="NT$" + str(product.price),
+                actions=[
+                    URITemplateAction(
+                        label='Take a look!',
+                        uri=request.host_url[:-1] + url_for('show_normal', product_id=product.id)
+                    )
+                ]               
+            ))
+        count += 1
+        if count > 5:
+            break
 
-	if carouselColumns:
-		message = TemplateSendMessage(
-		    alt_text="請到 "+ request.url_root[:-1] + url_for('search', keyword=event.message.text) + " 或",
-		    template=CarouselTemplate(columns=carouselColumns)
-		)
-	else:		
-		message = TextSendMessage(text="找不到相關商品")
-	line_bot_api.reply_message(event.reply_token, message)
+    if carouselColumns:
+        message = TemplateSendMessage(
+            alt_text="請到 "+ request.url_root[:-1] + url_for('search', keyword=event.message.text) + " 或",
+            template=CarouselTemplate(columns=carouselColumns)
+        )
+    else:       
+        message = TextSendMessage(text="找不到相關商品")
+    line_bot_api.reply_message(event.reply_token, message)
 
 # @LineChatbotSearch.handler.add(MessageEvent, message=TextMessage)
 # def handle_message(event):

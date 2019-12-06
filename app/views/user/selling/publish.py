@@ -48,7 +48,7 @@ class PublishView(MethodView):
         return render_template('user/selling/publish.html', form=form)
         
 class PublishForm(FlaskForm):
-    image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png'], '只能上傳圖片')])
+    image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png', 'gif'], '只能上傳圖片')])
     name = StringField("商品名稱", validators=[InputRequired(), Length(max=50)])
     price = IntegerField("商品直購價", validators=[InputRequired(), NumberRange(min=1, max=100000)])
     low_price = IntegerField("起標價", validators=[InputRequired(), NumberRange(min=1, max=10000)])
