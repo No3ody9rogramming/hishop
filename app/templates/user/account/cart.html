@@ -64,13 +64,14 @@
 					thisObj.text(data);
 				}
 			});
+			return false;
 		}
 
 	</script>
 {% endblock scripts %}
 
 {% block page %}
-	<form action="{{ url_for('cart') }}" method="post">
+	<form action="" method="post">
 		<div class="row">
 		    <div class="col-md-12">
 				<br>
@@ -104,7 +105,7 @@
 					      		<td class="align-middle">{{product.seller_id.name}}</td>
 					      		<td class="align-middle">{{product.price}}</td>
 					      		<td class="align-middle">select option</td>
-					      		<td class="align-middle"><button id="remove" value="{{ product.id }}" onclick="moveCart(this)" class="btn btn-sencondary">移出購物車</button></td>
+					      		<td class="align-middle"><button value="{{ product.id }}" onclick="return moveCart(this)" class="btn btn-sencondary">移出購物車</button></td>
 					    	</tr>
 						{% endfor %}
 				  	</tbody>
