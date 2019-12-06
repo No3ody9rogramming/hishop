@@ -68,7 +68,7 @@ class ShowNormalView(MethodView):
                 information.save()
                 return "fas fa-heart"
 
-            elif form.cart.data == True:
+            elif form.cart.data == True and product.seller_id.id != current_user.id:
                 information = Information.objects(user_id=current_user.id).first()
                 for (idx, cart) in enumerate(information.cart):
                     if product.id == cart.id:
@@ -81,7 +81,7 @@ class ShowNormalView(MethodView):
                 return "移出購物車"
             #print(form.like.data)
             #print(form.cart.data)
-        return abort(404);
+        abort(404)
         
 class NormalForm(FlaskForm):
     like = SubmitField('喜歡')
