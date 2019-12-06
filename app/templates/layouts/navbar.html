@@ -11,8 +11,9 @@
             <div class="col">
                 <ul class="nav flex-column">
                     <li class="nav-item pt-md">
-                        <form class="form-inline  required" action="{{ url_for('search') }}" method="GET">
+                        <form class="form-inline  required" action="{{ url_for('search', type='normal') }}" method="GET">
                             <input name="keyword" class="form-control  w-50 ml-sm-2 mr-sm-2" placeholder="輸入關鍵字加以搜尋">
+                            <input name="type" type="hidden" value="normal">
                         <button class="btn btn-secondary" type="submit"><i class="fas fa-search"></i></button>
                         </form> 
                     </li>
