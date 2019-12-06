@@ -14,7 +14,81 @@
 
 	    <div class="col-md-9">
 			<br>
-		    {{ wtf.quick_form(form, method="post", action=url_for("profile")) }}
+
+			<div class="row justify-content-center align-items-center bg-warning border border-dark rounded">
+				<div class="col-auto ">
+					<p class="text-cneter rounded" style="margin: 5px 5px 5px;"> 個人資料 </p>
+				</div>
+			</div>
+
+
+			
+				<form action="{{ url_for('profile') }}" method="POST">
+					{{ form.csrf_token }}
+					<div class="row justify-content-center border border-dark rounded">
+					
+						<div class="col-auto">
+							<div class="row">
+							<img src="{{ url_for('static',filename='logo.svg') }}" alt="Logo" style="width: 180px;height: 180px;">
+							</div>
+							<div class=" row btn btn-primary "> 上傳圖片</div>
+						</div>
+						
+						<div class="col-auto">
+							<div style="transform: translate(0,5vh);">	
+								<h1>{{ current_user.account }}</h1>
+								<p>評價星星</p>
+							</div>
+						</div>
+
+						<div class="col-6">
+							<div class="row justify-content-center">
+								<div class="col-lg-10 form-group required">
+									<p>*姓名:</p>
+									{% if form.name.errors %}
+										{{ form.name(class="form-control is-invalid") }}
+										{% for error in form.name.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+									{% else %}
+										{{ form.name(class="form-control") }}
+									{% endif %}
+								</div>
+							</div>
+
+							<div class="row justify-content-center">
+								<div class="col-lg-10 form-group required">
+									<p>電話:</p>
+									{% if form.phone.errors %}
+										{{ form.phone(class="form-control is-invalid") }}
+										{% for error in form.phone.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+									{% else %}
+										{{ form.phone(class="form-control") }}
+									{% endif %}
+								</div>
+							</div>
+
+							<div class="row justify-content-center">
+									<div class="col-lg-10 form-group required">
+										<p>生日:</p>
+										{% if form.birth.errors %}
+											{{ form.birth(class="form-control is-invalid" ) }}
+											{% for error in form.birth.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+										{% else %}
+											{{ form.birth(class="form-control") }}
+										{% endif %}
+									</div>
+							</div>
+
+
+							<div class="row justify-content-center">
+								<div class="col-5 form-group required">
+									{{ form.submit(class="btn btn-primary col-12") }}
+								</div>
+							</div>
+						</div>
+							
+					</div>
+				</form>
+			
 		</div>
 	</div>
 {% endblock page %}
