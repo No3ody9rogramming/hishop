@@ -91,11 +91,11 @@
 				  	<tbody>
 				  		<tr>
 						<input type="checkbox" value="" name="checkFormSeller" onclick="check_seller(this, 'productCheck')"  id="checkbox">全選賣家
-						<input type="checkbox" value="" name="c" id="checkbox">賣家</tr>					
+						<input type="checkbox" value="" name="c" id="checkbox">賣家</tr>			
+						{{ form.csrf_token }}		
 				  		{% for product in products %}
 					    	<tr>
 								<td class="align-middle">
-									{{ form.csrf_token }}
 									<input type="checkbox" value="{{product.id}}" name="productCheck"  id="{{product.id}}" price="{{product.price}}">
 								</td>
 								<th scope="row" class="align-middle">
