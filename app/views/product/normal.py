@@ -15,7 +15,7 @@ from app.models.information import Information, History
 class ShowNormalView(MethodView):
     def get(self, product_id):
         form = NormalForm()
-        product = Product.objects(id=product_id).first()
+        product = Product.objects(id=product_id, bidding=False).first()
         like = "far fa-heart"
         cart = "加入購物車"
         
