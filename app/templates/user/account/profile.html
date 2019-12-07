@@ -92,11 +92,11 @@
 								<div class="row justify-content-center">
 										<div class="col-lg-10 form-group required">
 											<p>賣場名稱:</p>
-											{% if form.name.errors %}
-												{{ form.name(class="form-control is-invalid") }}
-												{% for error in form.name.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+											{% if form.store_name.errors %}
+												{{ form.store_name(class="form-control is-invalid") }}
+												{% for error in form.store_name.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
 											{% else %}
-												{{ form.name(class="form-control") }}
+												{{ form.store_name(class="form-control") }}
 											{% endif %}
 										</div>
 									</div>
@@ -104,25 +104,22 @@
 									<div class="row justify-content-center">
 										<div class="col-lg-10 form-group required">
 											<p>交易地點:</p>
-											{% if form.phone.errors %}
-												{{ form.phone(class="form-control is-invalid") }}
-												{% for error in form.phone.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-											{% else %}
-												{{ form.phone(class="form-control") }}
-											{% endif %}
+											
 										</div>
 									</div>
 		
 									<div class="row justify-content-center">
 											<div class="col-lg-10 form-group required">
-												<p>交易時間:</p>
-												{% if form.birth.errors %}
-													{{ form.birth(class="form-control is-invalid" ) }}
-													{% for error in form.birth.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-												{% else %}
-													{{ form.birth(class="form-control") }}
-												{% endif %}
+												<p>交易時間(起始):</p>
+												
 											</div>
+									</div>
+
+									<div class="row justify-content-center">
+										<div class="col-lg-10 form-group required">
+											<p>交易時間(結束):</p>
+											
+										</div>
 									</div>
 
 									
