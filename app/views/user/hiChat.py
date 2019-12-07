@@ -33,3 +33,4 @@ def handle_message(senderID, receiverID, message):
         "message" : message
     }
     emit(receiverID, data, broadcast=True)
+    emit(senderID, data, broadcast=True)
