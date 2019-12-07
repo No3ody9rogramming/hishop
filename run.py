@@ -27,6 +27,8 @@ from app.views.user.selling.bidding import BiddingView
 from app.views.user.question.report import ReportView
 from app.views.user.question.all_question import All_questionView
 
+from app.views.user.hiChat import HiChatView
+
 from flask_mail import Message
 
 from flask import render_template ##for test socketio
@@ -60,13 +62,8 @@ app.add_url_rule(rule='/user/selling/bidding', endpoint='bidding', view_func=log
 
 app.add_url_rule(rule='/user/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
 app.add_url_rule(rule='/user/question/all_question', endpoint='all_question', view_func=login_required(All_questionView.as_view('all_question_view')), methods=['GET', 'POST'])
-@app.route('/test')
-def hello():
-    return render_template('user/hichatT.html', app=app)
+app.add_url_rule(rule='/hichat', endpoint='hiChat', view_func=login_required(HiChatView.as_view('hichat_view')), methods=['GET', 'POST'])
 
-@socketio.on('chat message')
-def handle_message(message):
-    emit('chat message', message, broadcast=True)
 
 
 
