@@ -19,11 +19,11 @@
                                     {% for product in popular_products %}
 
                                     <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
-                                        <div class=" col-md-3">
+                                        <div class="col-md">
                                             <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
                                             <div>
-                                                <a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0;">{{product.name}}</a>
-                                                <a style="display: inline-block; width: 45%; float: right; text-align: center;" class="bg-secondary text-white">${{product.price}}</a>
+                                                <a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_normal', product_id=product.id|string) }}">{{product.name}}</a>
+                                                <a style="display: inline-block; width: 45%; float: right; text-align: center; text-decoration:none;" class="bg-secondary text-white" href="{{ url_for('show_normal', product_id=product.id|string) }}">${{product.price}}</a>
                                             </div>
                                         </div>
                                     </a>
@@ -65,11 +65,11 @@
                                     {% for product in normal_products %}
 
                                     <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
-                                        <div class=" col-md-3">
+                                        <div class="col-md">
                                             <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
                                             <div>
-                                                <a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0;">{{product.name}}</a>
-                                                <a style="display: inline-block; width: 45%; float: right; text-align: center;" class="bg-secondary text-white">${{product.price}}</a>
+                                                <a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_normal', product_id=product.id|string) }}">{{product.name}}</a>
+                                                <a style="display: inline-block; width: 45%; float: right; text-align: center; text-decoration:none;" class="bg-secondary text-white" href="{{ url_for('show_normal', product_id=product.id|string) }}">${{product.price}}</a>
                                             </div>
                                         </div>
                                     </a>
@@ -110,11 +110,11 @@
                                     {% for product in bidding_products %}
 
                                     <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
-                                        <div class=" col-md-3">
+                                        <div class="col-md">
                                             <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
-                                            <div>
-                                                <a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0;">{{product.name}}</a>
-                                                <a style="display: inline-block; width: 45%; float: right; text-align: center;" class="bg-secondary text-white">${{product.price}}</a>
+                                            <div class="align-items-end">
+                                                <a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_normal', product_id=product.id|string) }}">{{product.name}}</a>
+                                                <a style="display: inline-block; width: 45%; float: right; text-align: center; text-decoration:none;" class="bg-secondary text-white" href="{{ url_for('show_normal', product_id=product.id|string) }}">${{product.price}}</a>
                                             </div>
                                         </div>
                                     </a>
