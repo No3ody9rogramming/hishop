@@ -2,91 +2,109 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block page %}
-	<div class = "container">
+	
 		<div class = "row">
 			<div class="col-auto">
 				<br>
 				{% include "layouts/category.html" %}
 			</div>
-			<div class="col-md-10">
-					<button class="btn btn-link btn-sm" type="button" data-toggle="collapse" data-target="#searchCheckBox" aria-expanded="false" aria-controls="collapseExample">
-							進階搜尋
-					</button>
-					<div class="collapse" id="searchCheckBox">
-						<div class = "card-body">
-						<form class="form  required" action="{{ url_for('search', type='normal') }}" method="GET">
-								<label class="form-check-label">價格:</label><br>
-								<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
-									<input class="form-check-input" type="checkbox" name="price" id="inlineRadio1" value="100">
-									<label class="form-check-label" for="inlineRadio1">0~100</label>
-								</div>
-								<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
-									<input class="form-check-input" type="checkbox" name="price" id="inlineRadio2" value="500">
-									<label class="form-check-label" for="inlineRadio2">101~500</label>
-								</div>
-								<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
-									<input class="form-check-input" type="checkbox" name="price" id="inlineRadio3" value="1000">
-									<label class="form-check-label" for="inlineRadio3">501~10000</label>
-								</div>
-								<br>
-									<label class="form-check-label">評價:</label>
-								<br>
-								<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">		
-									<input class="form-check-input" type="checkbox" name="rate" id="inlineRadio4" value="1">
-									<label class="form-check-label" for="inlineRadio4"><i class="far fa-star"></i></label>
-								</div>
-								<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
-									<input class="form-check-input" type="checkbox" name="rate" id="inlineRadio5" value="3">
-									<label class="form-check-label" for="inlineRadio5">
-										<i class="far fa-star"></i>
-										<i class="far fa-star"></i>
-										<i class="far fa-star"></i>
-									</label>
-								</div>
-								<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
-									<input class="form-check-input" type="checkbox" name="rate" id="inlineRadio6" value="5">
-									<label class="form-check-label" for="inlineRadio6">
-										<i class="far fa-star"></i>
-										<i class="far fa-star"></i>
-										<i class="far fa-star"></i>
-										<i class="far fa-star"></i>
-										<i class="far fa-star"></i>
-									</label>
-								</div>
-								<input name="way" type="hidden" value="spacial">
-						<button class="btn btn-secondary" style="float:right;" type="submit"><i class="fas fa-search"></i></button>
-						</form> 
-						</div>
+			<div class="col-md-10 col-lg-10 col-md-10 col-sm-10 col-xs-12">
+				<button class="btn btn-link btn-sm" type="button" data-toggle="collapse" data-target="#searchCheckBox" aria-expanded="false" aria-controls="collapseExample">
+						進階搜尋
+				</button>
+				<div class="collapse" id="searchCheckBox">
+					<div class = "card-body">
+					<form class="form  required" action="{{ url_for('search', type='normal') }}" method="GET">
+							<input name="keyword" type="hidden" value = "a">
+							<label class="form-check-label">價格:</label><br>
+							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input class="form-check-input" type="checkbox" name="price" id="inlineRadio1" value="100">
+								<label class="form-check-label" for="inlineRadio1">0~100</label>
+							</div>
+							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input class="form-check-input" type="checkbox" name="price" id="inlineRadio2" value="500">
+								<label class="form-check-label" for="inlineRadio2">101~500</label>
+							</div>
+							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input class="form-check-input" type="checkbox" name="price" id="inlineRadio3" value="1000">
+								<label class="form-check-label" for="inlineRadio3">501~10000</label>
+							</div>
+							<br>
+								<label class="form-check-label">評價:</label>
+							<br>
+							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">		
+								<input class="form-check-input" type="checkbox" name="rate" id="inlineRadio4" value="1">
+								<label class="form-check-label" for="inlineRadio4"><i class="far fa-star"></i></label>
+							</div>
+							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input class="form-check-input" type="checkbox" name="rate" id="inlineRadio5" value="3">
+								<label class="form-check-label" for="inlineRadio5">
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+								</label>
+							</div>
+							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input class="form-check-input" type="checkbox" name="rate" id="inlineRadio6" value="5">
+								<label class="form-check-label" for="inlineRadio6">
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+									<i class="far fa-star"></i>
+								</label>
+							</div>
+							<br>
+							<label class="form-check-label">上架時間:</label><br>
+							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input class="form-check-input" type="checkbox" name="creat_time" id="inlineRadio7" value="1">
+								<label class="form-check-label" for="inlineRadio7">今天</label>
+							</div>
+							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input class="form-check-input" type="checkbox" name="creat_time" id="inlineRadio8" value="7">
+								<label class="form-check-label" for="inlineRadio8">七天內</label>
+							</div>
+							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
+								<input class="form-check-input" type="checkbox" name="creat_time" id="inlineRadio9" value="30">
+								<label class="form-check-label" for="inlineRadio9">一個月內</label>
+							</div>
+							<br>
+							<input name="way" type="hidden" value="normal"><br>
+					<button class="btn btn-secondary" type="submit">進階搜尋<i class="fas fa-search"></i></button>
+					</form> 
 					</div>
-					<div class="card">
-						<div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">搜尋結果 \\</div>
-						<div class="card-body">
-							<div class="box">
-								<div class="container">
-									<div class="row">
-										{% for product in products %}	
-										<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-											<div class="box-part ">
-												<a href="{{ url_for('show_normal', product_id=product.id|string) }}">
-												<div class="card">
-													<img class="card-img-top" src="{{url_for('static', filename = 'image/'+
-														product.id|string +'/'+ product.image|string)}}" alt="Card image" style = "height:250px;width:100%;">
-													<div class="card-footer ">
-														{{ product.name }}
-														<span style = "float:right;">{{product.price}}</span>
-													</div>
-												</div>	
-												</a>
-											</div>
-										</div>
-										{% endfor %}
+				</div>
+				<div class="card">
+					<div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">搜尋結果 \\</div>
+					<div class="card-body">
+						<div class="box">
+							<div class="container">
+								<div class="row">
+									{% for product in products %}	
+									<div class="col-lg-3 col-md-6 col-sm-6 col-xs-6">
+										<div class="box-part ">
+											<a href="{{ url_for('show_normal', product_id=product.id|string) }}">
+												<img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Card image" height="180px">
+												<!--div class="card-footer "-->
+														<a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0;">{{product.name}}</a>
+														<a style="display: inline-block; width: 45%; float: right; text-align: center;" class="bg-secondary text-white">${{product.price}}</a>
+													{% if way == "bidding" %}
+													<br>{{product.bid.due_time - product.create_time}}
+													{% endif %}
+												<!--/div-->
+											</div>	
+											</a>
+											{% if loop.index % 4 == 0 %}
+											<br>
+											{% endif%}
 									</div>
+									{% endfor %}
 								</div>
 							</div>
 						</div>
+					</div>
 				</div>
-				
 			</div>
 		</div>
-	</div>
+	
 {% endblock page %}
