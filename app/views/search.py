@@ -13,13 +13,12 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage, TemplateS
 from app.models.product import Product
 from app import app
 
-import os
+import os, datetime
 
 class SearchView(MethodView):
     def get(self):
         if request.args.get('way') == "bidding":
             products = Product.objects(name__icontains=request.args.get('keyword'), status=0, bidding=True)
-            
             way = "bidding"
         elif request.args.get('way') == "normal":
             products = Product.objects(name__icontains=request.args.get('keyword'), status=0, bidding=False)
@@ -27,7 +26,7 @@ class SearchView(MethodView):
         else:
             abort(404)
 
-        return render_template('search.html', products=products, way=way)
+        return render_template('search.html', products=products, way=way, now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
 
 line_bot_api = LineBotApi(app.config['LINE_CHATBOT_ACCESS_TOKEN'])
 handler = WebhookHandler(app.config['LINE_CHATBOT_SECRET'])
