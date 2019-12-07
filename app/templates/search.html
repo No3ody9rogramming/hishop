@@ -4,7 +4,7 @@
 {% block page %}
 	<div class = "container">
 		<div class = "row">
-			<div class="col-md-2">
+			<div class="col-auto">
 				<br>
 				{% include "layouts/category.html" %}
 			</div>
@@ -13,38 +13,31 @@
 					<div class="card">
 						<div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">搜尋結果 \\</div>
 						<div class="card-body">
-							<!--div class = "card-columns"-->
-								{% for product in products %}						
-								{% if loop.index == 1 %}
-								<div class = "card-deck">
-								{% endif %}
-								{% if loop.index % 4 == 1 and loop.index > 1 %}
-								</div>
-								<div class = "card-deck">
-								{% endif %}
-								
-										<div class="card" style="width: 18rem;">
-											<img class="card-img-top" src="{{url_for('static', filename = 'image/'+
-												product.id|string +'/product.png')}}" alt="Card image" style = "height:250px;width:100%;">
-											<div class="card-footer ">
-												<a href="{{ url_for('show_normal', product_id=product.id|string) }}">{{ product.name }}</a>
-												<a style = "float:right;">{{product.price}}</a>
+							<div class="box">
+								<div class="container">
+									<div class="row">
+										{% for product in products %}	
+										<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+											<div class="box-part text-center">
+												<div class="card">
+													<img class="card-img-top" src="{{url_for('static', filename = 'image/'+
+														product.id|string +'/product.png')}}" alt="Card image" style = "height:250px;width:100%;">
+													<div class="card-footer ">
+														<a href="{{ url_for('show_normal', product_id=product.id|string) }}">{{ product.name }}</a>
+														<a style = "float:right;">{{product.price}}</a>
+													</div>
+												</div>	
+												
 											</div>
-										</div>	
-								{% if loop.index == loop.length %}
-									{% for i in range(0, 4 - loop.length % 4 )%}
-										<div class="card" style="width: 18rem;">
 										</div>
-									{% endfor%}
-								{% endif %}
-								{% endfor %}
+										{% endfor %}
+									</div>
 								</div>
-							<!--/div-->
+							</div>
 						</div>
-					</div>
+				</div>
+				
 			</div>
-			
 		</div>
 	</div>
-	
 {% endblock page %}
