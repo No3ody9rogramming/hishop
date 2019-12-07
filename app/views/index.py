@@ -6,6 +6,8 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import InputRequired, Length, ValidationError
 
+import datetime
+
 from app.models.product import Product
 
 class IndexView(MethodView):
@@ -23,7 +25,8 @@ class IndexView(MethodView):
         return render_template('index.html', form=form,
          				popular_products=popular_products,
          				normal_products=normal_products,
-         				bidding_products=bidding_products)
+         				bidding_products=bidding_products,
+                        now=datetime.datetime.utcnow() + datetime.timedelta(hours=-8))
         
 class SearchForm(FlaskForm):
     keyword = StringField("輸入搜尋", validators=[InputRequired(), Length(min=1, max=20)])
