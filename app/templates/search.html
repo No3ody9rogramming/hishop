@@ -9,7 +9,55 @@
 				{% include "layouts/category.html" %}
 			</div>
 			<div class="col-md-10">
-					<br>
+					<button class="btn btn-link btn-sm" type="button" data-toggle="collapse" data-target="#searchCheckBox" aria-expanded="false" aria-controls="collapseExample">
+							進階搜尋
+					</button>
+					<div class="collapse" id="searchCheckBox">
+						<div class = "card-body">
+						<form class="form  required" action="{{ url_for('search', type='normal') }}" method="GET">
+								<label class="form-check-label">價格:</label><br>
+								<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
+									<input class="form-check-input" type="checkbox" name="price" id="inlineRadio1" value="100">
+									<label class="form-check-label" for="inlineRadio1">0~100</label>
+								</div>
+								<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
+									<input class="form-check-input" type="checkbox" name="price" id="inlineRadio2" value="500">
+									<label class="form-check-label" for="inlineRadio2">101~500</label>
+								</div>
+								<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
+									<input class="form-check-input" type="checkbox" name="price" id="inlineRadio3" value="1000">
+									<label class="form-check-label" for="inlineRadio3">501~10000</label>
+								</div>
+								<br>
+									<label class="form-check-label">評價:</label>
+								<br>
+								<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">		
+									<input class="form-check-input" type="checkbox" name="rate" id="inlineRadio4" value="1">
+									<label class="form-check-label" for="inlineRadio4"><i class="far fa-star"></i></label>
+								</div>
+								<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
+									<input class="form-check-input" type="checkbox" name="rate" id="inlineRadio5" value="3">
+									<label class="form-check-label" for="inlineRadio5">
+										<i class="far fa-star"></i>
+										<i class="far fa-star"></i>
+										<i class="far fa-star"></i>
+									</label>
+								</div>
+								<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
+									<input class="form-check-input" type="checkbox" name="rate" id="inlineRadio6" value="5">
+									<label class="form-check-label" for="inlineRadio6">
+										<i class="far fa-star"></i>
+										<i class="far fa-star"></i>
+										<i class="far fa-star"></i>
+										<i class="far fa-star"></i>
+										<i class="far fa-star"></i>
+									</label>
+								</div>
+								<input name="way" type="hidden" value="spacial">
+						<button class="btn btn-secondary" style="float:right;" type="submit"><i class="fas fa-search"></i></button>
+						</form> 
+						</div>
+					</div>
 					<div class="card">
 						<div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">搜尋結果 \\</div>
 						<div class="card-body">
@@ -18,16 +66,17 @@
 									<div class="row">
 										{% for product in products %}	
 										<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-											<div class="box-part text-center">
+											<div class="box-part ">
+												<a href="{{ url_for('show_normal', product_id=product.id|string) }}">
 												<div class="card">
 													<img class="card-img-top" src="{{url_for('static', filename = 'image/'+
-														product.id|string +'/product.png')}}" alt="Card image" style = "height:250px;width:100%;">
+														product.id|string +'/'+ product.image|string)}}" alt="Card image" style = "height:250px;width:100%;">
 													<div class="card-footer ">
-														<a href="{{ url_for('show_normal', product_id=product.id|string) }}">{{ product.name }}</a>
-														<a style = "float:right;">{{product.price}}</a>
+														{{ product.name }}
+														<span style = "float:right;">{{product.price}}</span>
 													</div>
 												</div>	
-												
+												</a>
 											</div>
 										</div>
 										{% endfor %}
