@@ -12,8 +12,34 @@
             <div class="card">
                 <div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">熱門商品 \\</div>
                 <div class="card-body">
-                    <div id="hotProductIndicators" class="carousel slide" data-ride="carousel">
-                            {% include "layouts/slick.html" %}
+                    <div id="hotProductIndicators" class="carousel slide" data-ride="carousel" data-interval="8000">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="card-deck">
+                                    {% for product in popular_products %}
+
+                                    <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
+                                        <div class=" col-md-3">
+                                            <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
+                                            <div>
+                                                <a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0;">{{product.name}}</a>
+                                                <a style="display: inline-block; width: 45%; float: right; text-align: center;" class="bg-secondary text-white">${{product.price}}</a>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    {% if loop.index % 4 == 0 and loop.index > 1 %}
+                                </div>
+                            </div>
+                                        {% if loop.index != loop.length %}
+                            <div class="carousel-item">
+                                <div class = "card-deck">
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {% endfor %}
+
+                        </div>
                         <a class="carousel-control-prev" href="#hotProductIndicators" role="button" data-slide="prev" style="width: auto;">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="sr-only">Previous</span>
@@ -25,6 +51,7 @@
                     </div>
                 </div>
             </div>
+                          
 
             <br>
 
@@ -32,7 +59,33 @@
                 <div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">最新一般商品 \\</div>
                 <div class="card-body">
                     <div id="newProductIndicators" class="carousel slide" data-ride="false" data-interval="false">
-                            {% include "layouts/slick.html" %}
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="card-deck">
+                                    {% for product in normal_products %}
+
+                                    <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
+                                        <div class=" col-md-3">
+                                            <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
+                                            <div>
+                                                <a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0;">{{product.name}}</a>
+                                                <a style="display: inline-block; width: 45%; float: right; text-align: center;" class="bg-secondary text-white">${{product.price}}</a>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    {% if loop.index % 4 == 0 and loop.index > 1 %}
+                                </div>
+                            </div>
+                                        {% if loop.index != loop.length %}
+                            <div class="carousel-item">
+                                <div class = "card-deck">
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {% endfor %}
+                                
+                        </div>
                         <a class="carousel-control-prev" href="#newProductIndicators" role="button" data-slide="prev" style="width: auto;">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="sr-only">Previous</span>
@@ -51,7 +104,33 @@
                 <div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">最新競標商品 \\</div>
                 <div class="card-body">
                     <div id="bidProductIndicators" class="carousel slide" data-ride="false"  data-interval="false">
-                            {% include "layouts/slick.html" %}
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="card-deck">
+                                    {% for product in bidding_products %}
+
+                                    <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
+                                        <div class=" col-md-3">
+                                            <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
+                                            <div>
+                                                <a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0;">{{product.name}}</a>
+                                                <a style="display: inline-block; width: 45%; float: right; text-align: center;" class="bg-secondary text-white">${{product.price}}</a>
+                                            </div>
+                                        </div>
+                                    </a>
+    
+                                        {% if loop.index % 4 == 0 and loop.index > 1 %}
+                                    </div>
+                                </div>
+                                            {% if loop.index != loop.length %}
+                                <div class="carousel-item">
+                                    <div class = "card-deck">
+                                            {% endif %}
+                                        {% endif %}
+    
+                                        {% endfor %}
+                
+                        </div>
                         <a class="carousel-control-prev" href="#bidProductIndicators" role="button" data-slide="prev" style="width: auto;">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="sr-only">Previous</span>
