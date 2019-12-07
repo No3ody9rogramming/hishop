@@ -1,6 +1,6 @@
 from flask_login import login_required
 
-from app import app, login_manager, mail
+from app import app, login_manager, mail, socketio
 
 from app.views.index import IndexView
 from app.views.search import SearchView, LineChatbotSearch
@@ -28,6 +28,9 @@ from app.views.user.question.report import ReportView
 from app.views.user.question.all_question import All_questionView
 
 from flask_mail import Message
+
+from flask import render_template ##for test socketio
+from flask_socketio import emit ##for test socketio
 
 
 app.add_url_rule(rule='/', endpoint='index', view_func=IndexView.as_view('index_view'), methods=['GET'])
@@ -57,6 +60,16 @@ app.add_url_rule(rule='/user/selling/bidding', endpoint='bidding', view_func=log
 
 app.add_url_rule(rule='/user/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
 app.add_url_rule(rule='/user/question/all_question', endpoint='all_question', view_func=login_required(All_questionView.as_view('all_question_view')), methods=['GET', 'POST'])
+@app.route('/test')
+def hello():
+    return render_template('user/hichatT.html')
+
+@socketio.on('chat message')
+def handle_message(message):
+    print('received message: ' + message)
+    emit('chat message', message)
+
+
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0")
+     socketio.run(app, debug=True)

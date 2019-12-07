@@ -9,3 +9,4 @@ flask-mongoengine==0.9.5
 requests==2.22.0
 line-bot-sdk==1.15.0
 flask-reverse-proxy-fix==0.2.1
+python-socketio==4.4.0
