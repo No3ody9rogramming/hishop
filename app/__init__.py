@@ -6,7 +6,10 @@ from flask_bcrypt import Bcrypt
 from flask_ckeditor import CKEditor
 from flask_mail import Mail, Message
 from flask_reverse_proxy_fix.middleware import ReverseProxyPrefixFix
-from threading import Thread
+from threading import Thread, Lock
+from flask_socketio import SocketIO, emit, join_room, leave_room, close_room, rooms, disconnect
+
+async_mode = None
 
 app = Flask(__name__)
 app.config.from_pyfile('../config.cfg')
@@ -19,6 +22,9 @@ bcrypt = Bcrypt(app)
 ckeditor = CKEditor(app)
 mail = Mail(app)
 ReverseProxyPrefixFix(app)
+socketio = SocketIO(app, async_mode=async_mode)
+thread = None
+thread_lock = Lock()
 
 def send_mail(title, recipients, body):
 	msg = Message(title, sender="HiShop", recipients=recipients)
