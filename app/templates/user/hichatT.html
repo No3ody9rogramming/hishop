@@ -15,22 +15,37 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <script>
+      var chatObject;
       $(function () {
         var socket = io.connect("{{app.config['SERVER_DOMAIN']}}", {path: "{{app.config['REVERSE_PROXY_PATH']}}/socket.io"});        
         $('form').submit(function(e){
           e.preventDefault(); // prevents page reloading
-          socket.emit('chat message', $('#m').val());
+          socket.emit('chat message', "{{currentUserID}}", chatObject, $('#m').val());
           $('#m').val('');
           return false;
         });
-        socket.on('chat message', function(msg){
-          console.log(msg)
-          $('#messages').append($('<li>').text(msg));
+
+        socket.on('{{currentUserID}}', function(data){
+          $('#messages').append($('<li>').text(data.senderName + ": " + data.message));
         });
+
       });
+
+      function changeObject(obj) {
+        var thisObj = $(obj);
+        chatObject = thisObj.attr('id');
+      }
     </script>
   </head>
   <body>
+    <div>
+      chat with:
+      <ul id="users">
+        {% for user in users %}
+          <li><a id="{{user.id}}" href="#" onclick="changeObject(this)">{{user.name}}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
     <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
