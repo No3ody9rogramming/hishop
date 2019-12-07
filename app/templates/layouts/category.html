@@ -1,3 +1,4 @@
+{% if request.user_agent.platform in config['PC_PLATFORM'] %}
 <div  class="list-group ">
         <a  class="list-group-item list-group-item-action disabled list-group-item-secondary bg-secondary  text-white font-weight-bold h-5"  >商品分類</a>
         <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold">3C產品
@@ -36,5 +37,45 @@
         <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold">其他
             <span class="badge badge-light badge-pill">12</span>
         </a>
-       
 </div>
+{% endif %}
+{% if request.user_agent.platform not in config['PC_PLATFORM'] %}
+<div href="#categories" class="list-group-item collapsed bg-secondary font-weight-bold text-white" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down">分類名稱</span> </div>
+<div class="collapse " id="categories">
+        <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold" data-parent="#categories">3C產品
+            <span class="badge badge-light badge-pill">1</span>
+        </a>
+        <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold" data-parent="#categories">家電
+            <span class="badge badge-light badge-pill">2</span>
+        </a>
+        <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold" data-parent="#categories">服飾
+            <span class="badge badge-light badge-pill">3</span>
+        </a>
+        <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold" data-parent="#categories">美妝
+            <span class="badge badge-light badge-pill">4</span>
+        </a>
+        <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold" data-parent="#categories">食品
+            <span class="badge badge-light badge-pill">5</span>
+        </a>
+        <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold" data-parent="#categories">日用
+            <span class="badge badge-light badge-pill">6</span>
+        </a>
+        <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold" data-parent="#categories">書籍
+            <span class="badge badge-light badge-pill">7</span>
+        </a>
+        <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold" data-parent="#categories">文具
+            <span class="badge badge-light badge-pill">8</span>
+        </a>
+        <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold" data-parent="#categories">運動
+            <span class="badge badge-light badge-pill">9</span>
+        </a>
+        <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold" data-parent="#categories">娛樂
+            <span class="badge badge-light badge-pill">10</span>
+        </a>
+        <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold" data-parent="#categories">票券
+                <span class="badge badge-light badge-pill">11</span>
+        </a>
+        <a href="#" class="btn btn-secondary list-group-item list-group-item-action bg-warning font-weight-bold" data-parent="#categories">其他
+                <span class="badge badge-light badge-pill">12</span>
+        </a>
+</div>{% endif %}
