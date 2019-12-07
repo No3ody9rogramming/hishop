@@ -15,25 +15,25 @@
                     <div id="hotProductIndicators" class="carousel slide" data-ride="carousel" data-interval="8000">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <div class="card-deck">
+                                <div class="row">
                                     {% for product in popular_products %}
 
-                                    <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
-                                        <div class="col-md">
+                                        <div class="col-md col-6">
+                                            <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
                                             <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
+                                            </a>
                                             <div>
                                                 <a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_normal', product_id=product.id|string) }}">{{product.name}}</a>
                                                 <a style="display: inline-block; width: 45%; float: right; text-align: center; text-decoration:none;" class="bg-secondary text-white" href="{{ url_for('show_normal', product_id=product.id|string) }}">${{product.price}}</a>
                                             </div>
                                         </div>
-                                    </a>
 
                                     {% if loop.index % 4 == 0 and loop.index > 1 %}
                                 </div>
                             </div>
                                         {% if loop.index != loop.length %}
                             <div class="carousel-item">
-                                <div class = "card-deck">
+                                <div class = "row">
                                         {% endif %}
                                     {% endif %}
 
@@ -61,11 +61,11 @@
                     <div id="newProductIndicators" class="carousel slide" data-ride="false" data-interval="false">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <div class="card-deck">
+                                <div class="row">
                                     {% for product in normal_products %}
 
                                     <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
-                                        <div class="col-md">
+                                        <div class="col-md col-6">
                                             <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
                                             <div>
                                                 <a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_normal', product_id=product.id|string) }}">{{product.name}}</a>
@@ -79,7 +79,7 @@
                             </div>
                                         {% if loop.index != loop.length %}
                             <div class="carousel-item">
-                                <div class = "card-deck">
+                                <div class = "row">
                                         {% endif %}
                                     {% endif %}
 
@@ -106,11 +106,11 @@
                     <div id="bidProductIndicators" class="carousel slide" data-ride="false"  data-interval="false">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <div class="card-deck">
+                                <div class="row">
                                     {% for product in bidding_products %}
 
                                     <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
-                                        <div class="col-md">
+                                        <div class="col-md col-6">
                                             <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
                                             <div class="align-items-end">
                                                 <a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_normal', product_id=product.id|string) }}">{{product.name}}</a>
@@ -124,7 +124,7 @@
                                 </div>
                                             {% if loop.index != loop.length %}
                                 <div class="carousel-item">
-                                    <div class = "card-deck">
+                                    <div class = "row">
                                             {% endif %}
                                         {% endif %}
     
