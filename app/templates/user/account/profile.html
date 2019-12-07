@@ -27,20 +27,28 @@
 					{{ form.csrf_token }}
 					<div class="row justify-content-center border border-dark rounded">
 					
-						<div class="col-auto">
-							<div class="row">
-							<img src="{{ url_for('static',filename='logo.svg') }}" alt="Logo" style="width: 180px;height: 180px;">
-							</div>
-							<div class=" row btn btn-primary " style="transform: translate(100%,0);">
-								<div class="col-10" >
-								上傳圖片
+						<div class="col-6">
+							{% if current_user.icon == "default.png" %}
+								<img src="{{ url_for('static',filename='logo.svg') }}" alt="Logo" style="width: 180px;height: 180px;">
+							{% else %}
+								<img src="{{url_for('static', filename = 'image/'+
+							current_user.id|string +'/' + current_user.icon)}}" alt="icon" style = "height:250px;width:100%;">
+							{% endif %}
+							<div class=" row">
+								<div class="col-auto" >
+									{% if form.icon.errors %}
+									{{ form.icon(class="form-control is-invalid") }}
+									{% for error in form.icon.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+								{% else %}
+									{{ form.icon(class="form-control") }}
+								{% endif %}
 								</div>
 							</div>
 						</div>
 						
-						<div class="col-auto">
+						<div class="col-6">
 							<div style="transform: translate(0,8vh);">	
-								<h1>{{ current_user.account }}</h1>
+								<h1 class="text-center">{{ current_user.account }}</h1>
 								<p class="text-center">評價星星</p>
 							</div>
 						</div>
