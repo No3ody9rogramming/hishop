@@ -10,16 +10,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="col">
                 <ul class="nav flex-column">
-                    <li class="nav-item pt-md">
-                        <form class="form-inline  required" action="{{ url_for('search', type='normal') }}" method="GET">
-                            <input name="keyword" class="form-control  w-md-50 ml-sm-2 " placeholder="輸入關鍵字加以搜尋">
-                            
-                                <select class="form-control " name="way">
+                    <li class="nav-item pt-md ">
+                        <form class="form-inline  required input-group" action="{{ url_for('search', type='normal') }}" method="GET">
+                            <input name="keyword" class="form-control  ml-sm-2" placeholder="請輸入關鍵字">
+                            <div class="input-group-append">
+                                <select class="form-control" name="way">
                                     <option class="font-weight-bold" value="normal">一般商品</option>
                                     <option class="font-weight-bold" value="bidding">競標商品</option>
                                 </select>
-                            
-                        <button class="btn btn-secondary" type="submit"><i class="fas fa-search"></i></button>
+                            </div>
+                        <button class="btn btn-secondary mr-md-5" type="submit"><i class="fas fa-search"></i></button>
                         </form> 
                     </li>
                     <li class="nav-item pt-md">
@@ -48,7 +48,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{url_for('hiChat')}}"><i class='far fa-comment' style='color:orange'></i></a>
+                            <a class="nav-link" href="{{url_for('cart')}}"><i class='far fa-comment' style='color:orange'></i></a>
                     </li>
                 {% else %}
                     <li class="nav-item">
