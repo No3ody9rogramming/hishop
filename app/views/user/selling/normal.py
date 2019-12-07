@@ -43,7 +43,7 @@ class NormalView(MethodView):
         return render_template('user/selling/normal.html', form=form)
 
 class NormalForm(FlaskForm):
-    image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png'], '只能上傳圖片')])
+    image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png', 'gif'], '只能上傳圖片')])
     name = StringField("商品名稱", validators=[InputRequired(), Length(max=50)])
     price = IntegerField("商品直購價", validators=[InputRequired(), NumberRange(min=1, max=100000)])
     detail = CKEditorField("商品詳情")

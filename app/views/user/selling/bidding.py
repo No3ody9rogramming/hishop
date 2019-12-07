@@ -39,7 +39,7 @@ class BiddingView(MethodView):
                               status=0)
             product.save()
 
-            image_path = os.path.join(os.getcwd(), 'app\\static\\image', str(product.id))
+            image_path = os.path.join(os.getcwd(), 'app/static/image', str(product.id))
             os.makedirs(image_path)
             form.image.data.save(os.path.join(image_path, product.image))
 
@@ -48,7 +48,7 @@ class BiddingView(MethodView):
         return render_template('user/selling/bidding.html', form=form)
 
 class BiddingForm(FlaskForm):
-    image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png'], '只能上傳圖片')])
+    image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png', 'gif'], '只能上傳圖片')])
     name = StringField("商品名稱", validators=[InputRequired(), Length(max=50)])
     price = IntegerField("商品直購價", validators=[InputRequired(), NumberRange(min=1, max=100000)])
     low_price = IntegerField("起標價", validators=[InputRequired(), NumberRange(min=1, max=10000)])

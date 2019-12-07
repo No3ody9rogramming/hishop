@@ -13,17 +13,15 @@
 			<table class="table">
 			  <thead>
 			    <tr>
-			      <th scope="col">商品</th>
-			      <th scope="col">賣家</th>
-			      <th scope="col">售價</th>
+			      <th scope="col">問題主旨</th>
+			      <th scope="col">解決辦法</th>
 			    </tr>
 			  </thead>
 			  <tbody>
-			  	{% for product in products %}
+			  	{% for question in questions %}
 				    <tr>
-				      <th scope="row"><a href="{{ url_for('show_normal', product_id=product.id|string) }}" target=_blank>{{product.name}}</a></th>
-				      <td>{{product.seller_id.name}}</td>
-				      <td>{{product.price}}</td>
+				      <th scope="row"><a href="" target=_blank>{{question.title}}</a></th>
+				      <td>{{question.detail}}</td>
 				    </tr>
 				{% endfor %}	    
 			  </tbody>

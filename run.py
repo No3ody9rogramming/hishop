@@ -16,6 +16,7 @@ from app.views.user.account.profile import ProfileView
 from app.views.user.account.password import PasswordView
 from app.views.user.account.payment import PaymentView, PaymentConfirmView
 from app.views.user.account.cart import CartView
+from app.views.user.account.cartOperation import CartOperationView
 
 from app.views.user.product.like import LikeView
 from app.views.user.product.history import HistoryView
@@ -24,6 +25,7 @@ from app.views.user.selling.normal import NormalView
 from app.views.user.selling.bidding import BiddingView
 
 from app.views.user.question.report import ReportView
+from app.views.user.question.all_question import All_questionView
 
 from flask_mail import Message
 
@@ -33,6 +35,8 @@ app.add_url_rule(rule='/index', view_func=IndexView.as_view('index_view'), metho
 app.add_url_rule(rule='/search', endpoint='search', view_func=SearchView.as_view('search_view'), methods=['GET'])
 app.add_url_rule(rule='/linesearch', endpoint='linesearch', view_func=LineChatbotSearch.as_view('line_chatbot_search'), methods=['POST'])
 app.add_url_rule(rule='/normal/<string:product_id>', endpoint='show_normal', view_func=ShowNormalView.as_view('show_normal_view'), methods=['GET', 'POST'])
+app.add_url_rule(rule='/cart', endpoint='cart', view_func=login_required(CartView.as_view('cart_view')), methods=['GET', 'POST'])
+app.add_url_rule(rule='/cart/opration', endpoint='cartOperation', view_func=login_required(CartOperationView.as_view('cartOperation_view')), methods=['POST'])
 
 app.add_url_rule(rule='/registration', endpoint='registration', view_func=RegisterView.as_view('register_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/login', endpoint='login', view_func=LoginView.as_view('login_view'), methods=['GET', 'POST'])
@@ -44,7 +48,6 @@ app.add_url_rule(rule='/user/account/profile', endpoint='profile', view_func=log
 app.add_url_rule(rule='/user/account/password', endpoint='password', view_func=login_required(PasswordView.as_view('password_view')), methods=['GET', 'POST'])
 app.add_url_rule(rule='/user/account/payment', endpoint='payment', view_func=login_required(PaymentView.as_view('payment_view')), methods=['GET', 'POST'])
 app.add_url_rule(rule='/user/account/payment/confirm', endpoint='payment_confirm', view_func=login_required(PaymentConfirmView.as_view('payment_confirm_view')), methods=['GET'])
-app.add_url_rule(rule='/user/account/cart', endpoint='cart', view_func=login_required(CartView.as_view('cart_view')), methods=['GET', 'POST'])
 
 app.add_url_rule(rule='/user/product/like', endpoint='like', view_func=login_required(LikeView.as_view('like_view')), methods=['GET', 'POST'])
 app.add_url_rule(rule='/user/product/history', endpoint='history', view_func=login_required(HistoryView.as_view('history_view')), methods=['GET', 'POST'])
@@ -53,6 +56,7 @@ app.add_url_rule(rule='/user/selling/normal', endpoint='normal', view_func=login
 app.add_url_rule(rule='/user/selling/bidding', endpoint='bidding', view_func=login_required(BiddingView.as_view('bidding_view')), methods=['GET', 'POST'])
 
 app.add_url_rule(rule='/user/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
+app.add_url_rule(rule='/user/question/all_question', endpoint='all_question', view_func=login_required(All_questionView.as_view('all_question_view')), methods=['GET', 'POST'])
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
