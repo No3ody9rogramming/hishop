@@ -113,7 +113,7 @@
                                         <div class="col-md-3 col-6">
                                             <div class="bg-dark text-white text-center">
                                                 剩餘時間：
-                                                {{"%s days"|format(( now - product.bid.due_time).days)}}
+                                                {{"%s days"|format(( product.bid.due_time - now).days)}}
                                             </div>
                                             <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
                                             <div class="align-items-end">
