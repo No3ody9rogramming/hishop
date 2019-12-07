@@ -66,8 +66,7 @@ def hello():
 
 @socketio.on('chat message')
 def handle_message(message):
-    print('received message: ' + message)
-    emit('chat message', message)
+    emit('chat message', message, broadcast=True)
 
 
 
