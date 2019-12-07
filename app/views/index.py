@@ -18,15 +18,11 @@ class IndexView(MethodView):
         normal_products = Product.objects(bidding=False).order_by('-create_time')[:12]
         bidding_products = Product.objects(bidding=True).order_by('-create_time')[:12]
 
-        for product in bidding_products:
-            print(product.bid.due_time)
-            print(product.create_time)
-
         return render_template('index.html', form=form,
          				popular_products=popular_products,
          				normal_products=normal_products,
          				bidding_products=bidding_products,
-                        now=datetime.datetime.utcnow() + datetime.timedelta(hours=-8))
+                        now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
         
 class SearchForm(FlaskForm):
     keyword = StringField("輸入搜尋", validators=[InputRequired(), Length(min=1, max=20)])
