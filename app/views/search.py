@@ -17,7 +17,6 @@ import os
 
 class SearchView(MethodView):
     def get(self):
-        print(request.args.get('type'))
         if request.args.get('type') == "bidding":
             products = Product.objects(name__icontains=request.args.get('keyword'), status=0, bidding=True)
         else:
