@@ -15,7 +15,7 @@
 {% block scripts %}
 	{{ super() }}
 	<script type="text/javascript">
-
+		
 		function check_all(obj,cName1, cName2){
 			var checkbox1 = document.getElementsByName(cName1);
 			var checkbox2 = document.getElementsByName(cName2);
@@ -27,13 +27,13 @@
 				checkbox2[i].checked = obj.checked;
 			}
 		}
-
+		/*
 		function check_seller(obj,cName){
 			var checkbox = document.getElementsByName(cName);
 			for(var i=0; i<checkbox.length; i++){
 				checkbox[i].checked = obj.checked;
 			}
-		}
+		}*/
 
 		$('input:checkbox').change(function (){
       		var total = 0;
@@ -42,6 +42,14 @@
       		});     
 	  			total.toString();
       			$("#total").text(total);
+      		if(parseInt($('#total').text()) > {{hicoin}}) {
+      			$("#notEnough").toggleClass("d-none");
+      			$("#submit").toggleClass("d-none");
+      		}
+      		else {
+      			$("#notEnough").toggleClass("d-none");
+      			$("#submit").toggleClass("d-none");
+      		}
 		});
 
 		function moveCart(obj){
@@ -89,9 +97,10 @@
 				    	</tr>
 				  	</thead>
 				  	<tbody>
+				  		<!--
 				  		<tr>
 						<input type="checkbox" value="" name="checkFormSeller" onclick="check_seller(this, 'productCheck')"  id="checkbox">全選賣家
-						<input type="checkbox" value="" name="c" id="checkbox">賣家</tr>			
+						<input type="checkbox" value="" name="c" id="checkbox">賣家</tr>	-->
 						{{ form.csrf_token }}		
 				  		{% for product in products %}
 					    	<tr>
@@ -113,12 +122,15 @@
 				<br>			
 			</div>		
 		</div>
-		<div class="float-right">
+		<div class="float-right text-right">
 			<p>目前有 {{ hicoin }} hicoin</p>
-			<p id="total">
-				0
+			<p>
+				合計花費: <span id="total">0</span>
 			</p>
-			{{ form.submit }}
+			<p class="d-none alert alert-danger" id="notEnough" role="alert">
+				餘額不足，請先充值 
+			</p>
+			{{ form.submit(class_="btn btn-first float-right") }}
 		</div>
 	</form>
 {% endblock page %}
