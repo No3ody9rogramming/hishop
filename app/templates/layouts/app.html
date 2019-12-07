@@ -1,10 +1,11 @@
 {% extends "bootstrap/base.html" %}
 
 {% block title %}
-	{{ config['NAME'] }}
+	{{ config['APP_NAME'] }}
 {% endblock title %}
 
 {% block head %}
+	<link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static',filename='icon.png', _external=True) }}" />
 	{{ super() }}
 	<script src="https://kit.fontawesome.com/71a9eb620b.js" crossorigin="anonymous"></script>
 {% endblock head %}

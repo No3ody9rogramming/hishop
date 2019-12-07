@@ -1,38 +1,136 @@
 {% extends "layouts/app.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block page %}
-	<div class="row">
-		<div class="col-auto">
-			<br>
-			{% include "layouts/user.html" %}
-		</div>
+{% block styles %}
+	{{ super() }}
+	<style type = "text/css">
+		.productImg {
+			max-width: 100px;
+		    max-height:200px;
+		}
 
-	    <div class="col-md-9">
-			<br>
-			<table class="table">
-			  <thead>
-			    <tr>
-			      <th scope="col">商品名稱</th>
-			      <th scope="col">賣家</th>
-			      <th scope="col">售價</th>
-			      <th scope="col">折價券</th>
-			      <th scope="col">結帳</th>
-			    </tr>
-			  </thead>
-			  <tbody>
-			  	{% for product in products %}
-				    <tr>
-				      <th scope="row">{{product.name}}</th>
-				      <td><a href="#">{{product.seller_id.name}}</a></td>
-				      <td>{{product.price}}</td>
-				      <td>select option</td>
-				      <td>{{ wtf.quick_form(form, method="post", action=url_for("payment")) }}</td>
-				    </tr>
-				{% endfor %}	    
-			  </tbody>
-			</table>
-	    	<p>目前有 {{ hicoin }} hicoin</p>
+	</style>
+{% endblock styles %}
+
+{% block scripts %}
+	{{ super() }}
+	<script type="text/javascript">
+		
+		function check_all(obj,cName1, cName2){
+			var checkbox1 = document.getElementsByName(cName1);
+			var checkbox2 = document.getElementsByName(cName2);
+			for(var i=0; i<checkbox1.length; i++){
+				checkbox1[i].checked = obj.checked;
+			}
+
+			for(var i=0; i<checkbox2.length; i++){
+				checkbox2[i].checked = obj.checked;
+			}
+		}
+		/*
+		function check_seller(obj,cName){
+			var checkbox = document.getElementsByName(cName);
+			for(var i=0; i<checkbox.length; i++){
+				checkbox[i].checked = obj.checked;
+			}
+		}*/
+
+		$('input:checkbox').change(function (){
+      		var total = 0;
+      		$('input:checkbox:checked').each(function(){
+        		total += isNaN(parseInt($(this).attr('price'))) ? 0 : parseInt($(this).attr('price'));
+      		});     
+	  			total.toString();
+      			$("#total").text(total);
+      		if(parseInt($('#total').text()) > {{hicoin}}) {
+      			$("#notEnough").toggleClass("d-none");
+      			$("#submit").toggleClass("d-none");
+      		}
+      		else {
+      			$("#notEnough").toggleClass("d-none");
+      			$("#submit").toggleClass("d-none");
+      		}
+		});
+
+		function moveCart(obj){
+			{% if current_user.is_anonymous %}
+				window.location = "{{ url_for('login', _external=True, next=url_for('cart')) }}";
+			{% endif %}
+
+			var thisObj=$(obj);
+
+			var data = {
+				csrf_token: $("#csrf_token").val(),
+				cart: true,
+			};
+
+			$.ajax({
+				type:"POST",
+				url: "{{ url_for('cartOperation') }}",
+				data: { product_id : thisObj.val()},
+				success: function(data) {
+					thisObj.text(data);
+				}
+			});
+			return false;
+		}
+
+	</script>
+{% endblock scripts %}
+
+{% block page %}
+	<form action="" method="post">
+		<div class="row">
+		    <div class="col-md-12">
+				<br>
+				<table class="table">
+				  	<thead>
+				    	<tr>
+							<th>
+								<input type="checkbox" value="" name="checkall" onclick="check_all(this,'checkFormSeller', 'productCheck')"  id="checkbox">
+							</th>
+				      		<th scope="col">商品</th>
+				      		<th scope="col">賣家</th>
+				      		<th scope="col">售價</th>
+				      		<th scope="col">折價券</th>
+				      		<th scope="col">移出購物車</th>
+				    	</tr>
+				  	</thead>
+				  	<tbody>
+				  		<!--
+				  		<tr>
+						<input type="checkbox" value="" name="checkFormSeller" onclick="check_seller(this, 'productCheck')"  id="checkbox">全選賣家
+						<input type="checkbox" value="" name="c" id="checkbox">賣家</tr>	-->
+						{{ form.csrf_token }}		
+				  		{% for product in products %}
+					    	<tr>
+								<td class="align-middle">
+									<input type="checkbox" value="{{product.id}}" name="productCheck"  id="{{product.id}}" price="{{product.price}}">
+								</td>
+								<th scope="row" class="align-middle">
+									<img class="productImg" src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}"> 
+									<a href="{{ url_for('show_normal', product_id=product.id|string) }}" target=_blank>{{product.name}}</a>
+								</th>
+					      		<td class="align-middle">{{product.seller_id.name}}</td>
+					      		<td class="align-middle">{{product.price}}</td>
+					      		<td class="align-middle">select option</td>
+					      		<td class="align-middle"><button value="{{ product.id }}" onclick="return moveCart(this)" class="btn btn-sencondary">移出購物車</button></td>
+					    	</tr>
+						{% endfor %}
+				  	</tbody>
+				</table>
+				<br>			
+			</div>		
 		</div>
-	</div>
+		<div class="float-right text-right">
+			<p>目前有 {{ hicoin }} hicoin</p>
+			<p>
+				合計花費: <span id="total">0</span>
+			</p>
+			<p class="d-none alert alert-danger" id="notEnough" role="alert">
+				餘額不足，請先充值 
+			</p>
+			{{ form.submit(class_="btn btn-first float-right") }}
+		</div>
+	</form>
 {% endblock page %}
