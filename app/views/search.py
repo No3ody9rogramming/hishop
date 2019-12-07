@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, flash, request
+from flask import redirect, render_template, url_for, flash, request, abort
 from flask.views import MethodView
 from flask_login import login_user, current_user, logout_user
 from flask_wtf import FlaskForm
@@ -17,12 +17,17 @@ import os
 
 class SearchView(MethodView):
     def get(self):
-        if request.args.get('type') == "bidding":
+        if request.args.get('way') == "bidding":
             products = Product.objects(name__icontains=request.args.get('keyword'), status=0, bidding=True)
-        else:
+            
+            way = "bidding"
+        elif request.args.get('way') == "normal":
             products = Product.objects(name__icontains=request.args.get('keyword'), status=0, bidding=False)
+            way = "normal"
+        else:
+            abort(404)
 
-        return render_template('search.html', products=products)
+        return render_template('search.html', products=products, way=way)
 
 line_bot_api = LineBotApi(app.config['LINE_CHATBOT_ACCESS_TOKEN'])
 handler = WebhookHandler(app.config['LINE_CHATBOT_SECRET'])
