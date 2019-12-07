@@ -27,6 +27,7 @@ class RegisterView(MethodView):
             user = User(account=form.account.data,
                         password=bcrypt.generate_password_hash(form.password.data).decode(),
                         name=form.name.data,
+                        store_name=form.name.data,
                         email=form.email.data,
                         phone=form.phone.data,
                         birth=form.birth.data)      
