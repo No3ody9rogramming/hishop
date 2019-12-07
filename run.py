@@ -62,7 +62,7 @@ app.add_url_rule(rule='/user/question/report', endpoint='report', view_func=logi
 app.add_url_rule(rule='/user/question/all_question', endpoint='all_question', view_func=login_required(All_questionView.as_view('all_question_view')), methods=['GET', 'POST'])
 @app.route('/test')
 def hello():
-    return render_template('user/hichatT.html')
+    return render_template('user/hichatT.html', app=app)
 
 @socketio.on('chat message')
 def handle_message(message):
