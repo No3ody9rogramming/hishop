@@ -11,6 +11,7 @@ import datetime
 from app.models.user import User
 from app.models.product import Product
 from app.models.information import Information, History
+from app.models.order import Order
 
 class ShowBiddingView(MethodView):
     def get(self, product_id):
@@ -41,23 +42,34 @@ class ShowBiddingView(MethodView):
     @login_required
     def post(self, product_id):
         form = BiddingForm()
-        product = Product.objects(id=product_id, bidding=True).first()
+        product = Product.objects(id=product_id, status=0, bidding=True).first()
         if product == None:
             abort(404)
 
         if form.validate_on_submit():
             your_price = product.bid.now_price + product.bid.per_price * form.price.data
-            if current_user.hicoin < your_price:
-                form.price.errors.append('金額不足') 
+            if your_price > product.price:
+                your_price = product.price
+
+            if current_user != product.bid.buyer_id and current_user.hicoin < your_price:
+                form.price.errors.append('金額不足')
+            elif current_user == product.bid.buyer_id and current_user.hicoin < (your_price - product.bid.now_price):
+                form.price.errors.append('金額不足')
             else:
                 if product.bid.buyer_id != None:
-                    pre_buyer = User.objects(id=product.bid.buyer_id.id).first()
-                    pre_buyer.hicoin += product.bid.now_price
-                    pre_buyer.save()
+                    if product.bid.buyer_id == current_user:
+                        current_user.hicoin += product.bid.now_price
+                    else:
+                        pre_buyer = User.objects(id=product.bid.buyer_id.id).first()
+                        pre_buyer.hicoin += product.bid.now_price
+                        pre_buyer.save()
 
                 product.bid.buyer_id = current_user.id
-                product.bid.now_price += (product.bid.per_price * form.price.data)
-                current_user.hicoin -= product.bid.now_price
+                if your_price >= product.price:
+                    Order(buyer_id=current_user.id, product_id=product_id).save()
+                    product.status = 1
+                product.bid.now_price = your_price
+                current_user.hicoin -= your_price
                 current_user.save()
                 product.save()
 
