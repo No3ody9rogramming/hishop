@@ -1,0 +1,86 @@
+from flask import redirect, render_template, url_for, abort, request
+from flask.views import MethodView
+from flask_login import current_user, login_required
+from flask_wtf import FlaskForm
+
+from wtforms import SubmitField, IntegerField
+from wtforms.validators import InputRequired, ValidationError
+
+import datetime
+
+from app.models.user import User
+from app.models.product import Product
+from app.models.information import Information, History
+
+class ShowBiddingView(MethodView):
+    def get(self, product_id):
+        form = BiddingForm()
+        product = Product.objects(id=product_id, bidding=True).first()
+        like = "far fa-heart"
+        
+        if product == None:
+            abort(404)
+        if current_user.is_active:
+            #update history
+            information = Information.objects(user_id=current_user.id).first()
+            history_product = [h['product'] for h in information.history]
+            try:
+                index = history_product.index(product)
+                information.history[index].create_time = datetime.datetime.utcnow()
+            except ValueError:
+                information.history.append(History(product=product))
+            information.save()
+
+            if product in information.like:
+                like = "fas fa-heart"
+
+            product.view += 1
+            product.save()
+        return render_template('product/bidding.html', form=form, product=product, like=like, product_json=product.to_json())
+
+    @login_required
+    def post(self, product_id):
+        form = BiddingForm()
+        product = Product.objects(id=product_id, bidding=True).first()
+        if product == None:
+            abort(404)
+
+        if form.validate_on_submit():
+            your_price = product.bid.now_price + product.bid.per_price * form.price.data
+            if current_user.hicoin < your_price:
+                form.price.errors.append('金額不足') 
+            else:
+                if product.bid.buyer_id != None:
+                    pre_buyer = User.objects(id=product.bid.buyer_id.id).first()
+                    pre_buyer.hicoin += product.bid.now_price
+                    pre_buyer.save()
+
+                product.bid.buyer_id = current_user.id
+                product.bid.now_price += (product.bid.per_price * form.price.data)
+                current_user.hicoin -= product.bid.now_price
+                current_user.save()
+                product.save()
+
+        like = "far fa-heart"
+        information = Information.objects(user_id=current_user.id).first()
+        if product in information.like:
+            like = "fas fa-heart"
+
+        return render_template('product/bidding.html', form=form, product=product, like=like, product_json=product.to_json())
+
+def validate_price(form, price):
+    try:
+        price = int(price.data)
+    except:
+        raise ValidationError('請輸入數字')
+
+    product_id = request.base_url.split('/')[-1]
+    product = Product.objects(id=product_id, bidding=True).first()
+
+    if price > current_user.hicoin:
+        raise ValidationError('金額不足')
+
+class BiddingForm(FlaskForm):
+    like = SubmitField('喜歡')
+    price = IntegerField("起標價", validators=[InputRequired(), validate_price])
+    submit = SubmitField('出價')

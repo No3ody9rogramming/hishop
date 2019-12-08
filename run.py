@@ -5,6 +5,8 @@ from app import app, login_manager, mail, socketio
 from app.views.index import IndexView
 from app.views.search import SearchView, LineChatbotSearch
 from app.views.product.normal import ShowNormalView
+from app.views.product.bidding import ShowBiddingView
+from app.views.product.like import ProductLikeView
 
 from app.views.auth.login import LoginView
 from app.views.auth.logout import LogoutView
@@ -40,6 +42,8 @@ app.add_url_rule(rule='/index', view_func=IndexView.as_view('index_view'), metho
 app.add_url_rule(rule='/search', endpoint='search', view_func=SearchView.as_view('search_view'), methods=['GET'])
 app.add_url_rule(rule='/linesearch', endpoint='linesearch', view_func=LineChatbotSearch.as_view('line_chatbot_search'), methods=['POST'])
 app.add_url_rule(rule='/normal/<string:product_id>', endpoint='show_normal', view_func=ShowNormalView.as_view('show_normal_view'), methods=['GET', 'POST'])
+app.add_url_rule(rule='/bidding/<string:product_id>', endpoint='show_bidding', view_func=ShowBiddingView.as_view('show_bidding_view'), methods=['GET', 'POST'])
+app.add_url_rule(rule='/like/<string:product_id>', endpoint='product_like', view_func=ProductLikeView.as_view('product_like_view'), methods=['POST'])
 app.add_url_rule(rule='/cart', endpoint='cart', view_func=login_required(CartView.as_view('cart_view')), methods=['GET', 'POST'])
 app.add_url_rule(rule='/cart/opration', endpoint='cartOperation', view_func=login_required(CartOperationView.as_view('cartOperation_view')), methods=['POST'])
 

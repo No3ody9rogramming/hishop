@@ -10,6 +10,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate, CarouselColumn, CarouselTemplate, URITemplateAction
 
+from app.models.keyword import Keyword
 from app.models.product import Product
 from app import app
 
@@ -25,6 +26,13 @@ class SearchView(MethodView):
             way = "normal"
         else:
             abort(404)
+
+        if request.args.get('keyword') not in ["", None]:
+            keyword = Keyword.objects(keyword=request.args.get('keyword')).first()
+            if keyword == None:
+                keyword = Keyword(keyword=request.args.get('keyword'))
+            keyword.count += 1
+            keyword.save()
 
         return render_template('search.html', products=products, way=way, now=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
 
