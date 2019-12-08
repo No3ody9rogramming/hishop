@@ -26,12 +26,24 @@ class ProfileView(MethodView):
             current_user.phone = form.phone.data
             current_user.birth = form.birth.data
             current_user.store_name = form.store_name.data
-            icon="icon." + form.icon.data.filename[-3:].lower()
-            current_user.save()
-
+            
+        
             icon_path = os.path.join(os.getcwd(), 'app/static/icon', str(current_user.id))
-            os.makedirs(icon_path)
-            form.icon.data.save(os.path.join(icon_path, current_user.icon))
+            print(current_user.icon)
+            if(current_user.icon == "default.png"):
+                os.makedirs(icon_path)
+            else:
+                try:
+                    os.remove(os.path.join(icon_path, current_user.icon))   #刪掉原本的檔案
+                    print("File is deleted successfully")
+                    
+                except:
+                    print(e)
+            icon="icon." + form.icon.data.filename[-3:].lower()  #有上傳成功的話會是icon.xxx，否則為default.png
+            current_user.save()
+            form.icon.data.save(os.path.join(icon_path, current_user.icon)) #儲存上傳的檔案
+
+            
 
         return redirect(url_for('profile'))
         
@@ -41,8 +53,5 @@ class ProfileForm(FlaskForm):
     icon = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png'], '只能上傳圖片')])
     phone = StringField("電話號碼", validators=[InputRequired(), Length(max=15)])
     birth = DateField("生日", validators=[InputRequired()])
-    address = StringField("偏好地點",validators=[InputRequired(),Length(max=50)])
-    begin = StringField("偏好時間(起)",validators=[InputRequired(),Length(max=10)])
-    end = StringField("偏好時間(終)",validators=[InputRequired(),Length(max=10)])
     submit = SubmitField('修改')
 
