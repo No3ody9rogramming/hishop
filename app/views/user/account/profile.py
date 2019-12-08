@@ -21,6 +21,7 @@ class ProfileView(MethodView):
     
     def post(self):
         form = ProfileForm()
+
         if form.validate_on_submit():
             current_user.name = form.name.data
             current_user.phone = form.phone.data
@@ -39,18 +40,18 @@ class ProfileView(MethodView):
                     
                 except:
                     print(e)
-            icon="icon." + form.icon.data.filename[-3:].lower()  #有上傳成功的話會是icon.xxx，否則為default.png
+            current_user.icon = "icon." + form.icon.data.filename.split('.')[-1].lower()  #有上傳成功的話會是icon.xxx，否則為default.png
             current_user.save()
             form.icon.data.save(os.path.join(icon_path, current_user.icon)) #儲存上傳的檔案
 
             
 
-        return redirect(url_for('profile'))
+        return render_template('user/account/profile.html', form=form)
         
 class ProfileForm(FlaskForm):
     name = StringField("姓名", validators=[InputRequired(), Length(min=2, max=20)])
     store_name = StringField("賣場名稱", validators=[InputRequired(), Length(min=2, max=20)])
-    icon = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png'], '只能上傳圖片')])
+    icon = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpeg', 'jpg', 'png', 'gif'], '只能上傳圖片')])
     phone = StringField("電話號碼", validators=[InputRequired(), Length(max=15)])
     birth = DateField("生日", validators=[InputRequired()])
     submit = SubmitField('修改')
