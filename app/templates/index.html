@@ -109,7 +109,7 @@
                                 <div class="row">
                                     {% for product in bidding_products %}
 
-                                    <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
+                                    <a href="{{ url_for('show_bidding', product_id=product.id|string) }}">
                                         <div class="col-md-3 col-6">
                                             <div class="bg-dark text-white text-center">
                                                 剩餘時間：
@@ -117,8 +117,8 @@
                                             </div>
                                             <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
                                             <div class="align-items-end">
-                                                <a style="display: inline-block; width: 55%; overflow: hidden; text-overflow: ellipsis; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_normal', product_id=product.id|string) }}">{{product.name}}</a>
-                                                <a style="display: inline-block; width: 45%; float: right; text-align: center; text-decoration:none;" class="bg-secondary text-white" href="{{ url_for('show_normal', product_id=product.id|string) }}">${{product.price}}</a>
+                                                <a style="display: inline-block; width: 55%; overflow: hidden; text-overflow: ellipsis; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_bidding', product_id=product.id|string) }}">{{product.name}}</a>
+                                                <a style="display: inline-block; width: 45%; float: right; text-align: center; text-decoration:none;" class="bg-secondary text-white" href="{{ url_for('show_bidding', product_id=product.id|string) }}">${{product.price}}</a>
                                             </div>
                                         </div>
                                     </a>

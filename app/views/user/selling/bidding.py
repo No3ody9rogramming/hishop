@@ -27,6 +27,7 @@ class BiddingView(MethodView):
         if form.validate_on_submit():
             bid = Bid(per_price=form.per_price.data,
                       low_price=form.low_price.data,
+                      now_price=form.low_price.data,
                       due_time=form.due_time.data)
 
             product = Product(seller_id=current_user.id,
