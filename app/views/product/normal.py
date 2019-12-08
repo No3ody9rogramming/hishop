@@ -24,25 +24,20 @@ class ShowNormalView(MethodView):
         if current_user.is_active:
             #update history
             information = Information.objects(user_id=current_user.id).first()
-            update = False
-            for history in information.history:
-                if history.product.id == product.id:
-                    history.create_time = datetime.datetime.utcnow()
-                    update = True
-                    break
-            if update == False:
-                information.history.append(History(product=product.id))
+            history_product = [h['product'] for h in information.history]
+            try:
+                index = history_product.index(product)
+                information.history[index].create_time = datetime.datetime.utcnow()
+            except ValueError:
+                information.history.append(History(product=product))
             information.save()
 
-            for like_product in information.like:
-                if like_product.id == product.id:
-                    like = "fas fa-heart"
+            if product in information.like:
+                like = "fas fa-heart"
 
-            for cart_product in information.cart:
-                if cart_product.id == product.id:
-                    cart = "移出購物車"
+            if product in information.cart:
+                cart = "移出購物車"
 
-            #update view times
             product.view += 1
             product.save()
         return render_template('product/normal.html', form=form, product=product, like=like, cart=cart, product_json=product.to_json())
@@ -51,36 +46,35 @@ class ShowNormalView(MethodView):
     
     def post(self, product_id):
         form = NormalForm()
-        product = Product.objects(id=product_id).first()
+        product = Product.objects(id=product_id, bidding=False).first()
 
         if product == None:
             abort(404)
         if form.validate_on_submit():
-            if form.like.data == True:
-                information = Information.objects(user_id=current_user.id).first()
-                for (idx, like) in enumerate(information.like):
-                    if product.id == like.id:
-                        del information.like[idx]
-                        information.save()
-                        return "far fa-heart"
+            information = Information.objects(user_id=current_user.id).first()
 
-                information.like.append(product.id)
+            if form.like.data == True:
+                if product in information.like:
+                    information.like.remove(product)
+                    like = "far fa-heart"
+                else:
+                    information.like.append(product)
+                    like = "fas fa-heart"
                 information.save()
-                return "fas fa-heart"
+
+                return like
 
             elif form.cart.data == True and product.seller_id.id != current_user.id:
-                information = Information.objects(user_id=current_user.id).first()
-                for (idx, cart) in enumerate(information.cart):
-                    if product.id == cart.id:
-                        del information.cart[idx]
-                        information.save()
-                        return "加入購物車"
-
-                information.cart.append(product.id)
+                if product in information.cart:
+                    information.cart.remove(product)
+                    cart = "加入購物車"
+                else:
+                    information.cart.append(product)
+                    cart = "移出購物車"
                 information.save()
-                return "移出購物車"
-            #print(form.like.data)
-            #print(form.cart.data)
+
+                return cart
+
         abort(404)
         
 class NormalForm(FlaskForm):

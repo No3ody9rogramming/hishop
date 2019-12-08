@@ -5,5 +5,8 @@ from flask_login import login_required, current_user, logout_user
 class LogoutView(MethodView):
     def get(self):
         logout_user()
-        #return redirect('/login')
-        return redirect(url_for('login'))
+
+        if request.args.get('next'):
+        	return redirect(request.args.get('next'))
+        else:
+        	return redirect(url_for('login'))
