@@ -35,7 +35,7 @@
 							current_user.id|string +'/' + current_user.icon)}}" alt="icon" style = "height:250px;width:100%;">
 							{% endif %}
 							<div class=" row">
-								<div class="col-auto" >
+								<div class="col-auto form-group required" >
 									{% if form.icon.errors %}
 									{{ form.icon(class="form-control is-invalid") }}
 									{% for error in form.icon.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
@@ -110,21 +110,21 @@
 									</div>
 		
 									<div class="row justify-content-center">
-										<div class="col-lg-10 form-group required">
+										<div class="col-lg-10 ">
 											<p>交易地點:</p>
 											
 										</div>
 									</div>
 		
 									<div class="row justify-content-center">
-											<div class="col-lg-10 form-group required">
+											<div class="col-lg-10 ">
 												<p>交易時間(起始):</p>
 												
 											</div>
 									</div>
 
 									<div class="row justify-content-center">
-										<div class="col-lg-10 form-group required">
+										<div class="col-lg-10 ">
 											<p>交易時間(結束):</p>
 											
 										</div>
@@ -132,7 +132,7 @@
 
 									
 								</div>
-								<div class="col-7 form-group required">
+								<div class="col-7 ">
 										
 								</div>
 								<div class="col-3 form-group required">
