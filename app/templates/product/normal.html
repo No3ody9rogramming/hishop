@@ -6,6 +6,36 @@
 	{{ ckeditor.load() }}
 {% endblock head %}
 
+
+{% block styles %}
+	{{ super() }}
+	<style type = "text/css">
+		.row{
+			overflow: hidden;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			margin-bottom: 10px;
+			background-color: white;
+		}
+
+		.row [class="col-"]{
+			margin-bottom: -9999px;
+			padding-bottom: 9999px;
+		}	
+
+		.productImg{
+			width: 100%;
+			height: 100%;
+		}
+
+		#productprice{
+			background-color: #FFDDAA;
+			color: #E63F00;
+		}
+
+	</style>
+{% endblock styles %}
+
 {% block scripts %}
 	{{ super() }}
 	<script type="text/javascript">
@@ -59,16 +89,102 @@
 {% endblock scripts %}
 
 {% block page %}
-	<div class="row">
-		<div class="col-lg-12">
-	    	{{ product_json }}
+	<div class="row" style="margin-top: 50px;">
+		<div class="col-md-6">
+			<img class="productImg" src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}"> 
+		</div>
 
-	    	<form id="form" role="form">
-        		{{ form.csrf_token }}
-	    		<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red;"><i class="{{ like }}"></i></a>
-	    		
-	    		<button id="cart" name="cart" type="submit" class="btn btn-sencondary">{{ cart }}</button>
-	    	</form>
-	    </div>
+		<div class="col-md-6">
+			<h3>{{ product.name }}</h3>
+			<p>已有 {{ product.view}} 人觀看此商品</p>
+			<h5 id="productprice">$ {{ product.price}} </h5>
+
+			<form id="form" role="form">
+				{{ form.csrf_token }}
+						
+						
+				<button id="cart" name="cart" type="submit" class="btn btn-sencondary" style="position:absolute; bottom:0; right:50px;">{{ cart }}</button>
+
+				<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red; position:absolute; bottom:0; right:0;" ><i class="{{ like }}"></i></a>
+			</form>
+		</div>
 	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			賣家資訊 : {{ product.seller }}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12"">
+			商品詳情 :
+		</div>
+
+		<div class="col-md-12">
+			{{ product.detail | safe }}
+		</div>
+
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			商品評價 :
+		</div>
+		
+		<div class="col-md-12">
+			買家資訊 :
+			評價 :
+			評論 :
+		</div>
+	
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+		<br>
+			<div class="card">
+				<div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">相似商品 \\</div>
+					<div class="card-body">
+						<div id="hotProductIndicators" class="carousel slide" data-ride="carousel" data-interval="8000">
+							<div class="carousel-inner">
+								<div class="carousel-item active">
+									<div class="row">
+										{% for product in popular_products %}
+										<div class="col-md-3 col-6">
+											<a href="{{ url_for('show_normal', product_id=product.id|string) }}">
+											<img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
+											</a>
+											<div>
+												<a style="display: inline-block; width: 55%; overflow: hidden; text-overflow: ellipsis; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_normal', product_id=product.id|string) }}">相似商品名稱</a>
+												<a style="display: inline-block; width: 45%; float: right; text-align: center; text-decoration:none;" class="bg-secondary text-white" href="{{ url_for('show_normal', product_id=product.id|string) }}">相似商品價格</a>
+											</div>
+										</div>
+		
+										{% if loop.index % 4 == 0 and loop.index > 1 %}
+									</div>
+								</div>
+									{% if loop.index != loop.length %}
+								<div class="carousel-item">
+									<div class = "row">
+										{% endif %}
+										{% endif %}
+										{% endfor %}
+									</div>
+									<a class="carousel-control-prev" href="#hotProductIndicators" role="button" data-slide="prev" style="width: auto;">
+										<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+										<span class="sr-only">Previous</span>
+									</a>
+									<a class="carousel-control-next" href="#hotProductIndicators" role="button" data-slide="next" style="width: auto;">
+										<span class="carousel-control-next-icon" aria-hidden="true"></span>
+										<span class="sr-only">Next</span>
+									</a>
+								</div>
+							</div>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 {% endblock page %}
