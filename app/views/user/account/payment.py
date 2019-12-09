@@ -59,7 +59,7 @@ class PaymentConfirmView(MethodView):
             current_user.hicoin += payment.amount
             current_user.save()
             
-        return redirect(url_for('payment'))
+        return redirect(url_for('user.payment'))
 
 
 class PaymentForm(FlaskForm):
