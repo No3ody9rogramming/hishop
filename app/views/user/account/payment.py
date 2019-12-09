@@ -26,7 +26,7 @@ class PaymentView(MethodView):
                        "Content-Type": "application/json; charset=UTF-8"}
             data = {"amount": form.payment.data,
                     "productName": "Hi幣",
-                    "productImageUrl": "https://images-na.ssl-images-amazon.com/images/I/61%2Bd31HM4bL._SY355_.jpg",
+                    "productImageUrl": "https://h-coin.3zh-studio.com/img/H-Coin%20Logo.png",
                     "confirmUrl": url_for('user.payment_confirm', _external=True),
                     "orderId": uuid.uuid4().hex,
                     "currency": "TWD"}
