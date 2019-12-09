@@ -42,7 +42,8 @@ class ShowBiddingView(MethodView):
     @login_required
     def post(self, product_id):
         form = BiddingForm()
-        product = Product.objects(id=product_id, status=0, bidding=True).first()
+        product = Product.objects(id=product_id, status=0, bidding=True,
+                            bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8)).first()
         if product == None:
             abort(404)
 
