@@ -27,7 +27,7 @@ class PaymentView(MethodView):
             data = {"amount": form.payment.data,
                     "productName": "Hi幣",
                     "productImageUrl": url_for('static', filename='hicoin.png', _external=True),
-                    "confirmUrl": url_for('payment_confirm', _external=True),
+                    "confirmUrl": url_for('user.payment_confirm', _external=True),
                     "orderId": uuid.uuid4().hex,
                     "currency": "TWD"}
             response = requests.post(app.config['CHANNEL_URL'], headers=headers, data=json.dumps(data).encode('utf-8'))
