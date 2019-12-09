@@ -43,12 +43,12 @@
 	  			total.toString();
       			$("#total").text(total);
       		if(parseInt($('#total').text()) > {{hicoin}}) {
-      			$("#notEnough").toggleClass("d-none");
-      			$("#submit").toggleClass("d-none");
+      			$("#notEnough").removeClass("d-none");
+      			$("#submit").addClass("d-none");
       		}
       		else {
-      			$("#notEnough").toggleClass("d-none");
-      			$("#submit").toggleClass("d-none");
+      			$("#notEnough").addClass("d-none");
+      			$("#submit").removeClass("d-none");
       		}
 		});
 
