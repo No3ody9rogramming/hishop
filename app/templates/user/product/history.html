@@ -5,8 +5,8 @@
 	{{ super() }}
 	<style type = "text/css">
 		.productImg {
-			max-width: 100px;
-		    max-height:100px;
+			width: 100px;
+		    height:100px;
 		}
 
 	</style>
@@ -31,15 +31,18 @@
 				<table class="table">
 					<thead>
 						<th scope="col">商品</th>
+						<th scope="col">名稱</th>
 						<th scope="col">售價</th>
 					</thead>
 					{% for product in products %}
 					<tbody>
 						<th scope="row" class="align-middle">
-								<img class="productImg" src="{{url_for('static', filename = 'image/'+product.product.id|string +'/' + product.product.image)}}"> 
-								<a href="{{ url_for('show_normal', product_id=product.product.id|string) }}" target=_blank>{{product.product.name}}</a>
-								</th>
-					      		<td class="align-middle">{{ product.product.price }}</td>
+							<img class="productImg" src="{{url_for('static', filename = 'image/'+product.product.id|string +'/' + product.product.image)}}"> 
+						</th>
+						<td class="align-middle">
+							<a href="{{ url_for('show_normal', product_id=product.product.id|string) }}" target=_blank>{{product.product.name}}</a>
+						</td>
+					    <td class="align-middle">{{ product.product.price }}</td>
 					</tbody>
 					{% endfor %}
 			</div>
