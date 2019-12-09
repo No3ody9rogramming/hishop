@@ -15,7 +15,7 @@ class LoginView(MethodView):
         if current_user.is_active == False:
             return render_template('auth/login.html', form=form, next=request.args.get('next'))
         else:
-            return redirect(url_for('profile'))
+            return redirect(url_for('user.profile'))
     
     def post(self):
         form = LoginForm()
@@ -24,7 +24,7 @@ class LoginView(MethodView):
             login_user(user)
 
             if request.args.get('next') == None:
-                return redirect(url_for('profile'))
+                return redirect(url_for('user.profile'))
             else:
                 return redirect(request.args.get('next'))
         return render_template('auth/login.html', form=form)

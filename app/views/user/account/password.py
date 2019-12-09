@@ -13,14 +13,15 @@ class PasswordView(MethodView):
         form = PasswordForm()
 
         return render_template('user/account/password.html', form=form)
-    
     def post(self):
         form = PasswordForm()
         if form.validate_on_submit():
             current_user.password = bcrypt.generate_password_hash(form.password.data).decode()
             current_user.save()
             flash('修改成功')
-        return redirect(url_for('password'))
+
+            return redirect(url_for('user.password'))
+        return render_template('user/account/password.html', form=form)
 
 
 

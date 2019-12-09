@@ -38,7 +38,7 @@ class NormalView(MethodView):
             os.makedirs(image_path)
             form.image.data.save(os.path.join(image_path, product.image))
 
-            return redirect(url_for('profile'))
+            return redirect(url_for('user.profile'))
         
         return render_template('user/selling/normal.html', form=form)
 

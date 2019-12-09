@@ -37,7 +37,6 @@ from flask_socketio import emit ##for test socketio
 
 admin = Blueprint('admin', __name__)
 admin.add_url_rule(rule='/question/response', endpoint='response', view_func=login_required(ResponseView.as_view('response_view')), methods=['GET', 'POST'])
-
 app.register_blueprint(admin, url_prefix='/admin')
 
 app.add_url_rule(rule='/', endpoint='index', view_func=IndexView.as_view('index_view'), methods=['GET'])
@@ -56,21 +55,22 @@ app.add_url_rule(rule='/logout', endpoint='logout', view_func=login_required(Log
 app.add_url_rule(rule='/password/reset', endpoint='forgot', view_func=ForgotPasswordView.as_view('forgot_password_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/password/reset/<string:reset_token>', endpoint='reset', view_func=ResetPasswordView.as_view('reset_password_view'), methods=['GET', 'POST'])
 
-app.add_url_rule(rule='/user/account/profile', endpoint='profile', view_func=login_required(ProfileView.as_view('profile_view')), methods=['GET', 'POST'])
-app.add_url_rule(rule='/user/account/password', endpoint='password', view_func=login_required(PasswordView.as_view('password_view')), methods=['GET', 'POST'])
-app.add_url_rule(rule='/user/account/payment', endpoint='payment', view_func=login_required(PaymentView.as_view('payment_view')), methods=['GET', 'POST'])
-app.add_url_rule(rule='/user/account/payment/confirm', endpoint='payment_confirm', view_func=login_required(PaymentConfirmView.as_view('payment_confirm_view')), methods=['GET'])
+user = Blueprint('user', __name__)
+user.add_url_rule(rule='/account/profile', endpoint='profile', view_func=login_required(ProfileView.as_view('profile_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/account/password', endpoint='password', view_func=login_required(PasswordView.as_view('password_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/account/payment', endpoint='payment', view_func=login_required(PaymentView.as_view('payment_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/account/payment/confirm', endpoint='payment_confirm', view_func=login_required(PaymentConfirmView.as_view('payment_confirm_view')), methods=['GET'])
 
-app.add_url_rule(rule='/user/product/like', endpoint='like', view_func=login_required(LikeView.as_view('like_view')), methods=['GET', 'POST'])
-app.add_url_rule(rule='/user/product/history', endpoint='history', view_func=login_required(HistoryView.as_view('history_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/product/like', endpoint='like', view_func=login_required(LikeView.as_view('like_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/product/history', endpoint='history', view_func=login_required(HistoryView.as_view('history_view')), methods=['GET', 'POST'])
 
-app.add_url_rule(rule='/user/selling/normal', endpoint='normal', view_func=login_required(NormalView.as_view('normal_view')), methods=['GET', 'POST'])
-app.add_url_rule(rule='/user/selling/bidding', endpoint='bidding', view_func=login_required(BiddingView.as_view('bidding_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/selling/normal', endpoint='normal', view_func=login_required(NormalView.as_view('normal_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/selling/bidding', endpoint='bidding', view_func=login_required(BiddingView.as_view('bidding_view')), methods=['GET', 'POST'])
 
-app.add_url_rule(rule='/user/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
-app.add_url_rule(rule='/user/question/all_question', endpoint='all_question', view_func=login_required(All_questionView.as_view('all_question_view')), methods=['GET', 'POST'])
-app.add_url_rule(rule='/hichat', endpoint='hiChat', view_func=login_required(HiChatView.as_view('hichat_view')), methods=['GET', 'POST'])
-
+user.add_url_rule(rule='/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/question/all_question', endpoint='all_question', view_func=login_required(All_questionView.as_view('all_question_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/hichat', endpoint='hiChat', view_func=login_required(HiChatView.as_view('hichat_view')), methods=['GET', 'POST'])
+app.register_blueprint(user, url_prefix='/user')
 
 print(app.url_map)
 print(admin)

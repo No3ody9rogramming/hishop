@@ -22,7 +22,7 @@ class ReportView(MethodView):
                                 title=form.title.data,
                                 detail=form.detail.data)
             question.save()
-            return redirect(url_for('report'))
+            return redirect(url_for('user.report'))
         return render_template('user/question/report.html', form=form)
         
 class ReportForm(FlaskForm):
