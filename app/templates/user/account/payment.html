@@ -11,7 +11,7 @@
 	    <div class="col-md-10">
 			<br>
 	    	<p>目前有 {{ hicoin }} hicoin</p>
-		    {{ wtf.quick_form(form, method="post", action=url_for("payment")) }}
+		    {{ wtf.quick_form(form, method="post", action=url_for("user.payment")) }}
 		</div>
 	</div>
 {% endblock page %}
