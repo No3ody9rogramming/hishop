@@ -8,9 +8,56 @@
 			{% include "layouts/user.html" %}
 		</div>
 
-	    <div class="col-md-10">
+	    <div class="col-md-9">
 			<br>
-		    {{ wtf.quick_form(form, method="post", action=url_for("user.report")) }}
+
+			<div class="row justify-content-center align-items-center bg-warning border border-dark rounded">
+				<div class="col-auto ">
+					<p class="text-cneter rounded" style="margin: 5px 5px 5px;"> 問題回報 </p>
+				</div>
+			</div>
+
+			<div class="row justify-content-center border border-dark rounded">
+				<div class=" col-md-12 " style="margin: 3vh;">
+					<div class="row justify-content-center form-group required" >
+						<div class="col-auto">
+							<p> 問題回報</p>
+						</div>
+						<div class="col-lg-10">
+						{% if form.title.errors %}
+						{{ form.title(class="form-control is-invalid") }}
+						{% for error in form.title.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+					{% else %}
+						{{ form.title(class="form-control") }}
+					{% endif %}
+						</div>
+					</div>
+				</div>
+					<div class=" col-md-12 " style="margin: 3vh;">
+						<div class="row justify-content-center form-group required" >
+							<div class="col-auto">
+								<p> 問題描述
+								</p>
+							</div>
+							<div class="col-lg-10">
+							{% if form.detail.errors %}
+							{{ form.detail(class="form-control is-invalid") }}
+							{% for error in form.detail.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+						{% else %}
+							{{ form.detail(class="form-control") }}
+						{% endif %}
+							</div>
+						</div>
+					</div>
+
+				<div class="col-9"></div>
+				<div class="col-auto form-group required">
+					{{ form.submit(class="btn btn-primary col-12",value="送出") }}
+				</div>
+
+			</div>
+
+		    
 		</div>
 	</div>
 {% endblock page %}
