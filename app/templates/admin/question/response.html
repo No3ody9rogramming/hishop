@@ -1,0 +1,16 @@
+{% extends "layouts/app.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page %}
+	<div class="row">
+		<div class="col-auto">
+			<br>
+			{% include "layouts/admin.html" %}
+		</div>
+
+	    <div class="col-md-10">
+			<br>
+		    {{ wtf.quick_form(form, method="post", action=url_for("admin.response")) }}
+		</div>
+	</div>
+{% endblock page %}

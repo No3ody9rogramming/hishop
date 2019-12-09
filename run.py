@@ -19,23 +19,26 @@ from app.views.user.account.password import PasswordView
 from app.views.user.account.payment import PaymentView, PaymentConfirmView
 from app.views.user.account.cart import CartView
 from app.views.user.account.cartOperation import CartOperationView
-
 from app.views.user.product.like import LikeView
 from app.views.user.product.history import HistoryView
-
 from app.views.user.selling.normal import NormalView
 from app.views.user.selling.bidding import BiddingView
-
 from app.views.user.question.report import ReportView
 from app.views.user.question.all_question import All_questionView
+
+from app.views.admin.question.response import ResponseView
 
 from app.views.user.hiChat import HiChatView
 
 from flask_mail import Message
 
-from flask import render_template ##for test socketio
+from flask import render_template, Blueprint ##for test socketio
 from flask_socketio import emit ##for test socketio
 
+admin = Blueprint('admin', __name__)
+admin.add_url_rule(rule='/question/response', endpoint='response', view_func=login_required(ResponseView.as_view('response_view')), methods=['GET', 'POST'])
+
+app.register_blueprint(admin, url_prefix='/admin')
 
 app.add_url_rule(rule='/', endpoint='index', view_func=IndexView.as_view('index_view'), methods=['GET'])
 app.add_url_rule(rule='/index', view_func=IndexView.as_view('index_view'), methods=['GET'])
@@ -69,7 +72,8 @@ app.add_url_rule(rule='/user/question/all_question', endpoint='all_question', vi
 app.add_url_rule(rule='/hichat', endpoint='hiChat', view_func=login_required(HiChatView.as_view('hichat_view')), methods=['GET', 'POST'])
 
 
-
+print(app.url_map)
+print(admin)
 
 if __name__ == '__main__':
      socketio.run(app, debug=True)
