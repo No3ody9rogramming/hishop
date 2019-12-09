@@ -26,7 +26,7 @@ class PaymentView(MethodView):
                        "Content-Type": "application/json; charset=UTF-8"}
             data = {"amount": form.payment.data,
                     "productName": "Hi幣",
-                    "productImageUrl": url_for('static', filename='hicoin.png', _external=True),
+                    "productImageUrl": "https://images-na.ssl-images-amazon.com/images/I/61%2Bd31HM4bL._SY355_.jpg",
                     "confirmUrl": url_for('user.payment_confirm', _external=True),
                     "orderId": uuid.uuid4().hex,
                     "currency": "TWD"}
@@ -49,7 +49,6 @@ class PaymentConfirmView(MethodView):
                    "X-LINE-ChannelSecret": app.config['CHANNEL_SECRET'],
                    "Content-Type": "application/json; charset=UTF-8"}
         data = {"amount": payment.amount,
-                "productImageUrl": url_for('static', filename='hicoin.png', _external=True),
                 "currency": payment.currency}
         response = requests.post(app.config['CHANNEL_CONFIRM_URL'].format(payment.transaction_id), headers=headers, data=json.dumps(data).encode('utf-8'))
 
