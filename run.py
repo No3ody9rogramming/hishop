@@ -69,11 +69,8 @@ user.add_url_rule(rule='/selling/bidding', endpoint='bidding', view_func=login_r
 
 user.add_url_rule(rule='/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
 user.add_url_rule(rule='/question/all_question', endpoint='all_question', view_func=login_required(All_questionView.as_view('all_question_view')), methods=['GET', 'POST'])
-user.add_url_rule(rule='/hichat', endpoint='hiChat', view_func=login_required(HiChatView.as_view('hichat_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/hichat', endpoint='hichat', view_func=login_required(HiChatView.as_view('hichat_view')), methods=['GET', 'POST'])
 app.register_blueprint(user, url_prefix='/user')
-
-print(app.url_map)
-print(admin)
 
 if __name__ == '__main__':
      socketio.run(app, debug=True)
