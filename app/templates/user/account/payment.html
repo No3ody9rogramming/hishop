@@ -8,7 +8,7 @@
 			{% include "layouts/user.html" %}
 		</div>
 
-	    <div class="col-md-10">
+	    <div class="col-md-9">
 			<br>
 	    	<p>目前有 {{ hicoin }} hicoin</p>
 			{{ wtf.quick_form(form, method="post", action=url_for("user.payment")) }}
