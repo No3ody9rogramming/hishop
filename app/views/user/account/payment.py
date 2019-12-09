@@ -49,6 +49,7 @@ class PaymentConfirmView(MethodView):
                    "X-LINE-ChannelSecret": app.config['CHANNEL_SECRET'],
                    "Content-Type": "application/json; charset=UTF-8"}
         data = {"amount": payment.amount,
+                "productImageUrl": url_for('static', filename='hicoin.png', _external=True),
                 "currency": payment.currency}
         response = requests.post(app.config['CHANNEL_CONFIRM_URL'].format(payment.transaction_id), headers=headers, data=json.dumps(data).encode('utf-8'))
 
