@@ -40,7 +40,7 @@ class PaymentView(MethodView):
                                   confirm=False).save()
                 return redirect(json.loads(response.text)['info']['paymentUrl']['web'])
 
-        return redirect(url_for('payment'))
+        return redirect(url_for('user.payment'))
 
 class PaymentConfirmView(MethodView):
     def get(self):

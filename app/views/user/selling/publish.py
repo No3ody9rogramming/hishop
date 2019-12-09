@@ -43,7 +43,7 @@ class PublishView(MethodView):
                 product.bid = bid
                 product.save()
 
-            return redirect(url_for('profile'))
+            return redirect(url_for('user.profile'))
         
         return render_template('user/selling/publish.html', form=form)
         
