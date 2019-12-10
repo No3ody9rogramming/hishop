@@ -9,11 +9,12 @@ from wtforms.validators import DataRequired, Email, InputRequired, Length, Equal
 
 from app.models.question import Question
 
-class ResponseView(MethodView):
+class ResponseListView(MethodView):
     def get(self):
-        form = ResponseForm()
+        questions = Question.objects()
 
-        return render_template('admin/question/list.html', form=form)
+
+        return render_template('admin/question/list.html', questions=questions)
     
     def post(self):
         form = ResponseForm()

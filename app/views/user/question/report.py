@@ -27,5 +27,5 @@ class ReportView(MethodView):
         
 class ReportForm(FlaskForm):
     title = StringField("問題主旨", validators=[InputRequired(), Length(max=20)])
-    detail = TextAreaField("問題描述", render_kw={'rows': 7}, validators=[InputRequired(), Length(max=40)])
+    detail = TextAreaField("問題描述", render_kw={'rows': 7}, validators=[InputRequired(), Length(max=4000)])
     submit = SubmitField('提交')
