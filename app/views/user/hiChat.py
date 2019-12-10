@@ -21,7 +21,7 @@ class HiChatView(MethodView):
         receiverID = request.values["receiverID"]        
         if senderID != str(current_user.id):
             abort(403)        
-        messages = Message.objects((Q(sender_id=senderID) & Q(receiver_id=receiverID)) | (Q(sender_id=receiverID) & Q(receiver_id=senderID))).order_by("-create_time")
+        messages = Message.objects((Q(sender_id=senderID) & Q(receiver_id=receiverID)) | (Q(sender_id=receiverID) & Q(receiver_id=senderID))).order_by("+create_time")
         return messages.to_json()
 
 @socketio.on('chat message')
