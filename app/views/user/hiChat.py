@@ -26,8 +26,9 @@ class HiChatView(MethodView):
             messagesRtoS = Message.objects(sender_id=receiverID, receiver_id=senderID)
             if(messagesRtoS.count() > 0 ):
                 messagesList = json.loads(messages)
-                messagesRtoSList = json.loads(messagesRtoS.to_json())
-                messagesList.append(messagesRtoSList);
+                messagesRtoSLists = json.loads(messagesRtoS.to_json())
+                for messagesRtoSList in messagesRtoSLists:
+                    messagesList.append(messagesRtoSList);
                 messages = json.dumps(messagesList)
         return messages;
 

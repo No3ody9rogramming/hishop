@@ -18,7 +18,7 @@
       var chatObjectID;
       var chatObjectName;
       $(function () {
-        var socket = io.connect("{{app.config['SERVER_DOMAIN']}}", {path: "{{app.config['REVERSE_PROXY_PATH']}}/socket.io"});    
+        var socket = io.connect();    
 
         $('form').submit(function(e){
           e.preventDefault(); // prevents page reloading
@@ -45,7 +45,6 @@
           data: { senderID : "{{ currentUser.id|string }}", receiverID : chatObjectID},
           success: function(data) {
             messageInfos = JSON.parse(data)
-            console.log(messageInfos)
             for (messageInfo in messageInfos) {
               var senderName;
               if (messageInfos[messageInfo].sender_id.$oid == "{{ currentUser.id|string }}")
