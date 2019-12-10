@@ -1,0 +1,74 @@
+{% extends "layouts/app.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page %}
+	<br>
+	<div class="row">
+		<div class="col-auto">
+			{% include "layouts/user.html" %}
+		</div>
+
+	    <div class="col-md-9">
+	    	<div class="card">
+	    		<div class="card-header text-center bg-warning p-2 border border-dark">
+	    			購買清單
+	    		</div>
+	    		<div class="card-body border border-dark">
+	    			<a class="btn btn-primary {% if status == PRODUCT_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('user.selling_list', status=PRODUCT_STATUS['ALL']) }}">全部</a>
+	    			<a class="btn btn-primary {% if status == PRODUCT_STATUS['SELLING'] %} active {% endif %}" href="{{ url_for('user.selling_list', status=PRODUCT_STATUS['SELLING']) }}">販賣中</a>
+	    			<a class="btn btn-primary {% if status == PRODUCT_STATUS['FROZEN'] %} active {% endif %}" href="{{ url_for('user.selling_list', status=PRODUCT_STATUS['FROZEN']) }}">被凍結</a>
+	    			<a class="btn btn-primary {% if status == PRODUCT_STATUS['REMOVE'] %} active {% endif %}" href="{{ url_for('user.selling_list', status=PRODUCT_STATUS['REMOVE']) }}">已下架</a>
+
+					<div class="table-responsive-lg">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th scope="col">圖片</th>
+									<th scope="col">名稱</th>
+									<th scope="col">類型</th>
+									<th scope="col">價格</th>
+									<th scope="col">狀態</th>
+									<th scope="col">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for product in products %}
+								    <tr>
+										<td>圖片</td>
+										<td>{{ product.name }}</td>
+										<td>
+											{% if product.bidding == True %}
+												競標商品
+											{% else %}
+												一般商品
+											{% endif %}
+										</td>
+										<td>
+											{% if product.bidding == True and product.bid.buyer_id == None %}
+												未出價
+											{% elif product.bidding == True %}
+												$ {{ product.bid.now_price }}
+											{% else %}
+												$ {{ product.price }}
+											{% endif %}
+										</td>
+										<td>
+											{% if product.status|string == PRODUCT_STATUS['SELLING'] %}
+												販賣中
+											{% elif product.status|string == PRODUCT_STATUS['FROZEN'] %}
+												被凍結
+											{% elif product.status|string == PRODUCT_STATUS['REMOVE'] %}
+												已下架
+											{% endif %}
+										</td>
+										<td>None</td>
+								    </tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+	    	</div>
+		</div>
+	</div>
+{% endblock page %}
