@@ -1,0 +1,66 @@
+{% extends "layouts/app.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page %}
+	<br>
+	<div class="row">
+		<div class="col-auto">
+			{% include "layouts/admin.html" %}
+		</div>
+
+	   	<div class="col-md-9">
+	    	<div class="card">
+	    		<div class="card-header text-center bg-warning p-2 border border-dark">
+	    			所有問題
+	    		</div>
+	    		<div class="card-body border border-dark">
+					<a class="btn btn-primary {% if status == QUESTION_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('admin.response_list', status=QUESTION_STATUS['ALL']) }}">全部</a>
+					<a class="btn btn-primary {% if status == QUESTION_STATUS['NO_ANSWER'] %} active {% endif %}" href="{{ url_for('admin.response_list', status=QUESTION_STATUS['NO_ANSWER']) }}">未回答</a>
+					<a class="btn btn-primary {% if status == QUESTION_STATUS['ANSWER'] %} active {% endif %}" href="{{ url_for('admin.response_list', status=QUESTION_STATUS['ANSWER']) }}">已回答</a>
+					<div class="table-responsive-lg">
+						<table class="table table-striped table-border">
+							<thead>
+								<tr>
+									<th scope="col">問題主旨</th>
+									<th scope="col">提問時間</th>
+									<th scope="col">回答時間</th>
+									<th scope="col">狀態</th>
+									<th scope="col">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for question in questions %}
+								    <tr>
+										<td>{{ question.title }}</td>
+										<td>{{ question.create_time.strftime('%Y-%m-%d') }}</td>
+										<td>
+											{% if question.response == None %}
+												-
+											{% else %}
+												{{ question.response_time.strftime('%Y-%m-%d') }}
+											{% endif %}
+										</td>
+										<td>
+											{% if question.response == None %}
+												未回答
+											{% else %}
+												已回答
+											{% endif %}
+										</td>
+										<td>
+											{% if question.response == None %}
+												<a class="btn btn-secondary" href="{{ url_for('admin.response', question_id=question.id) }}" target="_blank">回答</a>
+											{% else %}
+												<a class="btn btn-secondary" href="{{ url_for('admin.response', question_id=question.id) }}" target="_blank">查看</a>
+											{% endif %}
+										</td>
+								    </tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+	    	</div>
+		</div>
+	</div>
+{% endblock page %}

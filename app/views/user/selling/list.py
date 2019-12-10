@@ -14,11 +14,11 @@ class SellingListView(MethodView):
         products = Product.objects(seller_id=current_user.id)
 
         status = request.args.get('status')
-        if request.args.get('status') == PRODUCT_STATUS['SELLING']:
+        if status == PRODUCT_STATUS['SELLING']:
             products = Product.objects(seller_id=current_user.id, status=PRODUCT_STATUS['SELLING'])
-        elif request.args.get('status') == PRODUCT_STATUS['FROZEN']:
+        elif status == PRODUCT_STATUS['FROZEN']:
             products = Product.objects(seller_id=current_user.id, status=PRODUCT_STATUS['FROZEN'])
-        elif request.args.get('status') == PRODUCT_STATUS['REMOVE']:
+        elif status == PRODUCT_STATUS['REMOVE']:
             products = Product.objects(seller_id=current_user.id, status=PRODUCT_STATUS['REMOVE'])
         else:
             status = PRODUCT_STATUS["ALL"]
