@@ -18,7 +18,7 @@ class RegisterView(MethodView):
         if current_user.is_active == False:
             return render_template('auth/register.html', form=form)
         else:
-            return redirect(url_for('profile'))
+            return redirect(url_for('user.profile'))
     
     def post(self):
         form = RegisterForm()
@@ -36,7 +36,7 @@ class RegisterView(MethodView):
             information = Information(user_id = user.id)
             information.save()
             login_user(user)
-            return redirect(url_for('profile'))
+            return redirect(url_for('user.profile'))
         
         return render_template('auth/register.html', form=form)
 
