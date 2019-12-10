@@ -2,64 +2,54 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block page %}
+	<br>
 	<div class="row">
 		<div class="col-auto">
-			<br>
 			{% include "layouts/user.html" %}
 		</div>
 
 	    <div class="col-md-9">
-			<br>
+	    	<div class="card">
+	    		<div class="card-header text-center bg-warning p-2 border border-dark">
+	    			問題回報
+	    		</div>
+	    		<div class="card-body border border-dark">
+					<form action="{{ url_for('user.report') }}" method="POST">
+						{{ form.csrf_token }}
+						<div class="col-lg-10 form-group row required m-0">
+		                    {{ form.title.label(class="col-lg-3 col-form-label text-lg-right") }}
 
-			<div class="row justify-content-center align-items-center bg-warning border border-dark rounded">
-				<div class="col-auto ">
-					<p class="text-cneter rounded" style="margin: 5px 5px 5px;"> 問題回報 </p>
-				</div>
-			</div>
-
-			<form action="{{ url_for('user.report') }}" method="POST">
-				{{ form.csrf_token }}
-			<div class="row justify-content-center border border-dark rounded">
-				<div class=" col-md-12 " style="margin: 3vh;">
-					<div class="row justify-content-center form-group required" >
-						<div class="col-auto">
-							<p> 問題回報</p>
-						</div>
-						<div class="col-lg-10">
-						{% if form.title.errors %}
-						{{ form.title(class="form-control is-invalid") }}
-						{% for error in form.title.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-					{% else %}
-						{{ form.title(class="form-control") }}
-					{% endif %}
-						</div>
-					</div>
-				</div>
-					<div class=" col-md-12 " style="margin: 3vh;">
-						<div class="row justify-content-center form-group required" >
-							<div class="col-auto">
-								<p> 問題描述
-								</p>
+							<div class="col-lg-9">
+								{% if form.title.errors %}
+									{{ form.title(class="form-control is-invalid", placeholder="上限為20個字") }}
+									{% for error in form.title.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+								{% else %}
+									{{ form.title(class="form-control", placeholder="上限為20個字") }}
+								{% endif %}
 							</div>
-							<div class="col-lg-10">
-							{% if form.detail.errors %}
-							{{ form.detail(class="form-control is-invalid") }}
-							{% for error in form.detail.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-						{% else %}
-							{{ form.detail(class="form-control") }}
-						{% endif %}
+		                </div><br>
+
+						<div class="col-lg-10 form-group row required m-0">
+		                    {{ form.detail.label(class="col-lg-3 col-form-label text-lg-right") }}
+
+							<div class="col-lg-9">
+								{% if form.detail.errors %}
+									{{ form.detail(class="form-control is-invalid", placeholder="上限為4000個字") }}
+									{% for error in form.detail.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+								{% else %}
+									{{ form.detail(class="form-control", placeholder="上限為4000個字") }}
+								{% endif %}
+							</div>
+		                </div><br>
+
+		                <div class="row justify-content-center">
+							<div class="col-lg-3 col-md-6 col-9 form-group">
+								{{ form.submit(class="btn btn-primary col-12",value="送出") }}
 							</div>
 						</div>
-					</div>
-
-				<div class="col-9"></div>
-				<div class="col-auto form-group required">
-					{{ form.submit(class="btn btn-primary col-12",value="送出") }}
+					</form>
 				</div>
-
 			</div>
-
-			</form>
 		</div>
 	</div>
 {% endblock page %}
