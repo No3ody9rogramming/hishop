@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>hichat</title>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
@@ -15,17 +15,19 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <script>
-      var chatObject;
+      var chatObjectID;
+      var chatObjectName;
       $(function () {
-        var socket = io.connect("{{app.config['SERVER_DOMAIN']}}", {path: "{{app.config['REVERSE_PROXY_PATH']}}/socket.io"});        
+        var socket = io.connect("{{app.config['SERVER_DOMAIN']}}", {path: "{{app.config['REVERSE_PROXY_PATH']}}/socket.io"});    
+
         $('form').submit(function(e){
           e.preventDefault(); // prevents page reloading
-          socket.emit('chat message', "{{currentUserID}}", chatObject, $('#m').val());
+          socket.emit('chat message', "{{ currentUser.id|string }}", chatObjectID, $('#m').val());
           $('#m').val('');
           return false;
         });
 
-        socket.on('{{currentUserID}}', function(data){
+        socket.on('{{ currentUser.id|string }}', function(data){
           $('#messages').append($('<li>').text(data.senderName + ": " + data.message));
         });
 
@@ -33,7 +35,28 @@
 
       function changeObject(obj) {
         var thisObj = $(obj);
-        chatObject = thisObj.attr('id');
+        chatObjectID = thisObj.attr('id');
+        chatObjectName = thisObj.text();
+        $('#messages').text("");
+
+        $.ajax({
+          type:"POST",
+          url: "{{ url_for('user.hichat') }}",
+          data: { senderID : "{{ currentUser.id|string }}", receiverID : chatObjectID},
+          success: function(data) {
+            messageInfos = JSON.parse(data)
+            console.log(messageInfos)
+            for (messageInfo in messageInfos) {
+              var senderName;
+              if (messageInfos[messageInfo].id == "{{ currentUser.id|string }}")
+                senderName = "{{ currentUser.name}}";
+              else
+                senderName = chatObjectName
+              $('#messages').append($('<li>').text(senderName + ": " + messageInfos[messageInfo].message));
+            }            
+          }
+        });
+
       }
     </script>
   </head>
