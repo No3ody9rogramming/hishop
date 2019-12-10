@@ -17,6 +17,8 @@
 				</div>
 			</div>
 
+			<form action="{{ url_for('user.report') }}" method="POST">
+				{{ form.csrf_token }}
 			<div class="row justify-content-center border border-dark rounded">
 				<div class=" col-md-12 " style="margin: 3vh;">
 					<div class="row justify-content-center form-group required" >
@@ -57,7 +59,7 @@
 
 			</div>
 
-		    
+			</form>
 		</div>
 	</div>
 {% endblock page %}
