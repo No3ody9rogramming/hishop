@@ -115,7 +115,7 @@
                                                 剩餘時間：
                                                 {{"%s days"|format(( product.bid.due_time - now).days)}}
                                             </div>
-                                            <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
+                                            <img id="bidPic" class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
                                             <div class="align-items-end">
                                                 <a style="display: inline-block; width: 55%; overflow: hidden; text-overflow: ellipsis; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_bidding', product_id=product.id|string) }}">{{product.name}}</a>
                                                 <a style="display: inline-block; width: 45%; float: right; text-align: center; text-decoration:none;" class="bg-secondary text-white" href="{{ url_for('show_bidding', product_id=product.id|string) }}">${{product.price}}</a>
@@ -148,4 +148,15 @@
             </div>
         </div>
     </div>
+
+    <!-- 當圖片載入失敗，使用預設圖片代替 -->
+    <script type="text/javascript"> 
+        document.addEventListener("error", function (e) {
+            let elem = e.target;
+            if (elem.tagName.toLowerCase() == 'img') {
+                elem.src = "{{ url_for('static',filename='errorPic.jpg') }}";
+            }
+            }, true);
+    </script>
+    
 {% endblock page %}
