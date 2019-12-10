@@ -12,13 +12,13 @@ class OrderListView(MethodView):
         products = Product.objects(seller_id=current_user.id)
 
         status = request.args.get('status')
-        if request.args.get('status') == ORDER_STATUS['TRANSFERING']:
+        if status == ORDER_STATUS['TRANSFERING']:
             orders = Order.objects(product_id__in=products, status=ORDER_STATUS["TRANSFERING"])
-        elif request.args.get('status') == ORDER_STATUS['RECEIPTING']:
+        elif status == ORDER_STATUS['RECEIPTING']:
             orders = Order.objects(product_id__in=products, status=ORDER_STATUS["RECEIPTING"])
-        elif request.args.get('status') == ORDER_STATUS['COMPLETE']:
+        elif status == ORDER_STATUS['COMPLETE']:
             orders = Order.objects(product_id__in=products, status=ORDER_STATUS["COMPLETE"])
-        elif request.args.get('status') == ORDER_STATUS['CANCEL']:
+        elif status == ORDER_STATUS['CANCEL']:
             orders = Order.objects(product_id__in=products, status=ORDER_STATUS["CANCEL"])
         else:
             status = ORDER_STATUS["ALL"]

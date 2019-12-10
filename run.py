@@ -29,7 +29,7 @@ from app.views.user.selling.order import OrderListView
 from app.views.user.question.report import ReportView
 from app.views.user.question.all_question import All_questionView
 
-#from app.views.admin.question.response import ResponseView
+from app.views.admin.question.response import ResponseView
 from app.views.admin.question.list import ResponseListView
 
 from app.views.user.hiChat import HiChatView
@@ -41,6 +41,7 @@ from flask_socketio import emit ##for test socketio
 
 admin = Blueprint('admin', __name__)
 admin.add_url_rule(rule='/question/list', endpoint='response_list', view_func=login_required(ResponseListView.as_view('response_list_view')), methods=['GET'])
+admin.add_url_rule(rule='/question/<string:question_id>', endpoint='response', view_func=login_required(ResponseView.as_view('response_view')), methods=['GET', 'POST'])
 app.register_blueprint(admin, url_prefix='/admin')
 
 app.add_url_rule(rule='/', endpoint='index', view_func=IndexView.as_view('index_view'), methods=['GET'])

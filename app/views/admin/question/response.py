@@ -9,19 +9,30 @@ from wtforms.validators import DataRequired, Email, InputRequired, Length, Equal
 
 from app.models.question import Question
 
+import datetime
+
+QUESTION_STATUS = {"NO_ANSWER": "0", "ANSWER" : "1", "ALL": "2"}
 class ResponseView(MethodView):
-    def get(self):
+    def get(self, question_id):
         form = ResponseForm()
 
-        return render_template('admin/question/list.html', form=form)
+        question = Question.objects(id=question_id).first()
+
+        return render_template('admin/question/response.html', form=form, question=question)
     
-    def post(self):
+    def post(self, question_id):
         form = ResponseForm()
         if form.validate_on_submit():
-            print()
-            return redirect(url_for('admin.response_list'))
-        return render_template('admin/question/list.html', form=form)
+            question = Question.objects(id=question_id).first()
+
+            if question.response == None:
+                question.response = form.response.data
+                question.response_time = datetime.datetime.utcnow()
+                question.save()
+
+            return redirect(url_for('admin.response_list', status=QUESTION_STATUS["ANSWER"]))
+        return render_template('admin/question/response.html', form=form)
         
 class ResponseForm(FlaskForm):
-    response = TextAreaField("回覆", render_kw={'rows': 7}, validators=[InputRequired(), Length(max=40000)])
+    response = TextAreaField("問題回覆", render_kw={'rows': 7}, validators=[InputRequired(), Length(max=4000)])
     submit = SubmitField('提交')
