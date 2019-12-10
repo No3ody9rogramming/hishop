@@ -8,6 +8,8 @@ from app.models.user import User
 from app.models.message import Message
 from app import app, socketio
 
+from mongoengine.queryset.visitor import Q
+
 import json
 
 class HiChatView(MethodView):
@@ -18,19 +20,9 @@ class HiChatView(MethodView):
         senderID = request.values["senderID"]
         receiverID = request.values["receiverID"]        
         if senderID != str(current_user.id):
-            print(senderID)
-            print(current_user.id)
             abort(403)        
-        messages = Message.objects(sender_id=senderID, receiver_id=receiverID).to_json()
-        if receiverID != senderID:
-            messagesRtoS = Message.objects(sender_id=receiverID, receiver_id=senderID)
-            if(messagesRtoS.count() > 0 ):
-                messagesList = json.loads(messages)
-                messagesRtoSLists = json.loads(messagesRtoS.to_json())
-                for messagesRtoSList in messagesRtoSLists:
-                    messagesList.append(messagesRtoSList);
-                messages = json.dumps(messagesList)
-        return messages;
+        messages = Message.objects((Q(sender_id=senderID) & Q(receiver_id=receiverID)) | (Q(sender_id=receiverID) & Q(receiver_id=senderID))).order_by("-create_time")
+        return messages.to_json()
 
 @socketio.on('chat message')
 def handle_message(senderID, receiverID, message):
