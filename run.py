@@ -21,8 +21,11 @@ from app.views.user.account.cart import CartView
 from app.views.user.account.cartOperation import CartOperationView
 from app.views.user.product.like import LikeView
 from app.views.user.product.history import HistoryView
+from app.views.user.product.list import PurchaseListView
 from app.views.user.selling.normal import NormalView
 from app.views.user.selling.bidding import BiddingView
+from app.views.user.selling.list import SellingListView
+from app.views.user.selling.order import OrderListView
 from app.views.user.question.report import ReportView
 from app.views.user.question.all_question import All_questionView
 
@@ -61,11 +64,14 @@ user.add_url_rule(rule='/account/password', endpoint='password', view_func=login
 user.add_url_rule(rule='/account/payment', endpoint='payment', view_func=login_required(PaymentView.as_view('payment_view')), methods=['GET', 'POST'])
 user.add_url_rule(rule='/account/payment/confirm', endpoint='payment_confirm', view_func=login_required(PaymentConfirmView.as_view('payment_confirm_view')), methods=['GET'])
 
+user.add_url_rule(rule='/product/list', endpoint='purchase_list', view_func=login_required(PurchaseListView.as_view('purchase_list_view')), methods=['GET', 'POST'])
 user.add_url_rule(rule='/product/like', endpoint='like', view_func=login_required(LikeView.as_view('like_view')), methods=['GET', 'POST'])
 user.add_url_rule(rule='/product/history', endpoint='history', view_func=login_required(HistoryView.as_view('history_view')), methods=['GET', 'POST'])
 
 user.add_url_rule(rule='/selling/normal', endpoint='normal', view_func=login_required(NormalView.as_view('normal_view')), methods=['GET', 'POST'])
 user.add_url_rule(rule='/selling/bidding', endpoint='bidding', view_func=login_required(BiddingView.as_view('bidding_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/selling/list', endpoint='selling_list', view_func=login_required(SellingListView.as_view('selling_list_view')), methods=['GET'])
+user.add_url_rule(rule='/selling/order', endpoint='order_list', view_func=login_required(OrderListView.as_view('order_list_view')), methods=['GET'])
 
 user.add_url_rule(rule='/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
 user.add_url_rule(rule='/question/all_question', endpoint='all_question', view_func=login_required(All_questionView.as_view('all_question_view')), methods=['GET', 'POST'])

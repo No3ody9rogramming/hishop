@@ -11,5 +11,6 @@ class Order(db.Document):
     buyer_comment = db.StringField(null=True)
     seller_rating = db.IntField(null=True, min_value=1, max_value=5)
     seller_comment = db.StringField(null=True)
+    status = db.IntField(required=True, default=0, min_value=0, max_value=3)
     create_time = db.DateTimeField(default=datetime.datetime.utcnow())
     finish_time = db.DateTimeField(null=True)

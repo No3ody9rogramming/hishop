@@ -1,0 +1,61 @@
+{% extends "layouts/app.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page %}
+	<br>
+	<div class="row">
+		<div class="col-auto">
+			{% include "layouts/user.html" %}
+		</div>
+
+	    <div class="col-md-9">
+	    	<div class="card">
+	    		<div class="card-header text-center bg-warning p-2 border border-dark">
+	    			購買清單
+	    		</div>
+	    		<div class="card-body border border-dark">
+	    			<a class="btn btn-primary {% if status == ORDER_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('user.purchase_list', status=ORDER_STATUS['ALL']) }}">全部</a>
+	    			<a class="btn btn-primary {% if status == ORDER_STATUS['TRANSFERING'] %} active {% endif %}" href="{{ url_for('user.purchase_list', status=ORDER_STATUS['TRANSFERING']) }}">移交中</a>
+	    			<a class="btn btn-primary {% if status == ORDER_STATUS['RECEIPTING'] %} active {% endif %}" href="{{ url_for('user.purchase_list', status=ORDER_STATUS['RECEIPTING']) }}">領收中</a>
+	    			<a class="btn btn-primary {% if status == ORDER_STATUS['COMPLETE'] %} active {% endif %}" href="{{ url_for('user.purchase_list', status=ORDER_STATUS['COMPLETE']) }}">已完成</a>
+	    			<a class="btn btn-primary {% if status == ORDER_STATUS['CANCEL'] %} active {% endif %}" href="{{ url_for('user.purchase_list', status=ORDER_STATUS['CANCEL']) }}">已取消</a>
+
+					<div class="table-responsive-lg">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th scope="col">圖片</th>
+									<th scope="col">名稱</th>
+									<th scope="col">價格</th>
+									<th scope="col">狀態</th>
+									<th scope="col">評價</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for order in orders %}
+								    <tr>
+										<td>圖片</td>
+										<td>{{ order.product_id.name }}</td>
+										<td>$ {{ order.product_id.price }}</td>
+										<td>
+											{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
+												移交中
+											{% elif order.status|string == ORDER_STATUS['RECEIPTING'] %}
+												領收中
+											{% elif order.status|string == ORDER_STATUS['COMPLETE'] %}
+												已完成
+											{% elif order.status|string == ORDER_STATUS['CANCEL'] %}
+												已取消
+											{% endif %}
+										</td>
+										<td>{{ order.product_id.price }}</td>
+								    </tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+	    	</div>
+		</div>
+	</div>
+{% endblock page %}
