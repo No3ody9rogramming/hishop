@@ -10,3 +10,4 @@ requests==2.22.0
 line-bot-sdk==1.15.0
 flask-reverse-proxy-fix==0.2.1
 flask-socketio==4.2.1
+gunicorn==20.0.4
