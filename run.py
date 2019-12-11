@@ -27,7 +27,7 @@ from app.views.user.selling.bidding import BiddingView
 from app.views.user.selling.list import SellingListView
 from app.views.user.selling.order import OrderListView
 from app.views.user.question.report import ReportView
-from app.views.user.question.all_question import All_questionView
+from app.views.user.question.list import QuestionListView
 
 from app.views.admin.question.response import ResponseView
 from app.views.admin.question.list import ResponseListView
@@ -76,7 +76,7 @@ user.add_url_rule(rule='/selling/list', endpoint='selling_list', view_func=login
 user.add_url_rule(rule='/selling/order', endpoint='order_list', view_func=login_required(OrderListView.as_view('order_list_view')), methods=['GET'])
 
 user.add_url_rule(rule='/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
-user.add_url_rule(rule='/question/all_question', endpoint='all_question', view_func=login_required(All_questionView.as_view('all_question_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/question/list', endpoint='question_list', view_func=login_required(QuestionListView.as_view('question_list_view')), methods=['GET'])
 user.add_url_rule(rule='/hichat', endpoint='hichat', view_func=login_required(HiChatView.as_view('hichat_view')), methods=['GET', 'POST'])
 app.register_blueprint(user, url_prefix='/user')
 
