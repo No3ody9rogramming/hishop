@@ -43,7 +43,11 @@
 								<img class="productImg" src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}">
 							</th>
 							<td class="align-middle">
-								<a href="{{ url_for('show_normal', product_id=product.id|string) }}" target=_blank>{{product.name}}</a>
+									{% if  product.bid  == "null" %}
+									<a href="{{ url_for('show_normal', product_id=product.id|string) }}" target=_blank>{{product.name}}</a>
+									{% else %}
+									<a href="{{ url_for('show_bidding', product_id=product.id|string) }}" target=_blank>{{product.name}}</a>
+									{% endif %}
 							</td>
 							<td class="align-middle">{{product.seller_id.name}}</td>
 							<td class="align-middle">{{product.price}}</td>	    
