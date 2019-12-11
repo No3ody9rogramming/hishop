@@ -37,6 +37,11 @@
                                         {% endif %}
                                     {% endif %}
 
+                                    {% if loop.length % 4 != 0 and loop.index == loop.length%}
+                                </div>
+                            </div>
+                                    {%endif%}
+
                                     {% endfor %}
 
                         </div>
@@ -82,6 +87,11 @@
                                 <div class = "row">
                                         {% endif %}
                                     {% endif %}
+
+                                    {% if loop.length % 4 != 0 and loop.index == loop.length%}
+                                </div>
+                            </div>
+                                    {%endif%}
 
                                     {% endfor %}
                                 
@@ -131,6 +141,11 @@
                                     <div class = "row">
                                             {% endif %}
                                         {% endif %}
+
+                                        {% if loop.length % 4 != 0 and loop.index == loop.length%}
+                                    </div>
+                                </div>
+                                        {%endif%}
     
                                         {% endfor %}
                 
