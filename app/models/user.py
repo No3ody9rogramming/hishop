@@ -18,6 +18,7 @@ class User(UserMixin, db.Document):
     phone = db.StringField(required=True, max_length=15)
     birth = db.DateTimeField(required=True)
     address = db.ListField(db.EmbeddedDocumentField(Address), default=list)
+    status = db.IntField(required=True, default=0)
     hicoin = db.LongField(required=True, min_value=0, default=0)
     reset_token = db.StringField(null=True)
     create_time = db.DateTimeField(default=datetime.datetime.utcnow())
