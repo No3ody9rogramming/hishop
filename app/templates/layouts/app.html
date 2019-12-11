@@ -35,6 +35,9 @@
 
 {% block content %}
 	<div id="content" class="container">
-		{% block page %}{% endblock page %}
+		{% block page %}{% endblock page %}		
 	</div>
+	{% block footer %}
+		{% include 'layouts/footer.html' %}
+	{% endblock footer %}
 {% endblock content %}
