@@ -34,7 +34,9 @@
 							<tbody>
 								{% for order in orders %}
 								    <tr>
-										<td>圖片</td>
+										<td>
+											<img class="productImg" src="{{url_for('static', filename = 'image/'+order.product_id|string +'/' + order.order2product.image)}}">
+										</td>
 										<td>{{ order.product_id.name }}</td>
 										<td>$ {{ order.product_id.price }}</td>
 										<td>
