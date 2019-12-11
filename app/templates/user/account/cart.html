@@ -35,6 +35,14 @@
 			}
 		}*/
 
+		function choose(){
+			var id = document.getElementsByName('productCheck');
+		}
+
+		$('#myModal').on('shown.bs.modal', function () {
+ 			$('#myInput').trigger('focus')
+		})
+
 		$('input:checkbox').change(function (){
       		var total = 0;
       		$('input:checkbox:checked').each(function(){
@@ -125,6 +133,8 @@
 				<br>			
 			</div>		
 		</div>
+
+
 		<div class="float-right text-right">
 			<p>目前有 {{ hicoin }} hicoin</p>
 			<p>
@@ -133,7 +143,50 @@
 			<p class="d-none alert alert-danger" id="notEnough" role="alert">
 				餘額不足，請先充值 
 			</p>
-			{{ form.submit(class_="btn btn-first float-right") }}
-		</div>
+
+
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="choose();">
+			結帳
+	  	</button>
+	  
+
+	 	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+		  		<div class="modal-content">
+					<div class="modal-header">
+			  			<h5 class="modal-title" id="exampleModalLabel">結帳品項</h5>
+			  			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+			  			</button>
+					</div>
+
+					<div class="modal-body">	
+						<table class="table">
+				  			<thead>
+				    			<tr>
+				      				<th scope="col">商品</th>
+									<th scope="col">售價</th>
+									<th scope="col">折價券</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr>	
+									<td></td>
+									<td></td>
+									<td>select option</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+					
+					<div class="modal-footer">
+			 			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						{{ form.submit(class_="btn btn-first float-right") }}
+					</div>
+		  		</div>
+			</div>
+	    </div>
 	</form>
 {% endblock page %}

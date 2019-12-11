@@ -37,7 +37,7 @@ class ShowBiddingView(MethodView):
 
             product.view += 1
             product.save()
-        return render_template('product/bidding.html', form=form, product=product, like=like, product_json=product.to_json())
+        return render_template('product/bidding.html', form=form, product=product, like=like, product_json=product.to_json(), now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
 
     @login_required
     def post(self, product_id):
