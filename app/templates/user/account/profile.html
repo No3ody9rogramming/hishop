@@ -15,17 +15,13 @@
 	    <div class="col-md-9">
 			<br>
 
-			<div class="row justify-content-center align-items-center bg-warning border border-dark rounded">
-				<div class="col-auto ">
-					<p class="text-cneter rounded" style="margin: 5px 5px 5px;"> 個人資料 </p>
-				</div>
-			</div>
-
-
+		<div class="card">
+			<div class="card-header text-center bg-warning p-2 border border-dark"> 個人資料 </div>
+			<div class="card-body border border-dark">
 			
 				<form action="{{ url_for('user.profile') }}" method="POST" enctype="multipart/form-data">
 					{{ form.csrf_token }}
-					<div class="row justify-content-center border border-dark rounded">
+					<div class="row justify-content-center rounded">
 					
 						<div class="col-6">
 							{% if current_user.icon == "default.png" %}
@@ -94,9 +90,9 @@
 							
 						
 						<div class="col-10 border border-dark bg-dark">
-							<p class="text-center text-light" style="margin: 5px 5px 5px;"> 個人資料 </p>
+							<p class="text-center text-light" style="margin: 5px 5px 5px;"> 賣場設定 </p>
 						</div>
-						<div class="col-10 border border-dark " style="margin: 0px 5px 5vh;">
+						<div class="col-10 border border-dark " style="margin: 0px 5px 5vh; background-color: #dcdcdc;">
 								<div class="row justify-content-center">
 										<div class="col-lg-10 form-group required">
 											<p>賣場名稱:</p>
@@ -142,7 +138,7 @@
 						<br>
 					</div>
 				</form>
-			
+			</div>
 		</div>
 	</div>
 {% endblock page %}
