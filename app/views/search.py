@@ -77,7 +77,7 @@ def handle_message(event):
         if(product.bidding):
             price = "Last Bid: NT$" + str(product.bid.now_price)
         else:
-            price = "NT$" + str(prodcut.price)
+            price = "NT$" + str(product.price)
         carouselColumns.append(
             CarouselColumn(
                 thumbnail_image_url=request.host_url[:-1] + url_for('static', filename=filePath),
