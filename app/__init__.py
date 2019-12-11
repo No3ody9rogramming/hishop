@@ -9,7 +9,7 @@ from flask_reverse_proxy_fix.middleware import ReverseProxyPrefixFix
 from threading import Thread, Lock
 from flask_socketio import SocketIO, emit, join_room, leave_room, close_room, rooms, disconnect
 
-async_mode = None
+async_mode = "threading"
 
 app = Flask(__name__)
 app.config.from_pyfile('../config.cfg')
