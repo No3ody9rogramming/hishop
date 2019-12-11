@@ -11,7 +11,20 @@ class PurchaseListView(MethodView):
     def get(self):
         status = request.args.get('status')
 
-        test = Order.objects.aggregate(*[
+        '''test = Order.objects.aggregate(*[
+            {
+                '$lookup':
+                {
+                    'from': 'Product',
+                    'localField': 'product_id',
+                    'foreignField': 'id',
+                    'as':'order2product',
+                }
+            },
+        ])'''
+
+        if status == ORDER_STATUS['TRANSFERING']:
+            orders = Order.objects(buyer_id=current_user.id, status=ORDER_STATUS["TRANSFERING"]).aggregate(*[
             {
                 '$lookup':
                 {
@@ -22,18 +35,55 @@ class PurchaseListView(MethodView):
                 }
             },
         ])
-
-        if status == ORDER_STATUS['TRANSFERING']:
-            orders = Order.objects(buyer_id=current_user.id, status=ORDER_STATUS["TRANSFERING"])
         elif status == ORDER_STATUS['RECEIPTING']:
-            orders = Order.objects(buyer_id=current_user.id, status=ORDER_STATUS["RECEIPTING"])
+            orders = Order.objects(buyer_id=current_user.id, status=ORDER_STATUS["RECEIPTING"]).aggregate(*[
+            {
+                '$lookup':
+                {
+                    'from': 'Product',
+                    'localField': 'product_id',
+                    'foreignField': 'id',
+                    'as':'order2product',
+                }
+            },
+        ])
         elif status == ORDER_STATUS['COMPLETE']:
-            orders = Order.objects(buyer_id=current_user.id, status=ORDER_STATUS["COMPLETE"])
+            orders = Order.objects(buyer_id=current_user.id, status=ORDER_STATUS["COMPLETE"]).aggregate(*[
+            {
+                '$lookup':
+                {
+                    'from': 'Product',
+                    'localField': 'product_id',
+                    'foreignField': 'id',
+                    'as':'order2product',
+                }
+            },
+        ])
         elif status == ORDER_STATUS['CANCEL']:
-            orders = Order.objects(buyer_id=current_user.id, status=ORDER_STATUS["CANCEL"])
+            orders = Order.objects(buyer_id=current_user.id, status=ORDER_STATUS["CANCEL"]).aggregate(*[
+            {
+                '$lookup':
+                {
+                    'from': 'Product',
+                    'localField': 'product_id',
+                    'foreignField': 'id',
+                    'as':'order2product',
+                }
+            },
+        ])
         else:
             status = ORDER_STATUS["ALL"]
-            orders = Order.objects(buyer_id=current_user.id)
+            orders = Order.objects(buyer_id=current_user.id).aggregate(*[
+            {
+                '$lookup':
+                {
+                    'from': 'Product',
+                    'localField': 'product_id',
+                    'foreignField': 'id',
+                    'as':'order2product',
+                }
+            },
+        ])
 
         orders = sorted(orders, key=lambda k: k.create_time, reverse=False)
         
