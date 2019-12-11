@@ -71,24 +71,27 @@
 		<div class="col-md-6">
 			<img class="productImg" src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}"> 
 		</div>
-
 		<div class="col-md-6">
 			<h3>{{ product.name }}</h3>
 			<p>已有 {{ product.view}} 人觀看此商品</p>
-			<h5 id="productprice">$ {{ product.price}} </h5>
-
-			<form id="form" role="form">
+			<h5 id="productprice">$ {{ product.price }} </h5>
+			<p>剩餘時間：{{ "%s days"|format(product.bid.due_time.days) }}</p>
+			<p>起標價 : {{ product.bid.low_price }}</p>
+			<p>目前價格 : {{ product.bid.now_price }}</p>
+			<p>{{product.bid.per_price}}/一刀(輸入格內為刀數)</p>
+			<form id="form" action="{{ url_for('show_bidding', product_id=product.id|string) }}" method="POST" role="form" class="form-inline">
 				{{ form.csrf_token }}
-				<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red; position:absolute; bottom:0; right:0;" ><i class="{{ like }}"></i></a>
-				<div class="col-md-5 form-group required">
-					{% if form.price.errors %}
-						<input id="price" name="price" type="number" class="form-control is-invalid" placeholder="請輸入價格" value="{{ form.price.data }}" required>
+					<div class="col-md-6 form-group required">
+						{% if form.price.errors %}
+							<input id="price" name="price" type="number" class="form-control is-invalid" placeholder="請輸入價格" value="{{ form.price.data }}" required>
 							{% for error in form.price.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-					{% else %}
-						<input id="price" name="price" type="number" class="form-control" placeholder="請輸入價格" value="0" required>
-							{% endif %}
-				</div>
+						{% else %}
+							<input id="price" name="price" type="number" class="form-control" placeholder="請輸入價格" value="0" required>
+						{% endif %}
+					</div>
+
 				{{ form.submit(class='btn btn-sencondary') }}
+				<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red;"><i class="{{ like }}"></i></a>
 			</form>
 		</div>
 	</div>
