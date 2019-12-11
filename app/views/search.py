@@ -60,9 +60,9 @@ class LineChatbotSearch(MethodView):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text == None:
-        products = Product.objects(status=0, bidding=False)
+        products = Product.objects(status=0)
     else:
-        products = Product.objects(name__icontains=event.message.text, status=0, bidding=False)
+        products = Product.objects(name__icontains=event.message.text, status=0)
 
     carouselColumns = [];
 
@@ -73,12 +73,16 @@ def handle_message(event):
         #   image = imagePath
         # else:
         #   image = "https://miro.medium.com/max/2834/0*f81bU2qWpP51WWWC.jpg"
-        filePath = 'image/' + str(product.id) + '/' + product.image
+        filePath = 'image/' + str(product.id) + '/' + product.image        
+        if(product.bidding):
+            price = "Last Bid: NT$" + str(product.bid.now_price)
+        else:
+            price = "NT$" + str(prodcut.price)
         carouselColumns.append(
             CarouselColumn(
                 thumbnail_image_url=request.host_url[:-1] + url_for('static', filename=filePath),
                 title=product.name,
-                text="NT$" + str(product.price),
+                text=price,
                 actions=[
                     URITemplateAction(
                         label='Take a look!',
