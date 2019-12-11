@@ -16,7 +16,7 @@ class IndexView(MethodView):
         
         popular_products = Product.objects(bidding=False, status=0).order_by('-view')[:12]
         normal_products = Product.objects(bidding=False, status=0).order_by('-create_time')[:12]
-        bidding_products = Product.objects(bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8, status=0),
+        bidding_products = Product.objects(bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8),
                          bidding=True, status=0).order_by('-create_time')[:12]
 
         return render_template('index.html', form=form,
