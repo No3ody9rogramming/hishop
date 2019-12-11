@@ -42,4 +42,4 @@ class CartView(MethodView):
         return redirect(url_for('cart'));
 
 class CartForm(FlaskForm):
-    submit = SubmitField('結帳GO')
+    submit = SubmitField('確定結帳')
