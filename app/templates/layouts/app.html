@@ -24,7 +24,7 @@
 		}
 
 		#content {
-			max-height: 90%;
+			max-height: 85%;
 		}
 	</style>
 {% endblock styles %}
@@ -35,9 +35,6 @@
 
 {% block content %}
 	<div id="content" class="container">
-		{% block page %}{% endblock page %}		
+	{% block page %}{% endblock page %}{% include 'layouts/footer.html' %}		
 	</div>
-	{% block footer %}
-		{% include 'layouts/footer.html' %}
-	{% endblock footer %}
 {% endblock content %}
