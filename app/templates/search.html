@@ -4,7 +4,7 @@
 {% block page %}
 	
 		<div class = "row">
-			<div class="col-auto">
+			<div class="col-md-2">
 				<br>
 				{% include "layouts/category.html" %}
 			</div>
@@ -15,7 +15,7 @@
 				<div class="collapse" id="searchCheckBox">
 					<div class = "card-body">
 					<form class="form  required" action="{{ url_for('search', type='normal') }}" method="GET">
-							<input name="keyword" type="hidden" value = "a">
+							<input name="keyword" type="hidden" value = "進階">
 							<label class="form-check-label">價格:</label><br>
 							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
 								<input class="form-check-input" type="checkbox" name="price" id="inlineRadio1" value="100">
@@ -69,7 +69,7 @@
 								<label class="form-check-label" for="inlineRadio9">一個月內</label>
 							</div>
 							<br>
-							<input name="way" type="hidden" value="normal"><br>
+							<input name="way" type="hidden" value= "{{way}}"><br>
 					<button class="btn btn-secondary" type="submit">進階搜尋<i class="fas fa-search"></i></button>
 					</form> 
 					</div>
@@ -85,7 +85,7 @@
 									<div class="col-lg-3 col-md-6 col-sm-6 col-xs-6">
 										<div class="box-part ">
 											<a href="{{ url_for('show_bidding', product_id=product.id|string) }}">
-											<div class = "bg-dark text-white text-center">
+											<div class = "bg-dark text-white text-center" style="text-decoration: none;">
 													剩餘時間：
 													{{"%s days"|format(( product.bid.due_time - now).days)}}
 											</div>
