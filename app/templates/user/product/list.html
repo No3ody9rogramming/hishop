@@ -61,7 +61,13 @@
 												已取消
 											{% endif %}
 										</td>
-										<td>{{ order.product_id.price }}</td>
+										<td>
+											{% if order.status|string == ORDER_STATUS['ALL'] %}
+												<p style="text-decoration: underline ;color: blue;">已評價</p>
+											{% else %}
+												<p style="text-decoration: underline ;color: blue;">未評價</p>
+											{%  endif %}
+										</td>
 								    </tr>
 								{% endfor %}
 							</tbody>
