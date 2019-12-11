@@ -31,15 +31,18 @@
                                     {% if loop.index % 4 == 0 and loop.index > 1 %}
                                 </div>
                             </div>
-                                        {% if loop.index != loop.length-1 %}
+                                        {% if loop.index != loop.length %}
                             <div class="carousel-item">
                                 <div class = "row">
                                         {% endif %}
                                     {% endif %}
 
-                                    {% endfor %}
+                                    {% if loop.length % 4 != 0 and loop.index == loop.length%}
                                 </div>
                             </div>
+                                    {%endif%}
+
+                                    {% endfor %}
 
                         </div>
                         <a class="carousel-control-prev" href="#hotProductIndicators" role="button" data-slide="prev" style="width: auto;">
@@ -79,15 +82,18 @@
                                     {% if loop.index % 4 == 0 and loop.index > 1 %}
                                 </div>
                             </div>
-                                        {% if loop.index != loop.length-1 %}
+                                        {% if loop.index != loop.length %}
                             <div class="carousel-item">
                                 <div class = "row">
                                         {% endif %}
                                     {% endif %}
 
-                                    {% endfor %}
+                                    {% if loop.length % 4 != 0 and loop.index == loop.length%}
                                 </div>
                             </div>
+                                    {%endif%}
+
+                                    {% endfor %}
                                 
                         </div>
                         <a class="carousel-control-prev" href="#newProductIndicators" role="button" data-slide="prev" style="width: auto;">
@@ -130,15 +136,18 @@
                                         {% if loop.index % 4 == 0 and loop.index > 1 %}
                                     </div>
                                 </div>
-                                            {% if loop.index != loop.length-1 %}
+                                            {% if loop.index != loop.length %}
                                 <div class="carousel-item">
                                     <div class = "row">
                                             {% endif %}
                                         {% endif %}
-    
-                                        {% endfor %}
+
+                                        {% if loop.length % 4 != 0 and loop.index == loop.length%}
                                     </div>
                                 </div>
+                                        {%endif%}
+    
+                                        {% endfor %}
                 
                         </div>
                         <a class="carousel-control-prev" href="#bidProductIndicators" role="button" data-slide="prev" style="width: auto;">
