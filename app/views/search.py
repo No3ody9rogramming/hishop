@@ -76,8 +76,10 @@ def handle_message(event):
         filePath = 'image/' + str(product.id) + '/' + product.image        
         if(product.bidding):
             price = "Last Bid: NT$" + str(product.bid.now_price)
+            showMethod = 'show_bidding'
         else:
             price = "NT$" + str(product.price)
+            showMethod = 'show_normal'
         carouselColumns.append(
             CarouselColumn(
                 thumbnail_image_url=request.host_url[:-1] + url_for('static', filename=filePath),
@@ -86,7 +88,7 @@ def handle_message(event):
                 actions=[
                     URITemplateAction(
                         label='Take a look!',
-                        uri=request.host_url[:-1] + url_for('show_normal', product_id=product.id)
+                        uri=request.host_url[:-1] + url_for(showMethod, product_id=product.id)
                     )
                 ]               
             ))
