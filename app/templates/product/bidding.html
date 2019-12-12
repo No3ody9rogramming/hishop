@@ -79,9 +79,10 @@
 			<p>起標價 : {{ product.bid.low_price }}</p>
 			<p>目前價格 : {{ product.bid.now_price }}</p>
 			<p>{{product.bid.per_price}}/一刀(輸入格內為刀數)</p>
-			<form id="form" action="{{ url_for('show_bidding', product_id=product.id|string) }}" method="POST" role="form" class="form-inline">
+		    <div class="row">
+			<form id="form" action="{{ url_for('show_bidding', product_id=product.id|string) }}" method="POST" role="form" class="form-inline" style="margin-top: 5px; margin-right: 5px;">
 				{{ form.csrf_token }}
-					<div class="col-md-6 form-group required">
+					<div class="col-md-8 form-group required" style="margin-right: 5px;">
 						{% if form.price.errors %}
 							<input id="price" name="price" type="number" class="form-control is-invalid" placeholder="請輸入價格" value="{{ form.price.data }}" required>
 							{% for error in form.price.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
@@ -93,6 +94,7 @@
 				{{ form.submit(class='btn btn-sencondary') }}
 				<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red;"><i class="{{ like }}"></i></a>
 			</form>
+		</div>
 		</div>
 	</div>
 
