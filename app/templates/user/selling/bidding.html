@@ -11,6 +11,31 @@
 		<div class="col-lg-12">
 			<br>
 	    	{{ wtf.quick_form(form, method="post", action=url_for("user.bidding")) }}
-	    </div>
+		</div>
 	</div>
+	<div class="row justify-content-center align-items-center">
+        <div class="col-auto ">
+            <div class="row justify-content-center">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>注意</strong> 起標價在1~10000內;每刀價在1~1000內
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+	<div class="row justify-content-center align-items-center">
+        <div class="col-auto ">
+            <div class="row justify-content-center">
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>注意</strong> 商品名稱字數在50字內;價錢需在1~100000內
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+	</div>
+	
 {% endblock page %}
