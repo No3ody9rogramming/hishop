@@ -42,7 +42,7 @@ label {
     cursor: pointer;
 }
 
-/* 幕后的英雄，单选按钮 */
+/* 按紐 */
 .score { position: absolute; clip: rect(0 0 0 0); }
 .score:checked + .star {    
     background: url({{url_for('static', filename = 'star.png')}}) repeat-x 0 -20px;
@@ -63,6 +63,29 @@ label {
 }
 	</style>
 {% endblock styles %}
+
+{% block scripts %}
+	{{ super() }}
+	<script type="text/javascript">
+	
+		function comment( name , id, img, price, account )
+		{
+			var commentImg = document.getElementById("commentImg")
+			var commentName = document.getElementById("commentName")
+			var commentPrice = document.getElementById("commentPrice")
+			var commentAccount = document.getElementById("commentAccount")
+			var source = '{{ url_for('static',filename='') }}' + 'image/' + id +'/'+ img 
+
+			commentName.innerHTML = name
+			commentPrice.innerHTML = price
+			commentAccount.innerHTML = account
+			commentImg.innerHTML = '<img class="productImg" src=' + source +'>'
+		}
+
+	</script>
+
+{% endblock scripts %}
+
 
 {% block page %}
 	<br>
@@ -118,7 +141,7 @@ label {
 												<p style="text-decoration: underline ;color: blue;">已評價</p>
 											{% elif order.status|string == ORDER_STATUS['RECEIPTING'] %}
 												<!-- Button trigger modal -->
-												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong" onclick="comment( '{{ order.product_id.name }}', '{{order.product_id.id}}', '{{order.product_id.image}}', '{{order.product_id.price}}','{{current_user.account}}' )">
 														未評價
 												</button>
 												
@@ -134,15 +157,15 @@ label {
 														</div>
 														<div class="modal-body">
 														<div class="row">
-															<div class="col-auto">
+															<div class="col-auto" id="commentImg">
 																圖片
 															</div>
 															<div class="col-5">
-																<p>商品AAA</p>
-																<p>賣家帳號</p>
+																<p id="commentName">商品AAA</p>
+																<p id="commentAccount" >賣家帳號</p>
 															</div>
 															<div class="col-3">
-																<p>價錢</p>
+																<p id="commentPrice">價錢</p>
 															</div>
 														</div>
 														<div class="row">
@@ -154,11 +177,11 @@ label {
 																		<input type="radio" id="starScore1" class="score score_1" value="1" name="score">
 																		<a href="#starScore1" class="star star_1" title="差"><label for="starScore1">差</label></a>
 																		<input type="radio" id="starScore2" class="score score_2" value="2" name="score">
-																		<a href="#starScore2" class="star star_2" title="较差"><label for="starScore2">较差</label></a>
+																		<a href="#starScore2" class="star star_2" title="較差"><label for="starScore2">較差</label></a>
 																		<input type="radio" id="starScore3" class="score score_3" value="3" name="score">
 																		<a href="#starScore3" class="star star_3" title="普通"><label for="starScore3">普通</label></a>
 																		<input type="radio" id="starScore4" class="score score_4" value="4" name="score">
-																		<a href="#starScore4" class="star star_4" title="较好"><label for="starScore4">较好</label></a>
+																		<a href="#starScore4" class="star star_4" title="較好"><label for="starScore4">較好</label></a>
 																		<input type="radio" id="starScore5" class="score score_5" value="5" name="score">
 																		<a href="#5" class="star star_5" title="好"><label for="starScore5">好</label></a>
 																</div>
