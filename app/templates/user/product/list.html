@@ -168,32 +168,38 @@ label {
 																<p id="commentPrice">價錢</p>
 															</div>
 														</div>
-														<div class="row">
-															<div class="col-auto">
-																<p>評分:</p>
-															</div>
-															<div class="col-auto">
-																<div id="starBg" class="star_bg">                    	
-																		<input type="radio" id="starScore1" class="score score_1" value="1" name="score">
-																		<a href="#starScore1" class="star star_1" title="差"><label for="starScore1">差</label></a>
-																		<input type="radio" id="starScore2" class="score score_2" value="2" name="score">
-																		<a href="#starScore2" class="star star_2" title="較差"><label for="starScore2">較差</label></a>
-																		<input type="radio" id="starScore3" class="score score_3" value="3" name="score">
-																		<a href="#starScore3" class="star star_3" title="普通"><label for="starScore3">普通</label></a>
-																		<input type="radio" id="starScore4" class="score score_4" value="4" name="score">
-																		<a href="#starScore4" class="star star_4" title="較好"><label for="starScore4">較好</label></a>
-																		<input type="radio" id="starScore5" class="score score_5" value="5" name="score">
-																		<a href="#5" class="star star_5" title="好"><label for="starScore5">好</label></a>
+														<form action="{{ url_for('user.purchase_list') }}" method="POST">
+															<div class="row">
+																<div class="col-auto">
+																	<p>評分:</p>
+																</div>
+																<div class="col-auto">
+																	<div id="starBg" class="star_bg">                    	
+																			<input type="radio" id="starScore1" class="score score_1" value="1" name="score">
+																			<a href="#starScore1" class="star star_1" title="差"><label for="starScore1">差</label></a>
+																			<input type="radio" id="starScore2" class="score score_2" value="2" name="score">
+																			<a href="#starScore2" class="star star_2" title="較差"><label for="starScore2">較差</label></a>
+																			<input type="radio" id="starScore3" class="score score_3" value="3" name="score">
+																			<a href="#starScore3" class="star star_3" title="普通"><label for="starScore3">普通</label></a>
+																			<input type="radio" id="starScore4" class="score score_4" value="4" name="score">
+																			<a href="#starScore4" class="star star_4" title="較好"><label for="starScore4">較好</label></a>
+																			<input type="radio" id="starScore5" class="score score_5" value="5" name="score">
+																			<a href="#5" class="star star_5" title="好"><label for="starScore5">好</label></a>
+																	</div>
 																</div>
 															</div>
-															</div>
 															<div class="row">
-																評論
+																	{% if form.detail.errors %}
+																	{{ form.detail(class="form-control is-invalid", placeholder="上限為4000個字") }}
+																	{% for error in form.detail.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+																{% else %}
+																	{{ form.detail(class="form-control", placeholder="上限為4000個字") }}
+																{% endif %}																
 															</div>
-														</div>
-														<div class="modal-footer">
-														<button type="button" class="btn btn-primary">送出評價</button>
-														</div>
+															<div class="modal-footer">
+															<button type="button" class="btn btn-primary">送出評價</button>
+															</div>
+														</form>
 													</div>
 													</div>
 												</div>
