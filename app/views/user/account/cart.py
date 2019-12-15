@@ -39,7 +39,7 @@ class CartView(MethodView):
                 information.cart.remove(product)
                 information.save()
 
-        return redirect(url_for('cart'));
+        return redirect(url_for('user.purchase_list', status='4'));
 
 class CartForm(FlaskForm):
     submit = SubmitField('確定結帳')
