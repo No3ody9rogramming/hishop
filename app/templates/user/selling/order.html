@@ -21,7 +21,7 @@
 	    <div class="col-md-9">
 	    	<div class="card">
 	    		<div class="card-header text-center bg-warning p-2 border border-dark">
-	    			購買清單
+	    			訂單管理
 	    		</div>
 	    		<div class="card-body border border-dark">
 	    			<a class="btn btn-primary {% if status == ORDER_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('user.purchase_list', status=ORDER_STATUS['ALL']) }}">全部</a>

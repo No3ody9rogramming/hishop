@@ -1,6 +1,16 @@
 {% extends "layouts/app.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block styles %}
+	{{ super() }}
+	<style type = "text/css">
+		.productImg {
+			width: 100px;
+		    height:100px;
+		}
+	</style>
+{% endblock styles %}
+
 {% block page %}
 	<br>
 	<div class="row">
@@ -11,7 +21,7 @@
 	    <div class="col-md-9">
 	    	<div class="card">
 	    		<div class="card-header text-center bg-warning p-2 border border-dark">
-	    			購買清單
+	    			歷史商品
 	    		</div>
 	    		<div class="card-body border border-dark">
 	    			<a class="btn btn-primary {% if status == PRODUCT_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('user.selling_list', status=PRODUCT_STATUS['ALL']) }}">全部</a>
@@ -34,7 +44,7 @@
 							<tbody>
 								{% for product in products %}
 								    <tr>
-										<td>圖片</td>
+										<td><img class="productImg" src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}"></td>
 										<td>{{ product.name }}</td>
 										<td>
 											{% if product.bidding == True %}
