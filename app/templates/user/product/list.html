@@ -139,9 +139,7 @@ label {
 											{% endif %}
 										</td>
 										<td>
-											{% if order.status|string == ORDER_STATUS['ALL'] %}
-												<p style="text-decoration: underline ;color: blue;">已評價</p>
-											{% elif order.status|string == ORDER_STATUS['RECEIPTING'] %}
+											
 												<!-- Button trigger modal -->
 												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong" onclick="comment( '{{ order.product_id.name }}', '{{order.product_id.id}}', '{{order.product_id.image}}', '{{order.product_id.price}}','{{current_user.account}}' )">
 														未評價
@@ -165,14 +163,15 @@ label {
 															<div class="col-5">
 																<p id="commentName">商品AAA</p>
 																<p id="commentAccount" >賣家帳號</p>
-																<input type="hidden" name="commentProductID" id="commentProductID">
 															</div>
 															<div class="col-3">
 																<p id="commentPrice">價錢</p>
 															</div>
 														</div>
 														<form action="{{ url_for('user.purchase_list') }}" method="POST">
+															{{ form.csrf_token }}
 															<div class="row">
+																<input type="hidden" class="form-control" name="commentProductID" id="commentProductID">
 																<div class="col-auto">
 																	<p>評分:</p>
 																</div>
@@ -200,15 +199,13 @@ label {
 																{% endif %}																
 															</div>
 															<div class="modal-footer">
-															<button type="button" class="btn btn-primary">送出評價</button>
+															{{ form.submit(class="btn btn-primary") }}
 															</div>
 														</form>
 													</div>
 													</div>
 												</div>
-											{% else %}
-												<p style="text-decoration: underline ;color: blue;">未評價</p>
-											{%  endif %}
+											
 										</td>
 								    </tr>
 								{% endfor %}

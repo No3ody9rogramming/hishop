@@ -46,16 +46,34 @@ class PurchaseListView(MethodView):
         return render_template('user/product/list.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status, form=form)
     def post(self):
         form = PerchaseListForm()
-        if form.validate_on_submit():
-            #need to be write something
-
-
-            
-            return redirect(url_for('user.perchase_list'))
-        return render_template('user/product/list.html', form=form)
+        status = request.args.get('status')
+        if status == ORDER_STATUS['TRANSFERING']:
+            orders = Order.objects(buyer_id=current_user.id, status=ORDER_STATUS["TRANSFERING"])
+        elif status == ORDER_STATUS['RECEIPTING']:
+            orders = Order.objects(buyer_id=current_user.id, status=ORDER_STATUS["RECEIPTING"])
+        elif status == ORDER_STATUS['COMPLETE']:
+            orders = Order.objects(buyer_id=current_user.id, status=ORDER_STATUS["COMPLETE"])
+        elif status == ORDER_STATUS['CANCEL']:
+            orders = Order.objects(buyer_id=current_user.id, status=ORDER_STATUS["CANCEL"])
+        else:
+            status = ORDER_STATUS["ALL"]
+            orders = Order.objects(buyer_id=current_user.id)
+        #print(orders)
+        orders = sorted(orders, key=lambda k: k.create_time, reverse=False)
+        #print(form.detail)
+        #print(request.values['commentProductID'])
+        if form.validate_on_submit() and 'score' in request.form:
+            order = Order.objects(product_id=request.values['commentProductID']).first()  # correct
+            order.seller_comment = form.detail      # correct
+            order.seller_rating = request.values['score']  # correct
+            print(request.values['score'])   
+             
+        return render_template('user/product/list.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status, form=form)
+        
 
 # for comment
 class PerchaseListForm(FlaskForm):
     detail = TextAreaField("評論", render_kw={'rows': 7}, validators=[InputRequired(), Length(max=4000)])
     submit = SubmitField('提交')
-    commentProductID = HiddenField()
+    
+    
