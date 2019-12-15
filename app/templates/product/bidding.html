@@ -8,6 +8,7 @@
 
 {% block styles %}
 	{{ super() }}
+	<link href="/static/sweetalert/dist/sweetalert2.css" rel="stylesheet" type="text/css">
 	<style type = "text/css">
 		#row{
 			overflow: hidden;
@@ -37,8 +38,28 @@
 
 {% block scripts %}
 	{{ super() }}
+	<script src="/static/sweetalert/dist/sweetalert2.all.min.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+
 	<script>
 		var url = "{{ url_for('product_like', product_id="") }}";
+
+	$(document).ready(function(){
+		$('#formBtn').click(function(e){
+			let $form = $(this).closest('form');
+			Swal.fire({
+				position: 'top-end',
+				icon: 'success',
+				title: '出價成功',
+				showConfirmButton: false,
+				timer: 1500
+			}).then((result) => {
+				$form.submit();
+			})
+		});
+	});
+
 
 		function like(element, product_id) {
 			{% if current_user.is_anonymous %}
@@ -91,12 +112,14 @@
 						{% endif %}
 					</div>
 
-				{{ form.submit(class='btn btn-sencondary') }}
+				<button type="button" class="btn btn-sencondary" id="formBtn">出價</button>	
 				<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red;"><i class="{{ like }}"></i></a>
 			</form>
 		</div>
 		</div>
 	</div>
+
+	
 
 	<div id="row" class="row">
 		<div class="col-md-12">
@@ -182,5 +205,6 @@
 
         </div>
 	</div>
+	
 	
 {% endblock page %}

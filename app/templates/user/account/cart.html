@@ -3,10 +3,15 @@
 
 {% block styles %}
 	{{ super() }}
+	<link href="/static/sweetalert/dist/sweetalert2.css" rel="stylesheet" type="text/css">
 	<style type = "text/css">
 		.productImg {
 			max-width: 100px;
 		    max-height:200px;
+		}
+
+		th, td {
+			text-align : left;
 		}
 
 	</style>
@@ -14,6 +19,9 @@
 
 {% block scripts %}
 	{{ super() }}
+
+	<script src="/static/sweetalert/dist/sweetalert2.all.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
 	<script type="text/javascript">
 		
 		function check_all(obj,cName1, cName2){
@@ -36,6 +44,21 @@
 		}*/
 
 		$(document).ready(function(){
+		$('#formBtn').click(function(e){
+			let $form = $(this).closest('form');
+			Swal.fire({
+				position: 'top-end',
+				icon: 'success',
+				title: '完成結帳',
+				showConfirmButton: false,
+				timer: 1500
+			}).then((result) => {
+				$form.submit();
+			})
+		});
+	});
+
+		$(document).ready(function(){
 			$('#checkBtn').click(function(){
 				var modal = document.getElementById("modaltabalbody");
 				modal.innerHTML="";
@@ -47,9 +70,10 @@
 					text = $(this).attr('productname');
 					price = isNaN(parseInt($(this).attr('price'))) ? 0 : parseInt($(this).attr('price'));
 					total += isNaN(parseInt($(this).attr('price'))) ? 0 : parseInt($(this).attr('price'));
-					modal.innerHTML += "<tr><td>" + text + "</td><td>"  + price + "</td></tr><br>";
-      			});   
-				modal.innerHTML +=  "<p>總價格:" + total  + "</p>";
+					modal.innerHTML += "<tr><td style='text-align:left;'>" + text + "</td><td>"  + price + "</td></tr><br>";
+				  });   
+				  total.toString();
+				$('#modaltotalprice').text(total);
 			});
 		});
 
@@ -175,10 +199,10 @@
 					</div>
 
 					<div class="modal-body" id="modaldata">	
-						<table class="table">
-							<thead>
+						<table class="table table-striped">
+							<thead class="thead-dark">
 								<tr>
-									<th>商品</th>
+									<th scope="col">商品</th>
 									<th scope="col">售價</th>
 								</tr>
 							</thead>
@@ -186,11 +210,14 @@
 
 							</tbody>
 						</table>
+
+						<p>總價格:<span id="modaltotalprice"></span id="modaltotalprice"></p>
 					</div>
 					
 					<div class="modal-footer">
-			 			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						{{ form.submit(class_="btn btn-first float-right") }}
+						 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						 <button type="button" class="btn btn-first float-right" id="formBtn">結帳</button>	
+						
 					</div>
 		  		</div>
 			</div>
