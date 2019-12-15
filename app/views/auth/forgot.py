@@ -14,10 +14,14 @@ import uuid
 class ForgotPasswordView(MethodView):
     def get(self):
         form = ForgotPasswordForm()
-        if current_user.is_active == False:
+        '''if current_user.is_active == False:
             return render_template('auth/forgot.html', form=form)
         else:
-            return redirect(url_for('profile'))
+            return redirect(url_for('profile'))'''
+        if current_user.is_anonymous == True:
+            return render_template('auth/forgot.html', form=form)
+        else:
+            return redirect(url_for('user.profile'))
     
     def post(self):
         form = ForgotPasswordForm()
