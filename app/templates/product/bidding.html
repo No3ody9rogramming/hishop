@@ -59,6 +59,13 @@
 		});
 	});
 
+	document.addEventListener("error", function (e) {
+            let elem = e.target;
+            if (elem.tagName.toLowerCase() == 'img') {
+                elem.src = "{{ url_for('static',filename='errorPic.jpg') }}";
+            }
+            }, true);
+
 
 		function like(element, product_id) {
 			{% if current_user.is_anonymous %}
