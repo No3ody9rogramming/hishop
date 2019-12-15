@@ -1,7 +1,7 @@
 from flask import redirect, render_template, url_for, request
 from flask.views import MethodView
 from flask_login import current_user, login_required
-from wtforms import SubmitField, TextAreaField
+from wtforms import SubmitField, TextAreaField, HiddenField
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, InputRequired, Length, EqualTo, ValidationError
 
@@ -48,6 +48,9 @@ class PurchaseListView(MethodView):
         form = PerchaseListForm()
         if form.validate_on_submit():
             #need to be write something
+
+
+            
             return redirect(url_for('user.perchase_list'))
         return render_template('user/product/list.html', form=form)
 
@@ -55,3 +58,4 @@ class PurchaseListView(MethodView):
 class PerchaseListForm(FlaskForm):
     detail = TextAreaField("評論", render_kw={'rows': 7}, validators=[InputRequired(), Length(max=4000)])
     submit = SubmitField('提交')
+    commentProductID = HiddenField()

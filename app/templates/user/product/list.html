@@ -75,7 +75,9 @@ label {
 			var commentPrice = document.getElementById("commentPrice")
 			var commentAccount = document.getElementById("commentAccount")
 			var source = '{{ url_for('static',filename='') }}' + 'image/' + id +'/'+ img 
+			var commentProductID = document.getElementById("commentProductID")
 
+			commentProductID.value = id
 			commentName.innerHTML = name
 			commentPrice.innerHTML = price
 			commentAccount.innerHTML = account
@@ -163,6 +165,7 @@ label {
 															<div class="col-5">
 																<p id="commentName">商品AAA</p>
 																<p id="commentAccount" >賣家帳號</p>
+																<input type="hidden" name="commentProductID" id="commentProductID">
 															</div>
 															<div class="col-3">
 																<p id="commentPrice">價錢</p>
