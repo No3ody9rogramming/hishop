@@ -1,38 +1,38 @@
 {% extends "layouts/app.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block styles %}
-	{{ super() }}
-	<link href="/static/sweetalert/dist/sweetalert2.css" rel="stylesheet" type="text/css">
-{% endblock styles %}
-
 {% block head %}
 	{{ super() }}
 {% endblock head %}
 
 {% block scripts %}
 	{{ super() }}
-	<script src="/static/sweetalert/dist/sweetalert2.all.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
-
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 	<script>
 		var url = "{{ url_for('product_like', product_id="") }}";
-
-	$(document).ready(function(){
-		$('#formBtn').click(function(e){
-			let $form = $(this).closest('form');
-			Swal.fire({
-				position: 'top',
-				icon: 'success',
-				title: '修改成功',
-				showConfirmButton: false,
-				timer: 1500
-			}).then((result) => {
-				$form.submit();
-			})
+		$(document).ready(function(){
+			$('#formBtn').click(function(e){
+				let $form = $(this).closest('form');
+				errortext = $(this).attr('error');
+				errortext.toString();
+				$("#test").text(errortext);
+					if(errortext == "0"){
+						Swal.fire({
+						position: 'top',
+						icon: 'success',
+						title: '修改成功',
+						showConfirmButton: false,
+						timer: 1500
+					}).then((result) => {
+					$form.submit();
+				});}
+				else{
+					$form.submit();
+				}
+			});
 		});
-	});
-</script>
+	</script>
 {% endblock scripts %}
 
 {% block page %}
@@ -162,7 +162,7 @@
 										
 								</div>
 								<div class="col-3 form-group required">
-									<button type="button" class="btn btn-primary col-12" id="formBtn">修改</button>	
+									<button type="button" class="btn btn-primary col-12" id="formBtn" error="{{form.store_name.errors}}">修改</button>	
 								</div>
 						</div>
 						<br>
