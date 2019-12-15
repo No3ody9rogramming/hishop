@@ -1,9 +1,39 @@
 {% extends "layouts/app.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block styles %}
+	{{ super() }}
+	<link href="/static/sweetalert/dist/sweetalert2.css" rel="stylesheet" type="text/css">
+{% endblock styles %}
+
 {% block head %}
 	{{ super() }}
 {% endblock head %}
+
+{% block scripts %}
+	{{ super() }}
+	<script src="/static/sweetalert/dist/sweetalert2.all.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+
+	<script>
+		var url = "{{ url_for('product_like', product_id="") }}";
+
+	$(document).ready(function(){
+		$('#formBtn').click(function(e){
+			let $form = $(this).closest('form');
+			Swal.fire({
+				position: 'top',
+				icon: 'success',
+				title: '修改成功',
+				showConfirmButton: false,
+				timer: 1500
+			}).then((result) => {
+				$form.submit();
+			})
+		});
+	});
+</script>
+{% endblock scripts %}
 
 {% block page %}
 	<div class="row">
@@ -132,7 +162,7 @@
 										
 								</div>
 								<div class="col-3 form-group required">
-										{{ form.submit(class="btn btn-primary col-12") }}
+									<button type="button" class="btn btn-primary col-12" id="formBtn">修改</button>	
 								</div>
 						</div>
 						<br>

@@ -48,7 +48,7 @@
 		$('#formBtn').click(function(e){
 			let $form = $(this).closest('form');
 			Swal.fire({
-				position: 'top-end',
+				position: 'top',
 				icon: 'success',
 				title: '出價成功',
 				showConfirmButton: false,
@@ -58,6 +58,13 @@
 			})
 		});
 	});
+
+	document.addEventListener("error", function (e) {
+            let elem = e.target;
+            if (elem.tagName.toLowerCase() == 'img') {
+                elem.src = "{{ url_for('static',filename='errorPic.jpg') }}";
+            }
+            }, true);
 
 
 		function like(element, product_id) {
