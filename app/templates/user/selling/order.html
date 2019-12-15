@@ -24,11 +24,11 @@
 	    			訂單管理
 	    		</div>
 	    		<div class="card-body border border-dark">
-	    			<a class="btn btn-primary {% if status == ORDER_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('user.purchase_list', status=ORDER_STATUS['ALL']) }}">全部</a>
-	    			<a class="btn btn-primary {% if status == ORDER_STATUS['TRANSFERING'] %} active {% endif %}" href="{{ url_for('user.purchase_list', status=ORDER_STATUS['TRANSFERING']) }}">移交中</a>
-	    			<a class="btn btn-primary {% if status == ORDER_STATUS['RECEIPTING'] %} active {% endif %}" href="{{ url_for('user.purchase_list', status=ORDER_STATUS['RECEIPTING']) }}">領收中</a>
-	    			<a class="btn btn-primary {% if status == ORDER_STATUS['COMPLETE'] %} active {% endif %}" href="{{ url_for('user.purchase_list', status=ORDER_STATUS['COMPLETE']) }}">已完成</a>
-	    			<a class="btn btn-primary {% if status == ORDER_STATUS['CANCEL'] %} active {% endif %}" href="{{ url_for('user.purchase_list', status=ORDER_STATUS['CANCEL']) }}">已取消</a>
+	    			<a class="btn btn-primary {% if status == ORDER_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('user.order_list', status=ORDER_STATUS['ALL']) }}">全部</a>
+	    			<a class="btn btn-primary {% if status == ORDER_STATUS['TRANSFERING'] %} active {% endif %}" href="{{ url_for('user.order_list', status=ORDER_STATUS['TRANSFERING']) }}">移交中</a>
+	    			<a class="btn btn-primary {% if status == ORDER_STATUS['RECEIPTING'] %} active {% endif %}" href="{{ url_for('user.order_list', status=ORDER_STATUS['RECEIPTING']) }}">領收中</a>
+	    			<a class="btn btn-primary {% if status == ORDER_STATUS['COMPLETE'] %} active {% endif %}" href="{{ url_for('user.order_list', status=ORDER_STATUS['COMPLETE']) }}">已完成</a>
+	    			<a class="btn btn-primary {% if status == ORDER_STATUS['CANCEL'] %} active {% endif %}" href="{{ url_for('user.order_list', status=ORDER_STATUS['CANCEL']) }}">已取消</a>
 
 					<div class="table-responsive-lg">
 						<table class="table table-striped">
