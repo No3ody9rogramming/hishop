@@ -1,6 +1,16 @@
 {% extends "layouts/app.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block styles %}
+	{{ super() }}
+	<style type = "text/css">
+		.productImg {
+			width: 100px;
+		    height:100px;
+		}
+	</style>
+{% endblock styles %}
+
 {% block page %}
 	<br>
 	<div class="row">
@@ -34,7 +44,7 @@
 							<tbody>
 								{% for order in orders %}
 								    <tr>
-										<td>圖片</td>
+										<td><img class="productImg" src="{{url_for('static', filename = 'image/'+order.product_id.id|string +'/' + order.product_id.image)}}"></td>
 										<td>{{ order.product_id.name }}</td>
 										<td>$ {{ order.product_id.price }}</td>
 										<td>
