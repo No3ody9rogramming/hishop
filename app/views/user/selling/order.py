@@ -28,4 +28,22 @@ class OrderListView(MethodView):
 
         return render_template('user/selling/order.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status)
     def post(self):
-        pass
+        products = Product.objects(seller_id=current_user.id)
+
+        status = request.args.get('status')
+        if status == ORDER_STATUS['TRANSFERING']:
+            orders = Order.objects(product_id__in=products, status=ORDER_STATUS["TRANSFERING"])
+        elif status == ORDER_STATUS['RECEIPTING']:
+            orders = Order.objects(product_id__in=products, status=ORDER_STATUS["RECEIPTING"])
+        elif status == ORDER_STATUS['COMPLETE']:
+            orders = Order.objects(product_id__in=products, status=ORDER_STATUS["COMPLETE"])
+        elif status == ORDER_STATUS['CANCEL']:
+            orders = Order.objects(product_id__in=products, status=ORDER_STATUS["CANCEL"])
+        else:
+            status = ORDER_STATUS["ALL"]
+            orders = Order.objects(product_id__in=products)
+
+        orders = sorted(orders, key=lambda k: k.create_time, reverse=False)
+
+        return render_template('user/selling/order.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status)
+

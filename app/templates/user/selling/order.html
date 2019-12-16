@@ -49,7 +49,31 @@
 										<td>$ {{ order.product_id.price }}</td>
 										<td>
 											{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
-												移交中
+												<!-- Button trigger modal -->
+												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+													移交中
+												</button>
+
+												<!-- Modal -->
+												<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="transform: translate(0,30vh);">
+													<div class="modal-dialog" role="document">
+													<div class="modal-content">
+														<div class="modal-header border border-dark bg-warning">
+														<h5 class="modal-title" id="exampleModalLabel">將狀態更改為領收</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+														</div>
+														<div class="modal-body">
+														確定更改狀態?
+														</div>
+														<div class="modal-footer">
+														<button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
+														<button type="button" class="btn btn-primary">確定</button>
+														</div>
+													</div>
+													</div>
+												</div>
 											{% elif order.status|string == ORDER_STATUS['RECEIPTING'] %}
 												領收中
 											{% elif order.status|string == ORDER_STATUS['COMPLETE'] %}
