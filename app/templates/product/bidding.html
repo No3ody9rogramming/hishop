@@ -8,7 +8,6 @@
 
 {% block styles %}
 	{{ super() }}
-	<link href="/static/sweetalert/dist/sweetalert2.css" rel="stylesheet" type="text/css">
 	<style type = "text/css">
 		#row{
 			overflow: hidden;
@@ -38,8 +37,8 @@
 
 {% block scripts %}
 	{{ super() }}
-	<script src="/static/sweetalert/dist/sweetalert2.all.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
 	<script>
 		var url = "{{ url_for('product_like', product_id="") }}";
