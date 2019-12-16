@@ -61,7 +61,6 @@
 
 		var socket = io.connect("{{app.config['SERVER_DOMAIN']}}", {path: "{{app.config['REVERSE_PROXY_PATH']}}/socket.io"});
 		socket.on('{{ product.id|string }}', function(data){
-			console.log('{{ product.id|string }}');
           	$('#currentPrice').text(data.newPrice);
         });
 
