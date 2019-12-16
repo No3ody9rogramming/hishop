@@ -23,24 +23,18 @@
     <div class="row align-items-center justify-content-center ">
         <div class="col-md-5 ">
             <div class="row justify-content-center">
-                <div class="col-5 ">
-                    
-                    <p class="text-center">會員登入</p>
-                    
-                </div>
                 <div class="col-auto ">
-                        <p class="text-center">|</p>
+                    
+                    <p class="text-center">重設密碼</p>
+                    
                 </div>
-                <div class="col-5 ">
-                    <a href="{{ url_for('registration') }}">
-                        <p class="text-center">立即註冊</p>
-                    </a>
-                </div>
+                
             </div>
         </div>
     </div>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
+    <!--
+        {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
                 <div class="row justify-content-center">
@@ -53,6 +47,7 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
+            -->
 
     <form action="{{ url_for('reset', reset_token=reset_token, email=email) }}" method="POST">
         {{ form.csrf_token }}
