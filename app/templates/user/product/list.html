@@ -145,74 +145,75 @@ label {
 												<!-- Button trigger modal -->
 												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong" onclick="comment( '{{ order.product_id.name }}', '{{order.product_id.id}}', '{{order.product_id.image}}', '{{order.product_id.price}}','{{current_user.account}}' )">
 														未評價
-												</button>
-												
-												<!-- Modal -->
-												<div class="modal fade " id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="transform: translate(0,30vh);">
-													<div class="modal-dialog" role="document">
-													<div class="modal-content ">
-														<div class="modal-header border border-dark bg-warning">
-														<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-															<span aria-hidden="true">&times;</span>
-														</button>
-														</div>
-														<div class="modal-body">
-														<div class="row">
-															<div class="col-auto" id="commentImg">
-																圖片
-															</div>
-															<div class="col-5">
-																<p id="commentName">商品AAA</p>
-																<p id="commentAccount" >賣家帳號</p>
-															</div>
-															<div class="col-3">
-																<p id="commentPrice">價錢</p>
-															</div>
-														</div>
-														<form action="{{ url_for('user.purchase_list') }}" method="POST">
-															{{ form.csrf_token }}
-															<div class="row">
-																<input type="hidden" class="form-control" name="commentProductID" id="commentProductID">
-																<div class="col-auto">
-																	<p>評分:</p>
-																</div>
-																<div class="col-auto">
-																	<div id="starBg" class="star_bg">                    	
-																			<input type="radio" id="starScore1" class="score score_1" value="1" name="score">
-																			<a href="#starScore1" class="star star_1" title="差"><label for="starScore1">差</label></a>
-																			<input type="radio" id="starScore2" class="score score_2" value="2" name="score">
-																			<a href="#starScore2" class="star star_2" title="較差"><label for="starScore2">較差</label></a>
-																			<input type="radio" id="starScore3" class="score score_3" value="3" name="score">
-																			<a href="#starScore3" class="star star_3" title="普通"><label for="starScore3">普通</label></a>
-																			<input type="radio" id="starScore4" class="score score_4" value="4" name="score">
-																			<a href="#starScore4" class="star star_4" title="較好"><label for="starScore4">較好</label></a>
-																			<input type="radio" id="starScore5" class="score score_5" value="5" name="score">
-																			<a href="#5" class="star star_5" title="好"><label for="starScore5">好</label></a>
-																	</div>
-																</div>
-															</div>
-															<div class="row">
-																	{% if form.detail.errors %}
-																	{{ form.detail(class="form-control is-invalid", placeholder="上限為4000個字") }}
-																	{% for error in form.detail.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-																{% else %}
-																	{{ form.detail(class="form-control", placeholder="上限為4000個字") }}
-																{% endif %}																
-															</div>
-															<div class="modal-footer">
-															{{ form.submit(class="btn btn-primary") }}
-															</div>
-														</form>
-													</div>
-													</div>
-												</div>
+												</button>	
 											{% else %}
 												<p style="text-decoration: underline ;color: blue;">未評價</p>
 											{%  endif %}
 										</td>
 								    </tr>
 								{% endfor %}
+
+								<!-- Modal -->
+								<div class="modal fade " id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="transform: translate(0,30vh);">
+									<div class="modal-dialog" role="document">
+									<div class="modal-content ">
+										<div class="modal-header border border-dark bg-warning">
+										<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+										</div>
+										<div class="modal-body">
+										<div class="row">
+											<div class="col-auto" id="commentImg">
+												圖片
+											</div>
+											<div class="col-5">
+												<p id="commentName">商品AAA</p>
+												<p id="commentAccount" >賣家帳號</p>
+											</div>
+											<div class="col-3">
+												<p id="commentPrice">價錢</p>
+											</div>
+										</div>
+										<form action="{{ url_for('user.purchase_list') }}" method="POST">
+											{{ form.csrf_token }}
+											<div class="row">
+												<input type="hidden" class="form-control" name="commentProductID" id="commentProductID">
+												<div class="col-auto">
+													<p>評分:</p>
+												</div>
+												<div class="col-auto">
+													<div id="starBg" class="star_bg">                    	
+															<input type="radio" id="starScore1" class="score score_1" value="1" name="score">
+															<a href="#starScore1" class="star star_1" title="差"><label for="starScore1">差</label></a>
+															<input type="radio" id="starScore2" class="score score_2" value="2" name="score">
+															<a href="#starScore2" class="star star_2" title="較差"><label for="starScore2">較差</label></a>
+															<input type="radio" id="starScore3" class="score score_3" value="3" name="score">
+															<a href="#starScore3" class="star star_3" title="普通"><label for="starScore3">普通</label></a>
+															<input type="radio" id="starScore4" class="score score_4" value="4" name="score">
+															<a href="#starScore4" class="star star_4" title="較好"><label for="starScore4">較好</label></a>
+															<input type="radio" id="starScore5" class="score score_5" value="5" name="score">
+															<a href="#5" class="star star_5" title="好"><label for="starScore5">好</label></a>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+													{% if form.detail.errors %}
+													{{ form.detail(class="form-control is-invalid", placeholder="上限為4000個字") }}
+													{% for error in form.detail.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+												{% else %}
+													{{ form.detail(class="form-control", placeholder="上限為4000個字") }}
+												{% endif %}																
+											</div>
+											<div class="modal-footer">
+											{{ form.submit(class="btn btn-primary") }}
+											</div>
+										</form>
+									</div>
+									</div>
+								</div>
+
 							</tbody>
 						</table>
 					</div>

@@ -11,6 +11,22 @@
 	</style>
 {% endblock styles %}
 
+{% block scripts %}
+	{{ super() }}
+	<script type="text/javascript">
+	
+		function setID(id)
+		{
+			var ProductID = document.getElementById("ProductID")
+
+			ProductID.value = id
+		}
+
+	</script>
+
+{% endblock scripts %}
+
+
 {% block page %}
 	<br>
 	<div class="row">
@@ -50,30 +66,11 @@
 										<td>
 											{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
 												<!-- Button trigger modal -->
-												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="setID('{{order.product_id.id}}')">
 													移交中
 												</button>
 
-												<!-- Modal -->
-												<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="transform: translate(0,30vh);">
-													<div class="modal-dialog" role="document">
-													<div class="modal-content">
-														<div class="modal-header border border-dark bg-warning">
-														<h5 class="modal-title" id="exampleModalLabel">將狀態更改為領收</h5>
-														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-															<span aria-hidden="true">&times;</span>
-														</button>
-														</div>
-														<div class="modal-body">
-														確定更改狀態?
-														</div>
-														<div class="modal-footer">
-														<button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
-														<button type="button" class="btn btn-primary">確定</button>
-														</div>
-													</div>
-													</div>
-												</div>
+												
 											{% elif order.status|string == ORDER_STATUS['RECEIPTING'] %}
 												領收中
 											{% elif order.status|string == ORDER_STATUS['COMPLETE'] %}
@@ -85,6 +82,33 @@
 										<td>{{ order.product_id.price }}</td>
 								    </tr>
 								{% endfor %}
+								<!-- Modal -->
+								<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="transform: translate(0,30vh);">
+									<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header border border-dark bg-warning">
+										<h5 class="modal-title" id="exampleModalLabel">更改狀態</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+										</div>
+										<form action="{{ url_for('user.order_list') }}" method="POST">
+											{{ form.csrf_token }}
+											<div class="modal-body">
+											
+											將狀態更改為領收?
+											<input type="hidden" id="ProductID" name="ProductID">
+											
+											</div>
+											<div class="modal-footer">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
+											{{form.submit(class="btn btn-primary")}}
+											</div>
+										</form>
+									</div>
+									</div>
+								</div>
+								
 							</tbody>
 						</table>
 					</div>

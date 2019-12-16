@@ -1,6 +1,9 @@
 from flask import redirect, render_template, url_for, request
 from flask.views import MethodView
 from flask_login import current_user, login_required
+from wtforms import SubmitField, TextAreaField, HiddenField
+from flask_wtf import FlaskForm
+from wtforms.validators import DataRequired, InputRequired, Length, EqualTo, ValidationError
 
 from app.models.order import Order
 from app.models.product import Product
@@ -9,6 +12,7 @@ from app.models.product import Product
 ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "1", "COMPLETE" : "2", "CANCEL" : "3", "ALL" : "4"}
 class OrderListView(MethodView):
     def get(self):
+        form = OrderListForm()
         products = Product.objects(seller_id=current_user.id)
 
         status = request.args.get('status')
@@ -26,8 +30,17 @@ class OrderListView(MethodView):
 
         orders = sorted(orders, key=lambda k: k.create_time, reverse=False)
 
-        return render_template('user/selling/order.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status)
+        return render_template('user/selling/order.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status,form=form)
     def post(self):
+        form = OrderListForm()
+        #print(form.ProductID)
+        #print(request.values['ProductID'])
+        if form.validate_on_submit:
+            order = Order.objects(product_id=request.values['ProductID']).first()
+            print(request.values['ProductID'])
+            order.status = ORDER_STATUS["RECEIPTING"]
+            order.save()
+
         products = Product.objects(seller_id=current_user.id)
 
         status = request.args.get('status')
@@ -45,5 +58,8 @@ class OrderListView(MethodView):
 
         orders = sorted(orders, key=lambda k: k.create_time, reverse=False)
 
-        return render_template('user/selling/order.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status)
+        return render_template('user/selling/order.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status,form=form)
 
+class OrderListForm(FlaskForm):
+    #ProductID = HiddenField()
+    submit = SubmitField('確定')
