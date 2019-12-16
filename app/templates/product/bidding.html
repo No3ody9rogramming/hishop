@@ -39,11 +39,13 @@
 	{{ super() }}
 	<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
 
 	<script>
 		var url = "{{ url_for('product_like', product_id="") }}";
 
 	$(document).ready(function(){
+
 		$('#formBtn').click(function(e){
 			let $form = $(this).closest('form');
 			Swal.fire({
@@ -56,6 +58,13 @@
 				$form.submit();
 			})
 		});
+
+		var socket = io.connect("{{app.config['SERVER_DOMAIN']}}", {path: "{{app.config['REVERSE_PROXY_PATH']}}/socket.io"});
+		socket.on('{{ product.id|string }}', function(data){
+			console.log('{{ product.id|string }}');
+          	$('#currentPrice').text(data.newPrice);
+        });
+
 	});
 
 	document.addEventListener("error", function (e) {
@@ -103,7 +112,7 @@
 			<h5 id="productprice">$ {{ product.price }} </h5>
 			<p>剩餘時間：{{ "%s days"|format(product.bid.due_time.days) }}</p>
 			<p>起標價 : {{ product.bid.low_price }}</p>
-			<p>目前價格 : {{ product.bid.now_price }}</p>
+			<p>目前價格 : <span id="currentPrice" >{{ product.bid.now_price }}</span></p>
 			<p>{{product.bid.per_price}}/一刀(輸入格內為刀數)</p>
 		    <div class="row">
 			<form id="form" action="{{ url_for('show_bidding', product_id=product.id|string) }}" method="POST" role="form" class="form-inline" style="margin-top: 5px; margin-right: 5px;">

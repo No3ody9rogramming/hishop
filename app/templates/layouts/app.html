@@ -13,9 +13,13 @@
 {% block styles %}
 	{{ super() }}
 	<style type = "text/css">
+
+		.background {
+			background-color: #e0e0e0;			
+		}
+
 		body {
             padding-top: 0px;
-            background-color: #f4f4f4;
 			height: 100vh;
 		}
 
@@ -26,6 +30,11 @@
 		#content {
 			max-height: 90%;
 		}
+
+		img {
+			border-radius: 10%;
+		}
+
 	</style>
 {% endblock styles %}
 

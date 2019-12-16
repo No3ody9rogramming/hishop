@@ -2,6 +2,7 @@ from flask import redirect, render_template, url_for, abort, request
 from flask.views import MethodView
 from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
+from flask_socketio import emit ##for test socketio
 
 from wtforms import SubmitField, IntegerField
 from wtforms.validators import InputRequired, ValidationError
@@ -12,6 +13,7 @@ from app.models.user import User
 from app.models.product import Product
 from app.models.information import Information, History
 from app.models.order import Order
+from app import socketio
 
 class ShowBiddingView(MethodView):
     def get(self, product_id):
@@ -37,7 +39,7 @@ class ShowBiddingView(MethodView):
 
             product.view += 1
             product.save()
-        return render_template('product/bidding.html', form=form, product=product, like=like, product_json=product.to_json(), now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
+        return render_template('product/bidding.html', form=form, product=product, like=like, now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
 
     @login_required
     def post(self, product_id):
@@ -73,6 +75,8 @@ class ShowBiddingView(MethodView):
                 current_user.hicoin -= your_price
                 current_user.save()
                 product.save()
+                updatePriceViaSocketIO(product.id, your_price)
+
 
         like = "far fa-heart"
         information = Information.objects(user_id=current_user.id).first()
@@ -97,3 +101,7 @@ class BiddingForm(FlaskForm):
     like = SubmitField('喜歡')
     price = IntegerField("起標價", validators=[InputRequired(), validate_price])
     submit = SubmitField('出價')
+
+def updatePriceViaSocketIO(product_id, newPrice):
+    print(str(product_id))
+    socketio.emit(str(product_id), {'newPrice': newPrice}, broadcast=True)
