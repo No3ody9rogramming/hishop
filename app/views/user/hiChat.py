@@ -23,7 +23,11 @@ class HiChatView(MethodView):
         return messages.to_json()
 
 @socketio.on('chat message')
-def handle_message(senderID, receiverID, message): #函式名自訂
+def handle_message(senderID, receiverID, message):
+    if senderID != str(current_user.id):
+    	abort(403)
+    if not User.objects(id=receiverID):
+    	abort(403) 
     sender = User.objects.get(id=senderID)
     data = {
         "senderID" : str(sender.id),
