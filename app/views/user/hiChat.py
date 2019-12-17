@@ -5,7 +5,7 @@ from flask_login import current_user
 from app.models.user import User
 from app.models.message import Message
 from app import app
-from app.socketioService import socketio as socketioService
+from app.socketioService import handle_message
 
 from mongoengine.queryset.visitor import Q
 

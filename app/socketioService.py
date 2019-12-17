@@ -6,11 +6,8 @@ from mongoengine.queryset.visitor import Q
 
 from app import app, socketio
 
-print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
-
 @socketio.on('chat message')
 def handle_message(senderID, receiverID, message): #函式名自訂
-    print("AAAAAAAAAAAAAAAAAAAAAAAA")
     sender = User.objects.get(id=senderID)
     data = {
         "senderID" : str(sender.id),
