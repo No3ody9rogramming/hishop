@@ -34,7 +34,7 @@ from app.views.admin.question.list import ResponseListView
 
 from app.views.user.hiChat import HiChatView
 
-from app.socketioService import socketio ##### not sure whether it is correct to import socketio, if I just want to import socketioService file
+#from app.socketioService import socketio as socketioService ##### not sure whether it is correct to import socketio, if I just want to import socketioService file
 
 from flask_mail import Message
 
