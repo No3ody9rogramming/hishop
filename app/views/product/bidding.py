@@ -13,7 +13,7 @@ from app.models.user import User
 from app.models.product import Product
 from app.models.information import Information, History
 from app.models.order import Order
-from app import socketio
+from app import socketio, app
 
 class ShowBiddingView(MethodView):
     def get(self, product_id):
@@ -39,7 +39,7 @@ class ShowBiddingView(MethodView):
 
             product.view += 1
             product.save()
-        return render_template('product/bidding.html', form=form, product=product, like=like, now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
+        return render_template('product/bidding.html', form=form, product=product, like=like, now=datetime.datetime.utcnow() + datetime.timedelta(hours=8), app=app)
 
     @login_required
     def post(self, product_id):
