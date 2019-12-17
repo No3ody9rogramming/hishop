@@ -123,6 +123,7 @@
 							<p class="text-center text-light" style="margin: 5px 5px 5px;"> 賣場設定 </p>
 						</div>
 						<div class="col-10 border border-dark " style="margin: 0px 5px 5vh; background-color: #dcdcdc;">
+							<br>
 								<div class="row justify-content-center">
 										<div class="col-lg-10 form-group required">
 											<p>賣場名稱:</p>
@@ -138,24 +139,39 @@
 									<div class="row justify-content-center">
 										<div class="col-lg-10 ">
 											<p>交易地點:</p>
-											
+											{% if form.address.errors %}
+												{{ form.address(class="form-control is-invalid") }}
+												{% for error in form.address.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+											{% else %}
+												{{ form.address(class="form-control") }}
+											{% endif %}
 										</div>
 									</div>
 		
 									<div class="row justify-content-center">
-											<div class="col-lg-10 ">
-												<p>交易時間(起始):</p>
-												
-											</div>
+										<div class="col-lg-10 ">
+											<p>交易時間(起始):</p>
+											{% if form.prefer_begin_time.errors %}
+												{{ form.prefer_begin_time(class="form-control is-invalid") }}
+												{% for error in form.prefer_begin_time.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+											{% else %}
+												{{ form.prefer_begin_time(class="form-control") }}
+											{% endif %}
+										</div>
 									</div>
 
 									<div class="row justify-content-center">
 										<div class="col-lg-10 ">
 											<p>交易時間(結束):</p>
-											
+											{% if form.prefer_end_time.errors %}
+												{{ form.prefer_end_time(class="form-control is-invalid") }}
+												{% for error in form.prefer_end_time.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+											{% else %}
+												{{ form.prefer_end_time(class="form-control") }}
+											{% endif %}
 										</div>
 									</div>
-
+									<br>
 									
 								</div>
 								<div class="col-7 ">

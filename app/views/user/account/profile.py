@@ -15,7 +15,7 @@ import os
 class ProfileView(MethodView):
     def get(self):
         form = ProfileForm(name=current_user.name, birth=current_user.birth, phone=current_user.phone,
-        store_name=current_user.store_name ,icon=current_user.icon)
+        store_name=current_user.store_name ,icon=current_user.icon, address=current_user.address, prefer_begin_time=current_user.prefer_begin_time, prefer_end_time=current_user.prefer_end_time)
 
         return render_template('user/account/profile.html', form=form)
     
@@ -27,6 +27,9 @@ class ProfileView(MethodView):
             current_user.phone = form.phone.data
             current_user.birth = form.birth.data
             current_user.store_name = form.store_name.data
+            current_user.address = form.address.data
+            current_user.prefer_begin_time = form.prefer_begin_time.data
+            current_user.prefer_end_time = form.prefer_end_time.data
             
         
             icon_path = os.path.join(os.getcwd(), 'app/static/icon', str(current_user.id))
@@ -54,5 +57,8 @@ class ProfileForm(FlaskForm):
     icon = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpeg', 'jpg', 'png', 'gif'], '只能上傳圖片')])
     phone = StringField("電話號碼", validators=[InputRequired(), Length(max=15)])
     birth = DateField("生日", validators=[InputRequired()])
+    address = StringField("地址", validators=[InputRequired(), Length(max=50)])
+    prefer_begin_time = StringField("偏好起始時間", validators=[InputRequired(), Length(max=10)])
+    prefer_end_time = StringField("偏好結束時間", validators=[InputRequired(), Length(max=10)])
     submit = SubmitField('修改')
 

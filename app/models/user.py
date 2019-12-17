@@ -3,11 +3,6 @@ import datetime
 
 from app import db, login_manager
 
-class Address(db.EmbeddedDocument):
-    address = db.StringField(required=True, max_length=50)
-    begin = db.StringField(required=True, max_length=10)
-    end = db.StringField(requried=True, max_length=10)
-
 class User(UserMixin, db.Document):
     account = db.StringField(required=True, unique=True, min_length=4, max_length=20)
     password = db.StringField(required=True)
@@ -17,7 +12,9 @@ class User(UserMixin, db.Document):
     email = db.StringField(required=True, unique=True)
     phone = db.StringField(required=True, max_length=15)
     birth = db.DateTimeField(required=True)
-    address = db.ListField(db.EmbeddedDocumentField(Address), default=list)
+    address = db.StringField(required=True, max_length=50)
+    prefer_begin_time = db.StringField(required=True, max_length=10)
+    prefer_end_time = db.StringField(requried=True, max_length=10)
     status = db.IntField(required=True, default=0)
     hicoin = db.LongField(required=True, min_value=0, default=0)
     reset_token = db.StringField(null=True)
