@@ -2,7 +2,6 @@ from flask import redirect, render_template, url_for, abort, request
 from flask.views import MethodView
 from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
-#from flask_socketio import emit ##for test socketio
 
 from wtforms import SubmitField, IntegerField
 from wtforms.validators import InputRequired, ValidationError
@@ -104,4 +103,4 @@ class BiddingForm(FlaskForm):
 
 def updatePriceViaSocketIO(product_id, newPrice):
     print(str(product_id))
-    #socketio.emit(str(product_id), {'newPrice': newPrice}, broadcast=True)
+    socketio.emit(str(product_id), {'newPrice': newPrice}, broadcast=True)

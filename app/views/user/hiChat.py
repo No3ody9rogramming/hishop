@@ -4,9 +4,8 @@ from flask_login import current_user
 
 from app.models.user import User
 from app.models.message import Message
-from app import app, socketio
-from flask_socketio import emit ##for test socketio
-#from app.socketioService import handle_message
+from app import app
+from app.socketioService import handle_message
 
 from mongoengine.queryset.visitor import Q
 
@@ -21,22 +20,3 @@ class HiChatView(MethodView):
             abort(403)        
         messages = Message.objects((Q(sender_id=senderID) & Q(receiver_id=receiverID)) | (Q(sender_id=receiverID) & Q(receiver_id=senderID))).order_by("+create_time")
         return messages.to_json()
-
-@socketio.on('chat message')
-def handle_message(senderID, receiverID, message):
-    print("AAAAAAAAAAAAAAAAAAAAAA")
-    if senderID != str(current_user.id):
-    	abort(403)
-    if not User.objects(id=receiverID):
-    	abort(403) 
-    sender = User.objects.get(id=senderID)
-    data = {
-        "senderID" : str(sender.id),
-        "senderName": sender.name,
-        "message" : message
-    }
-    emit(receiverID, data, broadcast=True)
-    if receiverID != senderID:
-        emit(senderID, data, broadcast=True)
-    message = Message(sender_id=senderID, receiver_id=receiverID, message=message)
-    message.save()
