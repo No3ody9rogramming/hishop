@@ -63,8 +63,8 @@ class PurchaseListView(MethodView):
             order = Order.objects(product_id=request.values['commentProductID']).first()  # correct
             order.seller_comment = form.detail      # correct
             order.seller_rating = request.values['score']  # correct
-            #order.status = ORDER_STATUS['COMPLETE']
-            #order.save()
+            order.status = ORDER_STATUS['COMPLETE']
+            order.save()
             print(request.values['score'])   
              
         return render_template('user/product/list.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status, form=form)
