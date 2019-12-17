@@ -41,11 +41,19 @@
 							<img class="productImg" src="{{url_for('static', filename = 'image/'+product.product.id|string +'/' + product.product.image)}}"> 
 						</th>
 						<td class="align-middle">
-							{% if  product.product.bid  == "null" %}
-							<a href="{{ url_for('show_normal', product_id=product.product.id|string) }}" target=_blank>{{product.product.name}}</a>
-							{% else %}
-							<a href="{{ url_for('show_bidding', product_id=product.product.id|string) }}" target=_blank>{{product.product.name}}</a>
-							{% endif %}
+							{% if  product.product.bid  == None %}
+										{% if product.product.status|string == PRODUCT_STATUS['SELLING'] %}
+											<a href="{{ url_for('show_normal', product_id=product.product.id|string) }}" target=_blank>{{product.product.name}}</a>
+										{% else %}
+											<p>{{product.product.name}}</p>
+										{% endif %}
+									{% else %}
+										{% if product.product.status|string == PRODUCT_STATUS['SELLING'] %}
+											<a href="{{ url_for('show_bidding', product_id=product.product.id|string) }}" target=_blank>{{product.product.name}}</a>
+										{% else %}
+											<p>{{product.product.name}}</p>
+										{% endif %}
+									{% endif %}
 						</td>
 					    <td class="align-middle">{{ product.product.price }}</td>
 					</tbody>
