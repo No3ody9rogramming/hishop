@@ -18,7 +18,7 @@
       var chatObjectID;
       var chatObjectName;
       $(function () {
-        var socket = io.connect("{{app.config['SERVER_DOMAIN']}}", {path: "{{app.config['REVERSE_PROXY_PATH']}}/socket.io"});    
+        var socket = io.connect();    
 
         $('form').submit(function(e){
           e.preventDefault(); // prevents page reloading
