@@ -143,11 +143,11 @@ label {
 												<p style="text-decoration: underline ;color: blue;">已評價</p>
 											{% elif order.status|string == ORDER_STATUS['RECEIPTING'] %}
 												<!-- Button trigger modal -->
-												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong" onclick="comment( '{{ order.product_id.name }}', '{{order.product_id.id}}', '{{order.product_id.image}}', '{{order.product_id.price}}','{{current_user.account}}' )">
+												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong" onclick="comment( '{{ order.product_id.name }}', '{{order.product_id.id}}', '{{order.product_id.image}}', '{{order.product_id.price}}','{{order.product_id.seller_id.account}}' )">
 														未評價
 												</button>	
 											{% else %}
-												<p style="text-decoration: underline ;color: blue;">未評價</p>
+												<p style="color: red;">未評價</p>
 											{%  endif %}
 										</td>
 								    </tr>
@@ -158,7 +158,7 @@ label {
 									<div class="modal-dialog" role="document">
 									<div class="modal-content ">
 										<div class="modal-header border border-dark bg-warning">
-										<h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+										<h5 class="modal-title text-center" id="exampleModalLongTitle">評價商品</h5>
 										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 											<span aria-hidden="true">&times;</span>
 										</button>

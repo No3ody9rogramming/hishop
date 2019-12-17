@@ -1,7 +1,7 @@
 from flask import redirect, render_template, url_for, request
 from flask.views import MethodView
 from flask_login import current_user, login_required
-from wtforms import SubmitField, TextAreaField, HiddenField
+from wtforms import SubmitField, TextAreaField, HiddenField, StringField
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, InputRequired, Length, EqualTo, ValidationError
 
@@ -63,8 +63,8 @@ class PurchaseListView(MethodView):
             order = Order.objects(product_id=request.values['commentProductID']).first()  # correct
             order.seller_comment = form.detail      # correct
             order.seller_rating = request.values['score']  # correct
-            order.status = ORDER_STATUS['COMPLETE']
-            order.save()
+            #order.status = ORDER_STATUS['COMPLETE']
+            #order.save()
             print(request.values['score'])   
              
         return render_template('user/product/list.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status, form=form)
@@ -72,7 +72,7 @@ class PurchaseListView(MethodView):
 
 # for comment
 class PerchaseListForm(FlaskForm):
-    detail = TextAreaField("評論", render_kw={'rows': 7}, validators=[InputRequired(), Length(max=4000)])
+    detail = StringField("評論")
     submit = SubmitField('提交')
     
     
