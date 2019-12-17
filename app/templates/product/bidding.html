@@ -59,10 +59,10 @@
 			})
 		});
 
-		var socket = io.connect("{{app.config['SERVER_DOMAIN']}}", {path: "{{app.config['REVERSE_PROXY_PATH']}}/socket.io"});
-		socket.on('{{ product.id|string }}', function(data){
-          	$('#currentPrice').text(data.newPrice);
-        });
+		// var socket = io.connect("{{app.config['SERVER_DOMAIN']}}", {path: "{{app.config['REVERSE_PROXY_PATH']}}/socket.io"});
+		// socket.on('{{ product.id|string }}', function(data){
+  //         	$('#currentPrice').text(data.newPrice);
+  //       });
 
 	});
 
