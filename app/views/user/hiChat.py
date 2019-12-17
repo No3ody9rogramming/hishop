@@ -24,6 +24,7 @@ class HiChatView(MethodView):
 
 @socketio.on('chat message')
 def handle_message(senderID, receiverID, message):
+	print("AAAAAAAAAAAAAAAAAAAAAA")
     if senderID != str(current_user.id):
     	abort(403)
     if not User.objects(id=receiverID):
