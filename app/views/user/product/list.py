@@ -9,8 +9,7 @@ from app.models.order import Order
 from app.models.product import Product
 
 #移交中 領收中 已完成 已取消 全部
-#ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "1", "COMPLETE" : "2", "CANCEL" : "3", "ALL" : "4"}
-ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "3", "COMPLETE" : "2", "CANCEL" : "1", "ALL" : "4"}
+ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "1", "COMPLETE" : "2", "CANCEL" : "3", "ALL" : "4"}
 class PurchaseListView(MethodView):
     def get(self):
         form = PerchaseListForm()
