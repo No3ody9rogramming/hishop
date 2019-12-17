@@ -18,7 +18,7 @@
       var chatObjectID;
       var chatObjectName;
       $(function () {
-        var socket = io.connect("{{app.config['SERVER_DOMAIN']}}", {path: "{{app.config['REVERSE_PROXY_PATH']}}/socket.io"});    
+        var socket = io.connect("https://csesa.csie.ntou.edu.tw", {path: "{{app.config['REVERSE_PROXY_PATH']}}/socket.io"});    
 
         $('form').submit(function(e){
           e.preventDefault(); // prevents page reloading
