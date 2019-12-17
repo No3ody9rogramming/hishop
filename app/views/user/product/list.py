@@ -61,7 +61,7 @@ class PurchaseListView(MethodView):
         orders = sorted(orders, key=lambda k: k.create_time, reverse=False)
         if form.validate_on_submit() and 'score' in request.form:   #correct
             order = Order.objects(product_id=request.values['commentProductID']).first()  # correct
-            order.seller_comment = form.detail      # correct
+            order.buyer_comment = form.detail.data      # correct
             order.seller_rating = request.values['score']  # correct
             order.status = ORDER_STATUS['COMPLETE']
             order.save()
