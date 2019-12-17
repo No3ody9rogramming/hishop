@@ -22,7 +22,7 @@ bcrypt = Bcrypt(app)
 ckeditor = CKEditor(app)
 mail = Mail(app)
 ReverseProxyPrefixFix(app)
-socketio = SocketIO(app, async_mode=async_mode)
+socketio = SocketIO(app, async_mode=async_mode, engineio_logger=True, cors_allowed_origins= ["https://csesa.csie.ntou.edu.tw", "http://localhost:5000"])
 thread = None
 thread_lock = Lock()
 
