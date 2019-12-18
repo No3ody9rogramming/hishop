@@ -28,18 +28,20 @@
 			</div>
 			
 			<div class="row justify-content-center border border-dark rounded  bg-white">
-				<div class="row justify-content-end">
-					<div class="col-auto">
-						<a class="btn btn-primary {% if status == SORT_STATUS['PRICE'] %} active {% endif %}" href="{{ url_for('user.history', status=SORT_STATUS['PRICE']) }}">價格</a>
-					</div>
-					<div class="col-auto">
-						<a class="btn btn-primary {% if status == SORT_STATUS['HOT'] %} active {% endif %}" href="{{ url_for('user.history', status=SORT_STATUS['HOT']) }}">人氣</a>
-					</div>
-					<div class="col-auto">
-						<a class="btn btn-primary {% if status == SORT_STATUS['RATING'] %} active {% endif %}" href="{{ url_for('user.history', status=SORT_STATUS['RATING']) }}">評價</a>
-					</div>
-					<div class="col-auto">
-						<a class="btn btn-primary {% if status == SORT_STATUS['CREATE_TIME'] %} active {% endif %}" href="{{ url_for('user.history', status=SORT_STATUS['CREATE_TIME']) }}">起始時間</a>
+				<div class="col" style="margin: 5px ;">
+					<div class="row justify-content-end">
+						<div class="col-auto">
+							<a class="btn btn-primary {% if status == SORT_STATUS['PRICE'] %} active {% endif %}" href="{{ url_for('user.history', status=SORT_STATUS['PRICE']) }}">價格</a>
+						</div>
+						<div class="col-auto">
+							<a class="btn btn-primary {% if status == SORT_STATUS['HOT'] %} active {% endif %}" href="{{ url_for('user.history', status=SORT_STATUS['HOT']) }}">人氣</a>
+						</div>
+						<div class="col-auto">
+							<a class="btn btn-primary {% if status == SORT_STATUS['RATING'] %} active {% endif %}" href="{{ url_for('user.history', status=SORT_STATUS['RATING']) }}">評價</a>
+						</div>
+						<div class="col-auto">
+							<a class="btn btn-primary {% if status == SORT_STATUS['CREATE_TIME'] %} active {% endif %}" href="{{ url_for('user.history', status=SORT_STATUS['CREATE_TIME']) }}">起始時間</a>
+						</div>
 					</div>
 				</div>
 				<table class="table">
