@@ -32,6 +32,7 @@
 					<thead>
 						<tr>
 						<th scope="col">商品</th>
+						<td scope="col">狀態</td>
 						<th scope="col">名稱</th>
 						<th scope="col">賣家</th>
 						<th scope="col">售價</th>
@@ -43,19 +44,22 @@
 								<img class="productImg" src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}">
 							</th>
 							<td class="align-middle">
-									{% if  product.bid  == None %}
-										{% if product.status|string == PRODUCT_STATUS['SELLING'] %}
-											<a href="{{ url_for('show_normal', product_id=product.id|string) }}" target=_blank>{{product.name}}</a>
-										{% else %}
-											<p>{{product.name}}</p>
-										{% endif %}
-									{% else %}
-										{% if product.status|string == PRODUCT_STATUS['SELLING'] %}
-											<a href="{{ url_for('show_bidding', product_id=product.id|string) }}" target=_blank>{{product.name}}</a>
-										{% else %}
-											<p>{{product.name}}</p>
-										{% endif %}
-									{% endif %}
+								{% if  product.status|string  == PRODUCT_STATUS['SELLING'] %}
+									販賣中
+								{% elif  product.status|string  == PRODUCT_STATUS['SOLD'] %}
+									已賣出
+								{% elif  product.status|string  == PRODUCT_STATUS['FROZEN'] %}
+									凍結中
+								{% else %}
+									已下架
+								{% endif %}
+							</td>
+							<td class="align-middle">
+								{% if  product.bid  == None %}
+									<a href="{{ url_for('show_normal', product_id=product.id|string) }}" target=_blank>{{product.name}}</a>
+								{% else %}
+									<a href="{{ url_for('show_bidding', product_id=product.id|string) }}" target=_blank>{{product.name}}</a>
+								{% endif %}
 							</td>
 							<td class="align-middle">{{product.seller_id.name}}</td>
 							<td class="align-middle">{{product.price}}</td>	    
