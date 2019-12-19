@@ -61,7 +61,7 @@
 							current_user.id|string +'/' + current_user.icon)}}" alt="icon" style = "height:250px;width:100%;">
 							{% endif %}
 							<div class=" row">
-								<div class="col-auto form-group required" >
+								<div class="col-auto form-group" >
 									{% if form.icon.errors %}
 									{{ form.icon(class="form-control is-invalid") }}
 									{% for error in form.icon.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
@@ -93,7 +93,7 @@
 							</div>
 
 							<div class="row justify-content-center">
-								<div class="col-lg-10 form-group required">
+								<div class="col-lg-10 form-group">
 									<p>電話:</p>
 									{% if form.phone.errors %}
 										{{ form.phone(class="form-control is-invalid") }}
@@ -105,7 +105,7 @@
 							</div>
 
 							<div class="row justify-content-center">
-									<div class="col-lg-10 form-group required">
+									<div class="col-lg-10 form-group">
 										<p>生日:</p>
 										{% if form.birth.errors %}
 											{{ form.birth(class="form-control is-invalid" ) }}
@@ -125,7 +125,7 @@
 						<div class="col-10 border border-dark " style="margin: 0px 5px 5vh; background-color: #dcdcdc;">
 							<br>
 								<div class="row justify-content-center">
-										<div class="col-lg-10 form-group required">
+										<div class="col-lg-10 form-group">
 											<p>賣場名稱:</p>
 											{% if form.store_name.errors %}
 												{{ form.store_name(class="form-control is-invalid") }}

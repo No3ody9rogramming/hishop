@@ -13,6 +13,12 @@
 {% block styles %}
 	{{ super() }}
 	<style type = "text/css">
+		@import url(https://fonts.googleapis.com/earlyaccess/cwtexyen.css);
+
+		@font-face {
+			font-family: GenSenMaruGothicTW;
+			src: url(../../static/font/GenSenMaruGothicTW.ttf);
+		}
 
 		.background {
 			background-color: #ffc107;
@@ -23,6 +29,7 @@
             padding-top: 0px;
             background-color: #f4f4f4;
 			height: 100vh;
+			font-family: GenSenMaruGothicTW, 'cwTeXYen', sans-serif;
 		}
 
 		#header {
