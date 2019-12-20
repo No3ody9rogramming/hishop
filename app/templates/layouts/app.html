@@ -6,12 +6,13 @@
 
 {% block head %}
 	<link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static',filename='icon.png', _external=True) }}" />
-	{{ super() }}
-	<script src="https://kit.fontawesome.com/71a9eb620b.js" crossorigin="anonymous"></script>
+	{{ super() }}	
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC:500,700&display=swap&subset=chinese-traditional" rel="stylesheet">
 {% endblock head %}
 
 {% block styles %}
-	{{ super() }}
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.Cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 	<style type = "text/css">
 
 		.background {
@@ -23,6 +24,7 @@
             padding-top: 0px;
             background-color: #f4f4f4;
 			height: 100vh;
+			font-family: 'Noto Sans TC', sans-serif;
 		}
 
 		#header {
@@ -48,3 +50,9 @@
 	{% endblock footer%}
 	</div>
 {% endblock content %}
+
+{% block scripts %}
+	{{ super() }}
+	<script src="https://kit.fontawesome.com/71a9eb620b.js" crossorigin="anonymous"></script>
+{% endblock scripts %}
+
