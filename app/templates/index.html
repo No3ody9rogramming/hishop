@@ -20,7 +20,7 @@
 
                                         <div class="col-md-3 col-6">
                                             <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
-                                            <img class="card-img-top" src="{{url_for('static', filename = 'imageLoading.gif')}}" lsrc="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
+                                            <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
                                             </a>
                                             <div>
                                                 <a style="display: inline-block; width: 55%; overflow: hidden; text-overflow: ellipsis; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_normal', product_id=product.id|string) }}">{{product.name}}</a>
@@ -71,7 +71,7 @@
 
                                     <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
                                         <div class="col-md-3 col-6">
-                                            <img class="card-img-top" src="{{url_for('static', filename = 'imageLoading.gif')}}" lsrc="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
+                                            <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
                                             <div>
                                                 <a style="display: inline-block; width: 55%; overflow: hidden; text-overflow: ellipsis; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_normal', product_id=product.id|string) }}">{{product.name}}</a>
                                                 <a style="display: inline-block; width: 45%; float: right; text-align: center; text-decoration:none;" class="bg-secondary text-white" href="{{ url_for('show_normal', product_id=product.id|string) }}">${{product.price}}</a>
@@ -125,7 +125,7 @@
                                                 剩餘時間：
                                                 {{"%s days"|format(( product.bid.due_time - now).days)}}
                                             </div>
-                                            <img class="card-img-top" src="{{url_for('static', filename = 'imageLoading.gif')}}" lsrc="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
+                                            <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
                                             <div class="align-items-end">
                                                 <a style="display: inline-block; width: 55%; overflow: hidden; text-overflow: ellipsis; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_bidding', product_id=product.id|string) }}">{{product.name}}</a>
                                                 <a style="display: inline-block; width: 45%; float: right; text-align: center; text-decoration:none;" class="bg-secondary text-white" href="{{ url_for('show_bidding', product_id=product.id|string) }}">${{product.price}}</a>
@@ -177,20 +177,7 @@
             }
             }, true);
 
-        $(function(){            
-            $.each(document.images, function(){                
-                var this_image = this;
-                var src = $(this_image).attr('src') || '' ;
-                if(src.length > 0){
-                    var lsrc = $(this_image).attr('lsrc') || '' ;
-                    if(lsrc.length > 0){
-                        var img = new Image();
-                        img.src = lsrc;
-                        this_image.src = img.src;
-                    }
-                }
-            });
-        });
+        
 
     </script>
 {% endblock scripts %}
