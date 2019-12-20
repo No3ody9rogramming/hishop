@@ -6,7 +6,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired, FileAllowed
 from wtforms import StringField, SubmitField, PasswordField, FileField
 from wtforms.fields.html5 import EmailField, DateField
-from wtforms.validators import DataRequired, Email, InputRequired, Length, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Email, InputRequired, Length, EqualTo, ValidationError, Optional
 
 from app.models.user import User
 
@@ -21,8 +21,9 @@ class ProfileView(MethodView):
     
     def post(self):
         form = ProfileForm()
-
+        print(form.icon.data.filename)
         if form.validate_on_submit():
+            print("valid")
             current_user.name = form.name.data
             current_user.phone = form.phone.data
             current_user.birth = form.birth.data
@@ -31,21 +32,23 @@ class ProfileView(MethodView):
             current_user.prefer_begin_time = form.prefer_begin_time.data
             current_user.prefer_end_time = form.prefer_end_time.data
             
-        
-            icon_path = os.path.join(os.getcwd(), 'app/static/icon', str(current_user.id))
-            print(current_user.icon)
-            if(current_user.icon == "default.png"):
-                os.makedirs(icon_path)
-            else:
-                try:
-                    os.remove(os.path.join(icon_path, current_user.icon))   #刪掉原本的檔案
-                    print("File is deleted successfully")
-                    
-                except:
-                    print(e)
-            current_user.icon = "icon." + form.icon.data.filename.split('.')[-1].lower()  #有上傳成功的話會是icon.xxx，否則為default.png
+            if(form.icon.data.filename!=''):
+                icon_path = os.path.join(os.getcwd(), 'app/static/icon', str(current_user.id))
+                print(current_user.icon)
+                if(current_user.icon == "default.png"):
+                    os.makedirs(icon_path)
+                else:
+                    try:
+                        os.remove(os.path.join(icon_path, current_user.icon))   #刪掉原本的檔案
+                        print("File is deleted successfully")
+                        
+                    except:
+                        print(e)
+                current_user.icon = "icon." + form.icon.data.filename.split('.')[-1].lower()  #有上傳成功的話會是icon.xxx，否則為default.png
+                form.icon.data.save(os.path.join(icon_path, current_user.icon)) #儲存上傳的檔案
+            
             current_user.save()
-            form.icon.data.save(os.path.join(icon_path, current_user.icon)) #儲存上傳的檔案
+            
 
             
 
@@ -54,7 +57,7 @@ class ProfileView(MethodView):
 class ProfileForm(FlaskForm):
     name = StringField("姓名", validators=[InputRequired(), Length(min=2, max=20)])
     store_name = StringField("賣場名稱", validators=[InputRequired(), Length(min=2, max=20)])
-    icon = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpeg', 'jpg', 'png', 'gif'], '只能上傳圖片')])
+    icon = FileField("商品照片", validators=[Optional(), FileAllowed(['jpeg', 'jpg', 'png', 'gif'], '只能上傳圖片')])
     phone = StringField("電話號碼", validators=[InputRequired(), Length(max=15)])
     birth = DateField("生日", validators=[InputRequired()])
     address = StringField("地址", validators=[InputRequired(), Length(max=50)])

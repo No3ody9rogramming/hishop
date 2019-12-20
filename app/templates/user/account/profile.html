@@ -61,13 +61,8 @@
 							current_user.id|string +'/' + current_user.icon)}}" alt="icon" style = "height:250px;width:100%;">
 							{% endif %}
 							<div class=" row">
-								<div class="col-auto form-group required" >
-									{% if form.icon.errors %}
-									{{ form.icon(class="form-control is-invalid") }}
-									{% for error in form.icon.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-								{% else %}
+								<div class="col-auto form-group" >
 									{{ form.icon(class="form-control") }}
-								{% endif %}
 								</div>
 							</div>
 						</div>
