@@ -57,7 +57,16 @@
 {% endblock content %}
 
 {% block scripts %}
+	<!---------->
 	{{ super() }}
 	<script src="https://kit.fontawesome.com/71a9eb620b.js" crossorigin="anonymous"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+	<script>
+		var socket;
+		if ("{{ request.host_url }}" == "http://localhost:5000/")
+			socket = io.connect(); //for local test
+		else
+	      	socket = io.connect({path: "{{config['REVERSE_PROXY_PATH']}}/socket.io"}); // for server deployment
+	</script>
 {% endblock scripts %}
 

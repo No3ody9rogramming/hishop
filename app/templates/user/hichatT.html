@@ -1,25 +1,28 @@
-<!doctype html>
-<html>
-  <head>
-    <title>hichat</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-    </style>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+{% extends "layouts/app.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page %}
+    <div>
+      chat with:
+      <ul id="users">
+        {% for user in users %}
+          <li><a id="{{user.id}}" href="#" onclick="changeObject(this)">{{user.name}}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <ul id="messages"></ul>
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+{% endblock page %}
+
+{% block scripts %}
+  {{ super() }}
     <script>
       var chatObjectID;
       var chatObjectName;
-      $(function () {
-        //var socket = io.connect("{{ config['CORS_ALLOWED_ORIGINS'][0] }}", {path: "{{config['REVERSE_PROXY_PATH']}}/socket.io"}); //for server deployment
-        var socket = io.connect({path: "{{config['REVERSE_PROXY_PATH']}}/socket.io"}); // for local test
+
+      $(function () {        
 
         $('form').submit(function(e){
           e.preventDefault(); // prevents page reloading
@@ -59,19 +62,4 @@
 
       }
     </script>
-  </head>
-  <body>
-    <div>
-      chat with:
-      <ul id="users">
-        {% for user in users %}
-          <li><a id="{{user.id}}" href="#" onclick="changeObject(this)">{{user.name}}</a></li>
-        {% endfor %}
-      </ul>
-    </div>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
-  </body>
-</html>
+{% endblock scripts %}

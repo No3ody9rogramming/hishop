@@ -19,3 +19,8 @@ def handle_message(senderID, receiverID, message): #函式名自訂
         emit(senderID, data, broadcast=True)
     message = Message(sender_id=senderID, receiver_id=receiverID, message=message)
     message.save()
+
+
+def updatePriceViaSocketIO(product_id, newPrice):
+    print(str(product_id))
+    socketio.emit(str(product_id), {'newPrice': newPrice}, broadcast=True)

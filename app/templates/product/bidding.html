@@ -39,8 +39,6 @@
 	{{ super() }}
 	<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-	<!--<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>-->
-
 	<script>
 		var url = "{{ url_for('product_like', product_id="") }}";
 
@@ -58,8 +56,6 @@
 					$form.submit();
 				})
 			});
-
-			var socket = io.connect("{{app.config['SERVER_DOMAIN']}}", {path: "{{app.config['REVERSE_PROXY_PATH']}}/socket.io"});
 			socket.on('{{ product.id|string }}', function(data){
 	          	$('#currentPrice').text(data.newPrice);
 	        });
