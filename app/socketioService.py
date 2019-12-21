@@ -1,24 +1,29 @@
 from flask_socketio import emit ##for test socketio
 from app.models.user import User
 from app.models.message import Message
+from flask_login import current_user
 
 from mongoengine.queryset.visitor import Q
 
 from app import app, socketio
 
-@socketio.on('chat message')
-def handle_message(senderID, receiverID, message): #函式名自訂
+@socketio.on('send message')
+def handle_message(senderID, receiverID, message): #函式名自訂    
+    if(senderID != str(current_user.id)):
+        abort(403)
     sender = User.objects.get(id=senderID)
+    messageDocument = Message(sender_id=sender, receiver_id=receiverID, message=message)
+    messageDocument.save()
+    print("AAAAAAAAAAAAAAAAAAAAA", senderID + 'To' + receiverID)
     data = {
-        "senderID" : str(sender.id),
+        "senderID" : senderID,
         "senderName": sender.name,
-        "message" : message
+        "message" : message,
+        "messageID" : str(messageDocument.id)
     }
-    emit(receiverID, data, broadcast=True)
+    emit(senderID + 'To' + receiverID, data, broadcast=True)
     if receiverID != senderID:
-        emit(senderID, data, broadcast=True)
-    message = Message(sender_id=senderID, receiver_id=receiverID, message=message)
-    message.save()
+        emit(receiverID + 'To' + senderID, data, broadcast=True)
 
 
 def updatePriceViaSocketIO(product_id, newPrice):

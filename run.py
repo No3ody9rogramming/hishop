@@ -32,7 +32,8 @@ from app.views.user.question.list import QuestionListView
 from app.views.admin.question.response import ResponseView
 from app.views.admin.question.list import ResponseListView
 
-from app.views.user.hiChat import HiChatView
+from app.views.user.hiChat.view import HiChatView
+from app.views.user.hiChat.update import HiChatUpdate
 
 from flask_mail import Message
 
@@ -77,6 +78,7 @@ user.add_url_rule(rule='/selling/order', endpoint='order_list', view_func=login_
 user.add_url_rule(rule='/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
 user.add_url_rule(rule='/question/list', endpoint='question_list', view_func=login_required(QuestionListView.as_view('question_list_view')), methods=['GET'])
 user.add_url_rule(rule='/hichat', endpoint='hichat', view_func=login_required(HiChatView.as_view('hichat_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/hichat_update', endpoint='hichat_update', view_func=login_required(HiChatUpdate.as_view('hichat_update')), methods=['POST'])
 app.register_blueprint(user, url_prefix='/user')
 
 if __name__ == '__main__':

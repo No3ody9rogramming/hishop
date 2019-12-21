@@ -2,7 +2,9 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% block page %}
-    <div>
+  <div class="row">
+
+    <div class="col-6" >
       chat with:
       <ul id="users">
         {% for user in users %}
@@ -10,10 +12,15 @@
         {% endfor %}
       </ul>
     </div>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+
+    <div class="col-6 overflow-auto" style="height: 781px;">
+      <ul id="messages"></ul>
+      <form action="">
+        <input id="message" autocomplete="off" /><button>Send</button>
+      </form>
+    </div>
+
+  </div>
 {% endblock page %}
 
 {% block scripts %}
@@ -22,25 +29,53 @@
       var chatObjectID;
       var chatObjectName;
 
-      $(function () {        
+      $(function () {
 
         $('form').submit(function(e){
           e.preventDefault(); // prevents page reloading
-          socket.emit('chat message', "{{ currentUser.id|string }}", chatObjectID, $('#m').val());
-          $('#m').val('');
+          socket.emit('send message', "{{ currentUser.id|string }}", chatObjectID, $('#message').val());
+          $('#message').val('');
           return false;
         });
 
-        socket.on('{{ currentUser.id|string }}', function(data){
-          $('#messages').append($('<li>').text(data.senderName + ": " + data.message));
-        });
 
       });
 
+      // $( "#message" ).focus(function() {
+
+      //   socket.on('{{ currentUser.id|string }}', function(data){
+      //     $('#messages').append($('<li>').text(data.senderName + ": " + data.message));
+      //     $.ajax({
+      //       type:"POST",
+      //       url: "{{ url_for('user.hichat_update') }}",
+      //       data: { senderID : chatObjectID, receiverID : "{{ currentUser.id|string }}", message : data.messageID},
+      //       success: function(data) {
+      //         messageInfos = JSON.parse(data)
+      //         for (messageInfo in messageInfos) {
+      //           var senderName;
+      //           if (messageInfos[messageInfo].sender_id.$oid == "{{ currentUser.id|string }}")
+      //             senderName = "{{ currentUser.name}}";
+      //           else
+      //             senderName = chatObjectName
+      //           $('#messages').append($('<li>').text(senderName + ": " + messageInfos[messageInfo].message));
+      //         }            
+      //       }
+      //     });
+      //   });
+
+      // });
+
+
       function changeObject(obj) {
+        socket.off(chatObjectID + 'To{{ currentUser.id|string }}'); //unsubscribe last event
         var thisObj = $(obj);
         chatObjectID = thisObj.attr('id');
         chatObjectName = thisObj.text();
+
+        socket.on(chatObjectID + 'To{{ currentUser.id|string }}', function(data){
+          $('#messages').append($('<li>').text(data.senderName + ": " + data.message));
+        });
+
         $('#messages').text("");
 
         $.ajax({
@@ -63,3 +98,6 @@
       }
     </script>
 {% endblock scripts %}
+
+{% block footer %}
+{% endblock footer %}
