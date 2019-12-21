@@ -18,7 +18,8 @@
       var chatObjectID;
       var chatObjectName;
       $(function () {
-        var socket = io.connect("https://{{ config['SERVER_DOMAIN'] }}", {path: "{{config['REVERSE_PROXY_PATH']}}/socket.io"});    
+        //var socket = io.connect("{{ config['CORS_ALLOWED_ORIGINS'][0] }}", {path: "{{config['REVERSE_PROXY_PATH']}}/socket.io"}); //for server deployment
+        var socket = io.connect({path: "{{config['REVERSE_PROXY_PATH']}}/socket.io"}); // for local test
 
         $('form').submit(function(e){
           e.preventDefault(); // prevents page reloading
