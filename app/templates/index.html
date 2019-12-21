@@ -178,7 +178,8 @@
             }, true);
 
         $(function(){            
-            $.each(document.images, function(){                
+            $.each($(".card-img-top"), function(){
+                console.log(this);
                 var this_image = this;
                 var src = $(this_image).attr('src') || '' ;
                 if(src.length > 0){
