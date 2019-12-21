@@ -117,38 +117,7 @@
             </div>
         </div>
 
-        <div class="row justify-content-center">
-            <div class="col-md-5 form-group required">
-                {% if form.address.errors %}
-                    {{ form.address(class="form-control is-invalid", placeholder="請輸入偏好交易地址") }}
-                    {% for error in form.address.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-                {% else %}
-                    {{ form.address(class="form-control", placeholder="請輸入偏好交易地址") }}
-                {% endif %}
-            </div>
-        </div>
-
-        <div class="row justify-content-center">
-            <div class="col-md-5 form-group required">
-                {% if form.prefer_begin_time.errors %}
-                    {{ form.prefer_begin_time(class="form-control is-invalid", placeholder="請輸入偏好交易時段(開始)") }}
-                    {% for error in form.prefer_begin_time.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-                {% else %}
-                    {{ form.prefer_begin_time(class="form-control", placeholder="請輸入偏好交易時段(開始)") }}
-                {% endif %}
-            </div>
-        </div>
-
-        <div class="row justify-content-center">
-            <div class="col-md-5 form-group required">
-                {% if form.prefer_end_time.errors %}
-                    {{ form.prefer_end_time(class="form-control is-invalid", placeholder="請輸入偏好交易時段(結束)") }}
-                    {% for error in form.prefer_end_time.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-                {% else %}
-                    {{ form.prefer_end_time(class="form-control", placeholder="請輸入偏好交易時段(結束)") }}
-                {% endif %}
-            </div>
-        </div>
+        
 
         <div class="row justify-content-center">
             <div class="col-md-5 form-group required">

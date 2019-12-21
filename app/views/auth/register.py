@@ -31,9 +31,9 @@ class RegisterView(MethodView):
                         email=form.email.data,
                         phone=form.phone.data,
                         birth=form.birth.data,
-                        address=form.address.data,
-                        prefer_begin_time=form.prefer_begin_time.data,
-                        prefer_end_time=form.prefer_end_time.data)      
+                        address='',
+                        prefer_begin_time='',
+                        prefer_end_time='')      
             user.save()
 
             information = Information(user_id = user.id)
@@ -67,7 +67,4 @@ class RegisterForm(FlaskForm):
     email = EmailField("海大信箱", validators=[InputRequired(), validate_email])
     phone = StringField("電話", validators=[InputRequired(), Length(max=15)])
     birth = DateField('生日', validators=[InputRequired()])
-    address = StringField("偏好交易地址", validators=[InputRequired(), Length(max=50)])
-    prefer_begin_time = StringField("偏好交易時段(開始)", validators=[InputRequired(), Length(max=10)])
-    prefer_end_time = StringField("偏好交易時段(結束)", validators=[InputRequired(), Length(max=10)])
     submit = SubmitField('註冊')
