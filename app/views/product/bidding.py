@@ -14,6 +14,8 @@ from app.models.information import Information, History
 from app.models.order import Order
 from app import socketio, app
 
+PRODUCT_STATUS = {"SELLING" : "0", "SOLD" : "1", "FROZEN" : "2", "REMOVE" : "3", "ALL" : "4"}
+
 class ShowBiddingView(MethodView):
     def get(self, product_id):
         form = BiddingForm()
@@ -21,6 +23,8 @@ class ShowBiddingView(MethodView):
         like = "far fa-heart"
         
         if product == None:
+            abort(404)
+        if product.status != PRODUCT_STATUS["SELLING"]:
             abort(404)
         if current_user.is_active:
             #update history

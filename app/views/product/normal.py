@@ -12,6 +12,8 @@ import datetime
 from app.models.product import Product
 from app.models.information import Information, History
 
+PRODUCT_STATUS = {"SELLING" : "0", "SOLD" : "1", "FROZEN" : "2", "REMOVE" : "3", "ALL" : "4"}
+
 class ShowNormalView(MethodView):
     def get(self, product_id):
         form = NormalForm()
@@ -20,6 +22,8 @@ class ShowNormalView(MethodView):
         cart = "加入購物車"
         
         if product == None:
+            abort(404)
+        if product.status != PRODUCT_STATUS["SELLING"]:
             abort(404)
         if current_user.is_active:
             #update history
