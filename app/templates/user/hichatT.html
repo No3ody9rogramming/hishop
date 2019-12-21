@@ -7,7 +7,13 @@
     <div class="col-6" >
       chat with:
       <ul id="users">
-        {% for user in users %}
+        {% for u in users %}
+          <li><a id="{{u[0]}}" href="#" onclick="changeObject(this)">{{u[1].receiver_id.name}}</a></li>
+        {% endfor %}
+      </ul>
+      <hr>
+      <ul id="users">
+        {% for user in Tusers %}
           <li><a id="{{user.id}}" href="#" onclick="changeObject(this)">{{user.name}}</a></li>
         {% endfor %}
       </ul>

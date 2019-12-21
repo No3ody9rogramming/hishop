@@ -1,3 +1,5 @@
+import datetime
+
 from flask_socketio import emit ##for test socketio
 from app.models.user import User
 from app.models.message import Message
@@ -12,9 +14,8 @@ def handle_message(senderID, receiverID, message): #函式名自訂
     if(senderID != str(current_user.id)):
         abort(403)
     sender = User.objects.get(id=senderID)
-    messageDocument = Message(sender_id=sender, receiver_id=receiverID, message=message)
+    messageDocument = Message(sender_id=sender, receiver_id=receiverID, message=message, create_time=datetime.datetime.utcnow())
     messageDocument.save()
-    print("AAAAAAAAAAAAAAAAAAAAA", senderID + 'To' + receiverID)
     data = {
         "senderID" : senderID,
         "senderName": sender.name,
