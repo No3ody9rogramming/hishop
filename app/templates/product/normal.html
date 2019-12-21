@@ -107,12 +107,13 @@
 			<p>已有 {{ product.view}} 人觀看此商品</p>
 			<h5 id="productprice">$ {{ product.price}} </h5>
 			<br>
-			<form id="form" role="form" style="margin-top: 10px;">  
+			<form id="form" role="form" style="margin-top: 10px;"> 
 				{{ form.csrf_token }}
-						
-						
+				{% if product.status|string == PRODUCT_STATUS['SELLING']%}
 				<button id="cart" name="cart" type="submit" class="btn btn-sencondary" style="position:absolute; bottom:0; right:50px;">{{ cart }}</button>
-
+				{% else %}
+				<p style="position:absolute; bottom:0; right:50px;">已售出</p>
+				{% endif %}
 				<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red; position:absolute; bottom:0; right:0;" ><i class="{{ like }}"></i></a>
 			</form>
 		</div>

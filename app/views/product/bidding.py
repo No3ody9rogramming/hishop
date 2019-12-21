@@ -24,8 +24,6 @@ class ShowBiddingView(MethodView):
         
         if product == None:
             abort(404)
-        if product.status != PRODUCT_STATUS["SELLING"]:
-            abort(404)
         if current_user.is_active:
             #update history
             information = Information.objects(user_id=current_user.id).first()
@@ -42,7 +40,7 @@ class ShowBiddingView(MethodView):
 
             product.view += 1
             product.save()
-        return render_template('product/bidding.html', form=form, product=product, like=like, now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
+        return render_template('product/bidding.html', form=form, product=product, PRODUCT_STATUS=PRODUCT_STATUS, like=like, now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
 
     @login_required
     def post(self, product_id):

@@ -23,8 +23,6 @@ class ShowNormalView(MethodView):
         
         if product == None:
             abort(404)
-        if product.status != PRODUCT_STATUS["SELLING"]:
-            abort(404)
         if current_user.is_active:
             #update history
             information = Information.objects(user_id=current_user.id).first()
@@ -44,7 +42,7 @@ class ShowNormalView(MethodView):
 
             product.view += 1
             product.save()
-        return render_template('product/normal.html', form=form, product=product, like=like, cart=cart, product_json=product.to_json())
+        return render_template('product/normal.html', form=form, product=product, PRODUCT_STATUS=PRODUCT_STATUS, like=like, cart=cart, product_json=product.to_json())
 
 
     
