@@ -12,7 +12,7 @@ from app.models.user import User
 from app.models.product import Product
 from app.models.information import Information, History
 from app.models.order import Order
-from app import socketio, app
+from app.socketioService import updatePriceViaSocketIO
 
 PRODUCT_STATUS = {"SELLING" : "0", "SOLD" : "1", "FROZEN" : "2", "REMOVE" : "3", "ALL" : "4"}
 
@@ -42,7 +42,7 @@ class ShowBiddingView(MethodView):
 
             product.view += 1
             product.save()
-        return render_template('product/bidding.html', form=form, product=product, like=like, now=datetime.datetime.utcnow() + datetime.timedelta(hours=8), app=app)
+        return render_template('product/bidding.html', form=form, product=product, like=like, now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
 
     @login_required
     def post(self, product_id):
@@ -86,7 +86,7 @@ class ShowBiddingView(MethodView):
         if product in information.like:
             like = "fas fa-heart"
 
-        return render_template('product/bidding.html', form=form, product=product, like=like, app=app)
+        return render_template('product/bidding.html', form=form, product=product, like=like)
 
 def validate_price(form, price):
     try:
@@ -104,7 +104,3 @@ class BiddingForm(FlaskForm):
     like = SubmitField('喜歡')
     price = IntegerField("起標價", validators=[InputRequired(), validate_price])
     submit = SubmitField('出價')
-
-def updatePriceViaSocketIO(product_id, newPrice):
-    print(str(product_id))
-    socketio.emit(str(product_id), {'newPrice': newPrice}, broadcast=True)
