@@ -32,8 +32,8 @@
             </div>
     </div>
 <!--  for testing    -->
-<!--
-    {% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% with messages = get_flashed_messages(category_filter=["success"]) %}
         {% if messages %}
             {% for category, message in messages %}
                 <div class="row justify-content-center">
@@ -46,7 +46,7 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
-    -->
+    
     <form action="{{ url_for('forgot') }}" method="POST">
         {{ form.csrf_token }}
         <div class="row justify-content-center form-group">
