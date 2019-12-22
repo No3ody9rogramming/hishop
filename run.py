@@ -35,9 +35,13 @@ from app.views.admin.question.list import ResponseListView
 from app.views.user.hiChat.view import HiChatView
 from app.views.user.hiChat.update import HiChatUpdate
 
+from app.socketioService import socketServiceOn
+
 from flask_mail import Message
 
 from flask import render_template, Blueprint
+
+socketServiceOn()
 
 admin = Blueprint('admin', __name__)
 admin.add_url_rule(rule='/question/list', endpoint='response_list', view_func=login_required(ResponseListView.as_view('response_list_view')), methods=['GET'])

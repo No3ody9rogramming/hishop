@@ -19,8 +19,10 @@
       </ul>
     </div>
 
-    <div class="col-6 overflow-auto" style="height: 781px;">
-      <ul id="messages"></ul>
+    <div class="col-6">
+      <div id="messageWindow" class="overflow-auto" style="height: 781px;">
+        <ul id="messages" class="list-group"></ul>
+      </div>
       <form action="">
         <input id="message" autocomplete="off" /><button>Send</button>
       </form>
@@ -38,8 +40,10 @@
       $(function () {
 
         $('form').submit(function(e){
-          e.preventDefault(); // prevents page reloading
-          socket.emit('send message', "{{ currentUser.id|string }}", chatObjectID, $('#message').val());
+          e.preventDefault(); // prevents page reloading\
+          let input = $('#message').val();
+          if(input.trim())
+            socket.emit('client send message', "{{ currentUser.id|string }}", chatObjectID, $('#message').val());
           $('#message').val('');
           return false;
         });
@@ -79,7 +83,7 @@
         chatObjectName = thisObj.text();
 
         socket.on(chatObjectID + 'To{{ currentUser.id|string }}', function(data){
-          $('#messages').append($('<li>').text(data.senderName + ": " + data.message));
+          appendMessage(data.senderID, data.message);
         });
 
         $('#messages').text("");
@@ -89,19 +93,28 @@
           url: "{{ url_for('user.hichat') }}",
           data: { senderID : "{{ currentUser.id|string }}", receiverID : chatObjectID},
           success: function(data) {
-            messageInfos = JSON.parse(data)
+            messageInfos = JSON.parse(data);
             for (messageInfo in messageInfos) {
-              var senderName;
-              if (messageInfos[messageInfo].sender_id.$oid == "{{ currentUser.id|string }}")
-                senderName = "{{ currentUser.name}}";
-              else
-                senderName = chatObjectName
-              $('#messages').append($('<li>').text(senderName + ": " + messageInfos[messageInfo].message));
-            }            
+              appendMessage(messageInfos[messageInfo].sender_id.$oid, messageInfos[messageInfo].message);
+            }
           }
         });
 
       }
+
+      function appendMessage(senderID, message) {
+        var senderName = "";
+        if(senderID == "{{ currentUser.id }}") {
+          senderName = "{{ currentUser.name}}";
+          $('#messages').append($('<li class="list-group-item text-right">').text(message));          
+        }
+        else {
+          senderName = chatObjectName;
+          $('#messages').append($('<li class="list-group-item">').text(senderName + ": " + message));
+        }
+        $("#messageWindow").scrollTop($("#messages").height());
+      }
+
     </script>
 {% endblock scripts %}
 
