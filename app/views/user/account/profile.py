@@ -48,7 +48,7 @@ class ProfileView(MethodView):
                 form.icon.data.save(os.path.join(icon_path, current_user.icon)) #儲存上傳的檔案
             
             current_user.save()
-            
+            flash('修改成功')
 
             
 
