@@ -12,6 +12,56 @@
 	</style>
 {% endblock styles %}
 
+{% block scripts %}
+	{{super()}}
+	<script>
+	
+
+	function select(target)
+	{
+		var pageItems = document.getElementsByName("pageItem")
+		var tableItem
+		var tableItems = document.getElementsByName("tableItem")
+		//disable all page
+		for(var i=0; i<pageItems.length; i++) 
+		{
+
+			pageItems[i].className = "page-item"
+		}
+		
+		//select this page
+		target.parentNode.className = "page-item active"
+		
+		//hidden all table
+		for(var k=0; k<tableItems.length; k++) 
+		{
+
+			tableItems[k].className = tableItems[k].className + " d-none"
+		}
+		
+		//show this table
+		for(var k=0; k<tableItems.length; k++) 
+		{
+
+			if(tableItems[k].id > (target.innerText-1)*10 && tableItems[k].id <= target.innerText*10)
+				while(tableItems[k].className.match("d-none"))
+					tableItems[k].className = tableItems[k].className.replace("d-none"," ")
+		}
+
+
+		/*for(var j=(target.innerText-1)*10+1; j<target.innerText*10; j++) 
+		{
+			tableItem = document.getElementById(j)
+			if(typeof tableItem == 'undefined')
+				break
+			console.log(tableItem)
+			tableItem.className = tableItem.className.replace("d-none"," ")
+		}*/
+	}
+
+	</script>
+{% endblock scripts %}
+
 {% block page %}	
 	<div class="row">
 		<div class="col-auto">
@@ -44,19 +94,48 @@
 						</div>
 					</div>
 				</div>
-				<table class="table">
+				<table class="table" id="his_table">
 					<thead>
 						<th scope="col">商品</th>
 						<th scope="col">狀態</th>
 						<th scope="col">名稱</th>
 						<th scope="col">售價</th>
 					</thead>
+					<tfoot>
+						<th scope="col" colspan="4">
+							<div class="row justify-content-center align-items-center ">
+								<nav aria-label="Page navigation example" >
+									<ul class="pagination pagination-circle pg-blue">
+									<li class="page-item disabled"><a class="page-link">First</a></li>
+									<li class="page-item disabled">
+										<a class="page-link" aria-label="Previous">
+										<span aria-hidden="true">&laquo;</span>
+										<span class="sr-only">Previous</span>
+										</a>
+									</li>
+									<li class="page-item active" name="pageItem"><a class="page-link" onclick="select(this)">1</a></li>
+									{% for i in range((products|length/10)|int) %} 
+									<li class="page-item" name="pageItem"><a class="page-link" onclick="select(this)">{{ i+2 }}</a></li>
+									
+									{% endfor %}
+									<li class="page-item">
+										<a class="page-link" aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
+										<span class="sr-only">Next</span>
+										</a>
+									</li>
+									<li class="page-item"><a class="page-link">Last</a></li>
+									</ul>
+								</nav>
+							</div>
+						</th>
+					</tfoot>
 					{% for product in products %}
 					<tbody>
-						<th scope="row" class="align-middle">
+						<td scope="row" class="align-middle " id="{{ products.index(product)+1 }}" name="tableItem">
 							<img class="productImg" src="{{url_for('static', filename = 'image/'+product.product.id|string +'/' + product.product.image)}}"> 
-						</th>
-						<td class="align-middle">
+						</td>
+						<td class="align-middle" id="{{ products.index(product)+1 }}" name="tableItem">
 							{% if  product.product.status|string  == PRODUCT_STATUS['SELLING'] %}
 								販賣中
 							{% elif  product.product.status|string  == PRODUCT_STATUS['SOLD'] %}
@@ -67,14 +146,14 @@
 								已下架
 							{% endif %}
 						</td>
-						<td class="align-middle">
+						<td class="align-middle" id="{{ products.index(product)+1 }}" name="tableItem">
 							{% if  product.product.bid  == None %}
 								<a href="{{ url_for('show_normal', product_id=product.product.id|string) }}" target=_blank>{{product.product.name}}</a>
 							{% else %}
 								<a href="{{ url_for('show_bidding', product_id=product.product.id|string) }}" target=_blank>{{product.product.name}}</a>
 							{% endif %}
 						</td>
-					    <td class="align-middle">{{ product.product.price }}</td>
+					    <td class="align-middle" id="{{ products.index(product)+1 }}" name="tableItem">{{ product.product.price }}</td>
 					</tbody>
 					{% endfor %}
 				</table>
