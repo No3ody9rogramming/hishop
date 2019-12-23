@@ -1,3 +1,5 @@
+import datetime
+
 from flask import redirect, render_template, url_for, flash, request, abort
 from flask.views import MethodView
 from flask_login import current_user
@@ -9,19 +11,71 @@ from mongoengine.queryset.visitor import Q
 
 class HiChatView(MethodView):
     def get(self):
-        messagesList = []
-        messagesOwners = Message.objects(sender_id=current_user.id).order_by("+create_time")
-        for m in messagesOwners:
-            messagesList.append(m)
-        messagesOwners = Message.objects(receiver_id=current_user.id).order_by("+create_time")
-        for m in messagesOwners:
-            m.receiver_id = m.sender_id
-            messagesList.append(m)
-        messagesList = sorted(messagesList, key = lambda i: i.create_time)
-        users = {}
-        for m in messagesList:
-        	users[str(m.receiver_id.id)] = m #user dictionary to prevent duplicate
-        users = sorted(users.items(), key = lambda i: i[1].create_time, reverse=True)
+        messagesOwners = Message.objects(Q(sender_id=current_user.id) | Q(receiver_id=current_user.id)).aggregate(
+            {
+                '$lookup': {
+                    'from': 'user',
+                    'localField': 'sender_id' ,
+                    'foreignField': '_id',
+                    'as': 'userS'
+                }
+            },
+            {
+                '$lookup': {
+                    'from': 'user',
+                    'localField': 'receiver_id' ,
+                    'foreignField': '_id',
+                    'as': 'userR'
+                }
+            },
+            {
+                '$addFields': {
+                    'current_user': current_user.id
+                }
+            },
+            {
+                '$lookup': {
+                    'from': 'user',
+                    'localField': 'current_user' ,
+                    'foreignField': '_id',
+                    'as': 'userC'
+                }
+            },
+            {
+                '$addFields': {
+                    'userSR': {
+                        '$let': {
+                            'vars': {
+                                'userSS': '$userS',
+                                'userRR': '$userR'
+                            },
+                            'in': { '$setUnion': [ '$$userSS', '$$userRR' ] }
+                        }
+                    }
+                }
+            },
+            {
+                '$group': {
+                    '_id': {
+                        '$setDifference': [ '$userSR', '$userC']
+                    },
+                    'create_time': {
+                        '$max': '$create_time'
+                    }
+                }
+            })
+
+        users = list(messagesOwners)
+        for u in users:
+            if(len(u['_id']) == 0):
+                dummyCurrentUserDict = {
+                    '_id': current_user.id,
+                    'name': current_user.name
+                }
+                u['_id'].append(dummyCurrentUserDict)
+
+        users = sorted(users, key = lambda i: i['create_time'], reverse=True)
+
         return render_template('user/hichatT.html', Tusers=User.objects, users=users, currentUser=current_user)
 
     def post(self):

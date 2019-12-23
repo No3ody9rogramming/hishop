@@ -8,7 +8,7 @@
       chat with:
       <ul id="users">
         {% for u in users %}
-          <li><a id="{{u[0]}}" href="#" onclick="changeObject(this)">{{u[1].receiver_id.name}}</a></li>
+          <li><a id="{{u['_id'][0]['_id']}}" href="#" onclick="changeObject(this)">{{u['_id'][0]['name']}}</a></li>
         {% endfor %}
       </ul>
       <hr>
