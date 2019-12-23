@@ -32,7 +32,7 @@ class ForgotPasswordView(MethodView):
 
             send_mail("重設密碼", [user.email], url_for('reset', reset_token=user.reset_token, email=user.email, _external=True))
 
-            flash('重設密碼連結已發送', 'success')
+            flash('重設密碼連結已發送', category='success')
 
         return render_template('auth/forgot.html', form=form)
     
