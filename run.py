@@ -13,6 +13,7 @@ from app.views.auth.logout import LogoutView
 from app.views.auth.register import RegisterView
 from app.views.auth.forgot import ForgotPasswordView
 from app.views.auth.reset import ResetPasswordView
+from app.views.auth.verification import VerificationView
 
 from app.views.user.account.profile import ProfileView
 from app.views.user.account.password import PasswordView
@@ -61,6 +62,7 @@ app.add_url_rule(rule='/cart/opration', endpoint='cartOperation', view_func=logi
 app.add_url_rule(rule='/registration', endpoint='registration', view_func=RegisterView.as_view('register_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/login', endpoint='login', view_func=LoginView.as_view('login_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/logout', endpoint='logout', view_func=login_required(LogoutView.as_view('logout_view')), methods=['GET', 'POST'])
+app.add_url_rule(rule='/verification/<string:user_id>', endpoint='verification', view_func=VerificationView.as_view('verification_view'), methods=['GET'])
 app.add_url_rule(rule='/password/reset', endpoint='forgot', view_func=ForgotPasswordView.as_view('forgot_password_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/password/reset/<string:reset_token>', endpoint='reset', view_func=ResetPasswordView.as_view('reset_password_view'), methods=['GET', 'POST'])
 

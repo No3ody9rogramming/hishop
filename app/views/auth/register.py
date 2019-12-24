@@ -7,7 +7,7 @@ from wtforms import StringField, SubmitField, PasswordField
 from wtforms.fields.html5 import EmailField, DateField
 from wtforms.validators import DataRequired, Email, InputRequired, Length, EqualTo, ValidationError
 
-from app import bcrypt
+from app import bcrypt, send_mail
 from app.models.user import User
 from app.models.information import Information
 
@@ -33,13 +33,16 @@ class RegisterView(MethodView):
                         birth=form.birth.data,
                         address='',
                         prefer_begin_time='',
-                        prefer_end_time='')      
+                        prefer_end_time='')
+            
             user.save()
 
             information = Information(user_id = user.id)
             information.save()
-            login_user(user)
-            return redirect(url_for('user.profile'))
+
+            send_mail("HiShop帳號認證", [form.email.data], url_for("verification", _external=True, user_id=user.id))
+
+            return redirect(url_for('login'))
         
         return render_template('auth/register.html', form=form)
 
@@ -52,19 +55,20 @@ def validate_account(form, account):
 
 def validate_email(form, email):
     user = User.objects(email=email.data).first()
-
     if user:
         raise ValidationError('此信箱已經有人使用')
+    elif (email.data.endswith("email.ntou.edu.tw") or email.data.endswith("mail.ntou.edu.tw")) == False:
+        raise ValidationError('信箱必須為@email.ntou.edu.tw或@mail.ntou.edu.tw結尾')
         
 class RegisterForm(FlaskForm):
-    account = StringField('帳號', validators=[InputRequired(), Length(min=4, max=20), validate_account])
-    password = PasswordField("密碼", validators=[InputRequired(), Length(min=6,max=20)])
+    account = StringField('帳號', validators=[InputRequired("帳號不得為空"), Length(min=4, max=20), validate_account])
+    password = PasswordField("密碼", validators=[InputRequired("密碼不得為空"), Length(min=6,max=20)])
     confirm  = PasswordField("確認密碼", validators=[
-        InputRequired(),
+        InputRequired("密碼不得為空"),
         Length(min=6,max=20),
-        EqualTo('password', "Password must match")])
-    name = StringField("姓名", validators=[InputRequired(), Length(min=2, max=20)])
-    email = EmailField("海大信箱", validators=[InputRequired(), validate_email])
-    phone = StringField("電話", validators=[InputRequired(), Length(max=15)])
-    birth = DateField('生日', validators=[InputRequired()])
+        EqualTo('password', "密碼不一致")])
+    name = StringField("姓名", validators=[InputRequired("姓名不得為空"), Length(min=2, max=20)])
+    email = EmailField("海大信箱", validators=[InputRequired("信箱不得為空"), validate_email])
+    phone = StringField("電話", validators=[InputRequired("電話不得為空"), Length(max=15)])
+    birth = DateField('生日', validators=[InputRequired("生日不得為空")])
     submit = SubmitField('註冊')
