@@ -13,18 +13,18 @@ class ResetPasswordView(MethodView):
     def get(self, reset_token):
         form = ResetPasswordForm()
         if current_user.is_active == False:
-            return render_template('auth/reset.html', form=form, reset_token=reset_token, email=request.args.get('email'))
+            return render_template('auth/reset.html', form=form, reset_token=reset_token, account=request.args.get('account'))
         else:
             return redirect(url_for('profile'))
     
     def post(self, reset_token):
         form = ResetPasswordForm()
         if form.validate_on_submit():
-            if request.args.get('email') == None:
+            if request.args.get('account') == None:
                 flash('密碼修改失敗', 'danger')
                 pass
             else:
-                user = User.objects(email=request.args.get('email'), reset_token=reset_token).first()
+                user = User.objects(account=request.args.get('account'), reset_token=reset_token).first()
 
                 if user == None:
                     flash('密碼修改失敗', 'danger')
@@ -35,12 +35,12 @@ class ResetPasswordView(MethodView):
                     user.save()
                     flash('密碼修改成功', 'success')
 
-        return render_template('auth/reset.html', form=form, reset_token=reset_token, email=request.args.get('email'))
+        return render_template('auth/reset.html', form=form, reset_token=reset_token, account=request.args.get('account'))
         
 class ResetPasswordForm(FlaskForm):
-    password = PasswordField("密碼", validators=[InputRequired(), Length(min=6,max=20)])
+    password = PasswordField("密碼", validators=[InputRequired("密碼不得為空"), Length(min=6,max=20)])
     confirm  = PasswordField("確認密碼", validators=[
         InputRequired(),
         Length(min=6,max=20),
-        EqualTo('password', "Password must match")])
+        EqualTo('password', "密碼不一致")])
     submit = SubmitField('送出')

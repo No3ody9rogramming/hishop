@@ -6,7 +6,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import InputRequired, ValidationError
 
-from app import bcrypt
+from app import bcrypt, send_mail
 from app.models.user import User
 
 class LoginView(MethodView):
@@ -24,7 +24,7 @@ class LoginView(MethodView):
             login_user(user)
 
             if request.args.get('next') == None:
-                return redirect(url_for('user.profile'))
+                return redirect(url_for('index'))
             else:
                 return redirect(request.args.get('next'))
         return render_template('auth/login.html', form=form)
@@ -34,6 +34,9 @@ def validate_account(form, account):
     user = User.objects(account=account.data).first()
     if user == None:
         raise ValidationError('此帳號尚未註冊')
+    elif user.status == 0:
+        send_mail("HiShop帳號認證", [user.email], url_for("verification", _external=True, user_id=user.id))
+        raise ValidationError('此帳號尚未認證')
 
 def validate_password(form, password):
     user = User.objects(account=form.account.data).first()

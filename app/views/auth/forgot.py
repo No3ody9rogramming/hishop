@@ -30,7 +30,7 @@ class ForgotPasswordView(MethodView):
             user.reset_token = str(uuid.uuid4()).replace('-', '') + str(uuid.uuid4()).replace('-', '')
             user.save()
 
-            send_mail("重設密碼", [user.email], url_for('reset', reset_token=user.reset_token, email=user.email, _external=True))
+            send_mail("重設密碼", [user.email], url_for('reset', reset_token=user.reset_token, account=user.account, _external=True))
 
             flash('重設密碼連結已發送', 'success')
 
