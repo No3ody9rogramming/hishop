@@ -22,6 +22,18 @@
 		var pageItems = document.getElementsByName("pageItem")
 		var tableItem
 		var tableItems = document.getElementsByName("tableItem")
+		var next = document.getElementsByName("next")
+		
+		if(target.id >= {{(products|length/10)|int +1}})
+		{
+			//console.log(target.id)
+			if('href' in next[0])
+				next[0].removeAttribute('href')
+		}
+		else
+		{
+			next[0].setAttribute("href","#")
+		}
 		//disable all page
 		for(var i=0; i<pageItems.length; i++) 
 		{
@@ -50,16 +62,19 @@
 				while(tableItems[k].className.match("d-none"))
 					tableItems[k].className = tableItems[k].className.replace("d-none"," ")
 		}
+	}
 
-
-		/*for(var j=(target.innerText-1)*10+1; j<target.innerText*10; j++) 
+	function next(pageNum,target)
+	{
+		var pageItems = document.getElementsByClassName("page-item active")
+		console.log(pageNum)
+		//if it is the last page
+		if(pageItems[0].children[0].id >= pageNum)
 		{
-			tableItem = document.getElementById(j)
-			if(typeof tableItem == 'undefined')
-				break
-			console.log(tableItem)
-			tableItem.className = tableItem.className.replace("d-none"," ")
-		}*/
+			if('href' in target)
+				target.removeAttribute('href')
+			return
+		}
 	}
 
 	</script>
@@ -115,13 +130,13 @@
 									<span class="sr-only">Previous</span>
 									</a>
 								</li>
-								<li class="page-item active" name="pageItem"><a class="page-link" onclick="select(this)" >1</a></li>
+								<li class="page-item active" name="pageItem"><a class="page-link" onclick="select(this)" id="1">1</a></li>
 								{% for i in range((products|length/10)|int) %} 
-								<li class="page-item" name="pageItem"><a class="page-link" onclick="select(this)" href="#">{{ i+2 }}</a></li>
+								<li class="page-item" name="pageItem"><a class="page-link" onclick="select(this)" href="#" id="{{i+2}}">{{ i+2 }}</a></li>
 								
 								{% endfor %}
 								<li class="page-item">
-									<a class="page-link" aria-label="Next">
+									<a class="page-link" name="next" aria-label="Next"  href="#" onclick="next({{(products|length/10)|int +1}},this)">
 									<span aria-hidden="true">&raquo;</span>
 									<span class="sr-only">Next</span>
 									</a>
