@@ -16,7 +16,7 @@ class ProfileView(MethodView):
     def get(self):
         form = ProfileForm(name=current_user.name, birth=current_user.birth, phone=current_user.phone,
         store_name=current_user.store_name ,icon=current_user.icon, address=current_user.address, prefer_begin_time=current_user.prefer_begin_time, prefer_end_time=current_user.prefer_end_time)
-
+        
         return render_template('user/account/profile.html', form=form)
     
     def post(self):
@@ -48,8 +48,9 @@ class ProfileView(MethodView):
                 form.icon.data.save(os.path.join(icon_path, current_user.icon)) #儲存上傳的檔案
             
             current_user.save()
-            flash('修改成功')
-
+            
+            flash('修改成功', 'success')
+            
             
 
         return render_template('user/account/profile.html', form=form)

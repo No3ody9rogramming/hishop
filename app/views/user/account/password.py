@@ -18,7 +18,7 @@ class PasswordView(MethodView):
         if form.validate_on_submit():
             current_user.password = bcrypt.generate_password_hash(form.password.data).decode()
             current_user.save()
-            flash('修改成功')
+            flash('修改成功', 'success')
 
             return redirect(url_for('user.password'))
         return render_template('user/account/password.html', form=form)
