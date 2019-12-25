@@ -17,13 +17,13 @@
 					<thead>
 						<tr>
 						<th scope="col">問題主旨</th>
-						<th scope="col">解決辦法</th>
+						<th scope="col">問題描述</th>
 						</tr>
 					</thead>
 					<tbody>
 						{% for question in questions %}
 							<tr>
-							<th scope="row"><a href="" target=_blank>{{ question.title }}</a></th>
+							<th scope="row"><a >{{ question.title }}</a></th>
 							<td>{{ question.detail }}</td>
 							</tr>
 						{% endfor %}	    
