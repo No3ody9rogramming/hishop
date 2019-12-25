@@ -156,7 +156,7 @@
 								{% endfor %}
 
 								<div class="col-3 form-group required">
-									<button type="button" class="btn btn-primary col-12" id="formBtn" error="{{form.store_name.errors}}">修改</button>	
+									{{ form.submit(class="btn btn-primary col-12") }}
 								</div>
 						</div>
 						<br>
