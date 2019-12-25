@@ -148,10 +148,18 @@
 					</tfoot>
 					{% for product in products %}
 					<tbody>
+						{% if products.index(product) < 10 %}
 						<td scope="row" class="align-middle " id="{{ products.index(product)+1 }}" name="tableItem">
+						{% else %}
+						<td scope="row" class="align-middle d-none " id="{{ products.index(product)+1 }}" name="tableItem">
+						{% endif %}
 							<img class="productImg" src="{{url_for('static', filename = 'image/'+product.product.id|string +'/' + product.product.image)}}"> 
 						</td>
+						{% if products.index(product) < 10 %}
 						<td class="align-middle" id="{{ products.index(product)+1 }}" name="tableItem">
+						{% else %}
+						<td class="align-middle d-none" id="{{ products.index(product)+1 }}" name="tableItem">
+						{% endif %}
 							{% if  product.product.status|string  == PRODUCT_STATUS['SELLING'] %}
 								販賣中
 							{% elif  product.product.status|string  == PRODUCT_STATUS['SOLD'] %}
@@ -162,14 +170,24 @@
 								已下架
 							{% endif %}
 						</td>
+						{% if products.index(product) < 10 %}
 						<td class="align-middle" id="{{ products.index(product)+1 }}" name="tableItem">
+						{% else %}
+						<td class="align-middle d-none " id="{{ products.index(product)+1 }}" name="tableItem">
+						{% endif %}
 							{% if  product.product.bid  == None %}
 								<a href="{{ url_for('show_normal', product_id=product.product.id|string) }}" target=_blank>{{product.product.name}}</a>
 							{% else %}
 								<a href="{{ url_for('show_bidding', product_id=product.product.id|string) }}" target=_blank>{{product.product.name}}</a>
 							{% endif %}
 						</td>
-					    <td class="align-middle" id="{{ products.index(product)+1 }}" name="tableItem">{{ product.product.price }}</td>
+						{% if products.index(product) < 10 %}
+					    <td class="align-middle" id="{{ products.index(product)+1 }}" name="tableItem">
+						{% else %}
+						<td class="align-middle d-none" id="{{ products.index(product)+1 }}" name="tableItem">
+						{% endif %}
+							{{ product.product.price }}
+						</td>
 					</tbody>
 					{% endfor %}
 				</table>
