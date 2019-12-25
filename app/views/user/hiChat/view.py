@@ -11,7 +11,7 @@ from mongoengine.queryset.visitor import Q
 
 class HiChatView(MethodView):
     def get(self):
-        messagesOwners = Message.objects(Q(sender_id=current_user.id) | Q(receiver_id=current_user.id)).aggregate(
+        messagesOwners = Message.objects((Q(sender_id=current_user.id)) | (Q(receiver_id=current_user.id))).order_by("-create_time").aggregate(
             {
                 '$lookup': {
                     'from': 'user',
@@ -61,11 +61,24 @@ class HiChatView(MethodView):
                     },
                     'create_time': {
                         '$max': '$create_time'
+                    },
+                    'messages': { 
+                        '$push':  { 'message': "$message", 'isRead': "$isRead" }
                     }
                 }
-            })
+            },
+            {
+                '$project': {
+                    'create_time': '$create_time',
+                    'messages': {'$slice': ['$messages', 20]}
+                }
+            },
+            )
 
         users = list(messagesOwners)
+        print(users)
+        #currentUserMessage = Message.objects(sender_id=current_user.id, receiver_id=current_user.id).order_by("+create_time").limit(20)
+
         for u in users:
             if(len(u['_id']) == 0):
                 dummyCurrentUserDict = {
