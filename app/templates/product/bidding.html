@@ -45,21 +45,38 @@
 		$(document).ready(function(){
 
 			$('#formBtn').click(function(e){
-				let $form = $(this).closest('form');
-				Swal.fire({
-					position: 'top',
-					icon: 'success',
-					title: '出價成功',
-					showConfirmButton: false,
-					timer: 1500
-				}).then((result) => {
-					$form.submit();
-				})
+				var price = $("#price").val();
+				
+					{% if current_user.is_anonymous %}
+						window.location = "{{ url_for('login', _external=True, next=request.url) }}";
+					{% else %}
+						if(price<=0){
+							Swal.fire({
+								position: 'top',
+								icon: 'error',
+								title: '請輸入正確刀數',
+								showConfirmButton: false,
+								timer: 1500
+							});
+						}
+						else{
+							let $form = $(this).closest('form');
+							Swal.fire({
+								position: 'top',
+								icon: 'success',
+								title: '出價成功',
+								showConfirmButton: false,
+								timer: 1500
+							}).then((result) => {
+								$form.submit();
+							});
+						}	
+					{% endif %}
 			});
 			socket.on('{{ product.id|string }}', function(data){
 	          	$('#currentPrice').text(data.newPrice);
 	        });
-
+			
 		});
 
 		document.addEventListener("error", function (e) {
@@ -115,12 +132,7 @@
 
 				{% if product.status|string == PRODUCT_STATUS['SELLING']%}
 					<div class="col-md-8 form-group required" style="margin-right: 5px;">
-						{% if form.price.errors %}
-							<input id="price" name="price" type="number" class="form-control is-invalid" placeholder="請輸入價格" value="{{ form.price.data }}" required>
-							{% for error in form.price.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-						{% else %}
-							<input id="price" name="price" type="number" class="form-control" placeholder="請輸入價格" value="0" required>
-						{% endif %}
+						<input id="price" name="price" type="number" class="form-control" placeholder="請輸入價格" value="0" required>
 					</div>
 
 				<button type="button" class="btn btn-sencondary" id="formBtn">出價</button>
