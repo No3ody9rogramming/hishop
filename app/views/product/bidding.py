@@ -84,7 +84,7 @@ class ShowBiddingView(MethodView):
         if product in information.like:
             like = "fas fa-heart"
 
-        return render_template('product/bidding.html', form=form, product=product, like=like)
+        return render_template('product/bidding.html', form=form, PRODUCT_STATUS=PRODUCT_STATUS, product=product, like=like)
 
 def validate_price(form, price):
     try:
