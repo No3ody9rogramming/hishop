@@ -24,6 +24,7 @@
 		var tableItems = document.getElementsByName("tableItem")
 		var next = document.getElementsByName("next")
 		var prev = document.getElementsByName("Previous")
+		var lastItem = document.getElementById("Last")
 		
 		//check next button
 		if(target.id >= {{(products|length/10)|int +1}})
@@ -31,10 +32,13 @@
 			//console.log(target.id)
 			if('href' in next[0])
 				next[0].removeAttribute('href')
+			if('href' in lastItem)
+				lastItem.removeAttribute('href')
 		}
 		else
 		{
 			next[0].setAttribute("href","#")
+			lastItem.setAttribute("href","#")
 		}
 
 		//check previous botton
@@ -132,6 +136,23 @@
 			}
 		}
 	}
+
+	function last(pageNum,target)
+	{
+		var pageItems = document.getElementsByName("pageItem")
+		var lastItem = document.getElementById("Last")
+		for (var i = 0;i<pageItems.length;i++)
+		{
+			if(pageItems[i].children[0].id=pageNum)
+			{
+				select(pageItems[i].children[0])
+				if('href' in target)
+					target.removeAttribute('href')
+				
+			}
+		}
+		
+	}
 	</script>
 {% endblock scripts %}
 
@@ -196,7 +217,7 @@
 									<span class="sr-only">Next</span>
 									</a>
 								</li>
-								<li class="page-item"><a class="page-link">Last</a></li>
+								<li class="page-item"><a class="page-link" id="Last" href="#" onclick="last({{(products|length/10)|int +1}},this)">Last</a></li>
 								</ul>
 							</nav>
 						</th>
