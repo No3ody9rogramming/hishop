@@ -25,6 +25,7 @@
 		var next = document.getElementsByName("next")
 		var prev = document.getElementsByName("Previous")
 		var lastItem = document.getElementById("Last")
+		var firstItem = document.getElementById("First")
 		
 		//check next button
 		if(target.id >= {{(products|length/10)|int +1}})
@@ -35,10 +36,18 @@
 			if('href' in lastItem)
 				lastItem.removeAttribute('href')
 		}
+		else if(target.id ==1)
+		{
+			next[0].setAttribute("href","#")
+			lastItem.setAttribute("href","#")
+			if('href' in lastItem)
+				firstItem.removeAttribute('href')
+		}
 		else
 		{
 			next[0].setAttribute("href","#")
 			lastItem.setAttribute("href","#")
+			firstItem.setAttribute("href","#")
 		}
 
 		//check previous botton
@@ -140,10 +149,10 @@
 	function last(pageNum,target)
 	{
 		var pageItems = document.getElementsByName("pageItem")
-		var lastItem = document.getElementById("Last")
+		//var lastItem = document.getElementById("Last")
 		for (var i = 0;i<pageItems.length;i++)
 		{
-			if(pageItems[i].children[0].id=pageNum)
+			if(pageItems[i].children[0].id==pageNum)
 			{
 				select(pageItems[i].children[0])
 				if('href' in target)
@@ -153,6 +162,25 @@
 		}
 		
 	}
+
+	function fist(target)
+	{
+		var pageItems = document.getElementsByName("pageItem")
+		//var lastItem = document.getElementById("Last")
+		for (var i = 0;i<pageItems.length;i++)
+		{
+			if(pageItems[i].children[0].id=1)
+			{
+				select(pageItems[i].children[0])
+				if('href' in target)
+					target.removeAttribute('href')
+				
+			}
+		}
+		
+	}
+
+
 	</script>
 {% endblock scripts %}
 
@@ -199,7 +227,7 @@
 						<th scope="col" colspan="4">
 							<nav aria-label="Page navigation example" >
 								<ul class="pagination pagination-circle pg-blue justify-content-center">
-								<li class="page-item disabled"><a class="page-link">First</a></li>
+								<li class="page-item "><a class="page-link" id="First">First</a></li>
 								<li class="page-item">
 									<a class="page-link" name="Previous" aria-label="Previous" onclick="previous(this)">
 									<span aria-hidden="true">&laquo;</span>
