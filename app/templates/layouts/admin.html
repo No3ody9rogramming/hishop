@@ -4,16 +4,14 @@
 
 我的帳戶
 <ol>
-	<li><a href="{{ url_for('user.profile') }}">個人資料</a></li>
-	<li><a href="{{ url_for('user.password') }}">密碼設定</a></li>
+	<li><a href="">密碼設定</a></li>
 </ol>
-我的賣場
+管理
 <ol>
-	<li><a href="{{ url_for('user.normal') }}">一般上架</a></li>
-	<li><a href="{{ url_for('user.bidding') }}">開啟競標</a></li>
-	<li>商品資訊</li>
+	<li><a href="{{ url_for('admin.account') }}">帳號管理</a></li>
+	<li><a href="">商品管理</a></li>
 </ol>
-問題回報
+問題管理
 <ol>
 	<li><a href="{{ url_for('admin.response_list') }}">問題列表</a></li>
 	<li>所有問題</li>

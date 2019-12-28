@@ -1,4 +1,5 @@
-from flask_login import UserMixin
+from flask import abort
+from flask_login import UserMixin, current_user
 import datetime
 
 from app import db, login_manager
@@ -23,3 +24,11 @@ class User(UserMixin, db.Document):
 @login_manager.user_loader
 def load_user(user_id):
     return User.objects(pk=user_id).first()
+
+def check_admin(func):
+    def wrap(*args, **kwargs):
+        if current_user.status != 2:
+            return abort(403)
+        else:
+            return func(*args, **kwargs)
+    return wrap

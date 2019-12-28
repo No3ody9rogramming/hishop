@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, abort
 from flask_mongoengine import MongoEngine
 from flask_login import UserMixin, LoginManager
 from flask_bootstrap import Bootstrap
