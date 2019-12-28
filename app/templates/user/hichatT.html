@@ -30,7 +30,7 @@
             {% for u in users %}
                 <li id="{{u['_id'][0]['_id']}}" username="{{u['_id'][0]['name']}}" class="list-group-item pointer hover-bg" onclick="changeObject(this)">
                     <div class="text-break">{{u['_id'][0]['name']}}</div>
-                    <div class="text-muted small text-break d-sm-none d-md-block">{{u['messages'][0]['sender'][0]}}: {{u['messages'][0]['message']}}</div>
+                    <div class="text-muted small text-break d-none d-md-block">{{u['messages'][0]['sender'][0]}}: {{u['messages'][0]['message']}}</div>
                 </li>
             {% endfor %}
         </ul>
@@ -114,7 +114,7 @@
                 if(secondChild.length == 1)
                     secondChild.text(newMessage);
                 else if (secondChild.length ==0) {
-                    var senderDIV = '<div class="text-muted small text-break">' + newMessage + '</div>';
+                    var senderDIV = '<div class="text-muted small text-break d-none d-md-block">' + newMessage + '</div>';
                     chatObjectLI.append(senderDIV);
                 }
             }
