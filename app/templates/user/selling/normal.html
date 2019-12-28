@@ -23,16 +23,34 @@
                     {{ form.image(class="form-control-file") }}
                 </div>
                 <div class="form-group">
-                    {{ form.name.label(class="form-control-label") }}
-                    {{ form.name(class="form-control") }}
+                    {% if form.name.errors %}
+                        {{ form.name.label(class="form-control-label") }}
+                        {{ form.name(class="form-control is-invalid") }}
+                        {% for error in form.name.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+                    {% else %}
+                        {{ form.name.label(class="form-control-label") }}
+                        {{ form.name(class="form-control") }}
+                    {% endif %}
                 </div>
                 <div class="form-group">
-                    {{ form.price.label(class="form-control-label") }}
-                    {{ form.price(class="form-control") }}
+                    {% if form.price.errors %}
+                        {{ form.price.label(class="form-control-label") }}
+                        {{ form.price(class="form-control is-invalid") }}
+                        {% for error in form.price.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+                    {% else %}
+                        {{ form.price.label(class="form-control-label") }}
+                        {{ form.price(class="form-control") }}
+                    {% endif %}
                 </div>
                 <div class="form-group">
-                    {{ form.detail.label(class="form-control-label") }}
-                    {{ form.detail(class="form-control") }}
+                    {% if form.detail.errors %}
+                        {{ form.detail.label(class="form-control-label") }}
+                        {{ form.detail(class="form-control is-invalid") }}
+                        {% for error in form.detail.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+                    {% else %}
+                        {{ form.detail.label(class="form-control-label") }}
+                        {{ form.detail(class="form-control") }}
+                    {% endif %}
                 </div>
                 {{ form.submit(class="btn btn-primary") }}
             </form>

@@ -23,4 +23,4 @@ class Product(db.Document):
     categories = db.ListField(db.ReferenceField(Category), default=list)
     bidding = db.BooleanField(requried=True)
     status = db.IntField(requried=True, default=0)
-    create_time = db.DateTimeField(default=datetime.datetime.utcnow())
+    create_time = db.DateTimeField(default=datetime.datetime.utcnow()+datetime.timedelta(hours=8))

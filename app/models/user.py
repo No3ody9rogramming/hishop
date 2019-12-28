@@ -19,7 +19,7 @@ class User(UserMixin, db.Document):
     status = db.IntField(required=True, default=0)
     hicoin = db.LongField(required=True, min_value=0, default=0)
     reset_token = db.StringField(null=True)
-    create_time = db.DateTimeField(default=datetime.datetime.utcnow())
+    create_time = db.DateTimeField(default=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
     
 @login_manager.user_loader
 def load_user(user_id):

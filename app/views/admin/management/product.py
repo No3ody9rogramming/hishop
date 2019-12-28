@@ -16,7 +16,6 @@ class ProductView(MethodView):
 	def get(self):
 		form = ManagementForm()
 
-		
 		if request.args.get("status") == str(PRODUCT_STATUS["SELLING"]):
 			products = Product.objects(status__in=[PRODUCT_STATUS["SELLING"]])
 			status = PRODUCT_STATUS["SELLING"]

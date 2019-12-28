@@ -49,7 +49,7 @@ class NormalView(MethodView):
 
 class NormalForm(FlaskForm):
     image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png', 'gif'], '只能上傳圖片')])
-    name = StringField("商品名稱", validators=[InputRequired(), Length(max=50)])
-    price = IntegerField("商品直購價", validators=[InputRequired(), NumberRange(min=1, max=100000)])
+    name = StringField("商品名稱", validators=[InputRequired("商品名稱不得為空"), Length(max=50)])
+    price = IntegerField("商品價格", validators=[InputRequired("商品價格不得為空"), NumberRange(min=1, max=100000)])
     detail = CKEditorField("商品詳情")
     submit = SubmitField('上架')
