@@ -1,32 +1,56 @@
 {% extends "layouts/app.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block page %}
-  <div class="row">
+{% block styles %}
+	{{ super() }}
+	<style type = "text/css">
+		.no-underline {
+            text-decoration: none !important;
+        }
 
-    <div class="col-6" >
-      chat with:
-      <div id="users">
+        .pointer {cursor: pointer;}
+
+        .hover-bg:hover {
+            background-color: Khaki;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 15px;
+        }
+
+	</style>
+{% endblock styles %}
+
+{% block page %}
+  <div class="row" id="content">
+
+    <div id="usersWindow" class="col-4 overflow-auto">
+      <ul id="usersList" class="list-group">
         {% for u in users %}
-          <div><a id="{{u['_id'][0]['_id']}}" href="#" onclick="changeObject(this)">{{u['_id'][0]['name']}}</a></div>
-          <div>"{{u['messages'][0]['message']}}"</div>
+            <li id="{{u['_id'][0]['_id']}}" username="{{u['_id'][0]['name']}}" class="list-group-item pointer hover-bg" onclick="changeObject(this)">
+                <div>{{u['_id'][0]['name']}}</div>
+                <div class="text-muted small text-break">{{u['messages'][0]['sender'][0]}}: {{u['messages'][0]['message']}}</div>
+            </li>
         {% endfor %}
-      </div>
+      </ul>
+      <!--
       <hr>
       <ul id="users">
         {% for user in Tusers %}
           <li><a id="{{user.id}}" href="#" onclick="changeObject(this)">{{user.name}}</a></li>
         {% endfor %}
       </ul>
+      -->
     </div>
 
-    <div class="col-6">
-      <div id="messageWindow" class="overflow-auto" style="height: 781px;">
-        <ul id="messages" class="list-group"></ul>
-      </div>
-      <form action="">
-        <input id="message" autocomplete="off" /><button>Send</button>
-      </form>
+    <div class="col-8">
+        <div id="messageWindow" class="overflow-auto">
+            <ul id="messages" class="list-group"></ul>            
+        </div>
+        <form id="inputForm" action="">
+            <input id="message" class="form-control" autocomplete="off" /><button style="display:none;">Send</button>
+        </form>
     </div>
 
   </div>
@@ -35,22 +59,26 @@
 {% block scripts %}
   {{ super() }}
     <script>
-      var chatObjectID;
-      var chatObjectName;
+        var chatObjectID;
+        var chatObjectName;
 
-      $(function () {
+        $(function () {
+            resizeContent();
+            appendUnforeSeenUser();
 
-        $('form').submit(function(e){
-          e.preventDefault(); // prevents page reloading\
-          let input = $('#message').val();
-          if(input.trim())
-            socket.emit('client send message', "{{ currentUser.id|string }}", chatObjectID, $('#message').val());
-          $('#message').val('');
-          return false;
+            $('form').submit(function(e){
+                e.preventDefault(); // prevents page reloading\
+                let inputObj = $('#message');
+                if(inputObj.val().trim()) {
+                    socket.emit('client send message', "{{ currentUser.id|string }}", chatObjectID, inputObj.val());
+                    prependUser(chatObjectID, inputObj.val(), "{{ currentUser.name|string }}");
+                }
+                inputObj.val('');
+                return false;
+            });
+
+
         });
-
-
-      });
 
       // $( "#message" ).focus(function() {
 
@@ -76,46 +104,84 @@
 
       // });
 
+        function resizeContent(){
+            var windowHeight = $(window).innerHeight();            
+            var navHeight = $("#header").innerHeight();
+            var formHeight = $("#inputForm").innerHeight();
+            $("#messageWindow").height(windowHeight- formHeight - navHeight);
+            $("#usersWindow").height(windowHeight - navHeight);
+        }
 
-      function changeObject(obj) {
-        socket.off(chatObjectID + 'To{{ currentUser.id|string }}'); //unsubscribe last event
-        var thisObj = $(obj);
-        chatObjectID = thisObj.attr('id');
-        chatObjectName = thisObj.text();
-
-        socket.on(chatObjectID + 'To{{ currentUser.id|string }}', function(data){
-          appendMessage(data.senderID, data.message);
-        });
-
-        $('#messages').text("");
-
-        $.ajax({
-          type:"POST",
-          url: "{{ url_for('user.hichat') }}",
-          data: { senderID : "{{ currentUser.id|string }}", receiverID : chatObjectID},
-          success: function(data) {
-            messageInfos = JSON.parse(data);
-            for (messageInfo in messageInfos) {
-              appendMessage(messageInfos[messageInfo].sender_id.$oid, messageInfos[messageInfo].message);
+        function prependUser(userID, message, senderName){
+            var chatObjectLI = $("#" + userID);
+            if(chatObjectLI.length == 1) {
+                $("#usersList").prepend(chatObjectLI)
+                var secondChild = chatObjectLI.children().eq(1);
+                var newMessage = senderName + ": " + message;
+                if(secondChild.length == 1)
+                    secondChild.text(newMessage);
+                else if (secondChild.length ==0) {
+                    var senderDIV = '<div class="text-muted small text-break">' + newMessage + '</div>';
+                    chatObjectLI.append(senderDIV);
+                }
             }
-          }
-        });
-
-      }
-
-      function appendMessage(senderID, message) {
-        var senderName = "";
-        if(senderID == "{{ currentUser.id }}") {
-          senderName = "{{ currentUser.name}}";
-          $('#messages').append($('<li class="list-group-item text-right">').text(message));          
+            else if(chatObjectLI.length == 0){
+                console.log("a");
+            }
         }
-        else {
-          senderName = chatObjectName;
-          $('#messages').append($('<li class="list-group-item">').text(senderName + ": " + message));
-        }
-        $("#messageWindow").scrollTop($("#messages").height());
-      }
 
+        function appendUnforeSeenUser(){
+            var allUserList = [{% for user in Tusers %}{id: '{{user.id}}', name: '{{ user.name }}'}, {% endfor %}];
+            for (u in allUserList) {
+                let chatObjectLI = $("#" + allUserList[u].id);
+                if(chatObjectLI.length == 0) {
+                    let newUser = '<li id="' + allUserList[u].id + '" username="' + allUserList[u].name + '" class="list-group-item pointer hover-bg" onclick="changeObject(this)"><div>' + allUserList[u].name + '</div></li>'
+                    $("#usersList").append(newUser);
+                }
+            }
+        }
+
+        function changeObject(obj) {
+            socket.off(chatObjectID + 'To{{ currentUser.id|string }}'); //unsubscribe last event
+            var thisObj = $(obj);
+            chatObjectID = thisObj.attr('id');
+            chatObjectName = thisObj.attr('username');
+
+            socket.on(chatObjectID + 'To{{ currentUser.id|string }}', function(data){
+                appendMessage(data.senderID, data.message);
+            });
+
+            $('#messages').text("");
+
+            $.ajax({
+                type:"POST",
+                url: "{{ url_for('user.hichat') }}",
+                data: { senderID : "{{ currentUser.id|string }}", receiverID : chatObjectID},
+                success: function(data) {
+                    messageInfos = JSON.parse(data);
+                    for (messageInfo in messageInfos) {
+                        appendMessage(messageInfos[messageInfo].sender_id.$oid, messageInfos[messageInfo].message);
+                    }
+                }
+            });
+            resizeContent();
+        }
+
+        function appendMessage(senderID, message) {
+            var senderName = "";
+            if(senderID == "{{ currentUser.id }}") {
+                senderName = "{{ currentUser.name}}";
+                var newLI = '<li class="list-group-item"><div class="float-right text-break background message" style="max-width:80%;">' + message + '</div></li>'
+                $('#messages').append(newLI);          
+            }
+            else {
+                senderName = chatObjectName;
+                var newLI = '<li class="list-group-item"><div class="float-left text-break background message" style="max-width:80%;">' +  message + '</div></li>'
+                $('#messages').append(newLI);
+            }
+            $("#messageWindow").scrollTop($("#messages").height());
+        }
+        
     </script>
 {% endblock scripts %}
 
