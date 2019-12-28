@@ -11,6 +11,7 @@ from app.models.user import User, check_admin
 from app.models.product import Product
 import time
 
+PRODUCT_STATUS = {"FROZEN" : 2}
 ACCOUNT_STATUS = {"NO_ACTIVE": 0, "ACTIVE" : 1, "LOCK": 3, "ALL": 4}
 class AccountView(MethodView):
 	def get(self):
@@ -30,7 +31,7 @@ class AccountView(MethodView):
 			status = ACCOUNT_STATUS["ALL"]
 
 		for user in users:
-			user.products = len(Product.objects(seller_id=user.id, status=6))
+			user.products = len(Product.objects(seller_id=user.id, status=PRODUCT_STATUS["FROZEN"]))
 
 		return render_template('admin/management/account.html', form=form, users=users, status=status, ACCOUNT_STATUS=ACCOUNT_STATUS)
 
@@ -40,7 +41,6 @@ class AccountView(MethodView):
 		if form.validate_on_submit():
 			user = User.objects(id=form.user_id.data, status__in=[ACCOUNT_STATUS["ACTIVE"], ACCOUNT_STATUS["LOCK"]]).first()
 			
-			
 			if user.status == ACCOUNT_STATUS["ACTIVE"]:
 				user.status = ACCOUNT_STATUS["LOCK"]
 				user.save()
@@ -49,8 +49,7 @@ class AccountView(MethodView):
 				user.status = ACCOUNT_STATUS["ACTIVE"]
 				user.save()
 				return "凍結"
-			else:
-				return "error"
+			return "error"
 
 class ManagementForm(FlaskForm):
     user_id = HiddenField("", validators=[InputRequired()])
