@@ -1,6 +1,7 @@
 from flask_login import login_required
 
 from app import app, login_manager, mail, socketio
+from app.models.user import check_admin
 
 from app.views.index import IndexView
 from app.views.search import SearchView, LineChatbotSearch
@@ -30,6 +31,7 @@ from app.views.user.selling.order import OrderListView
 from app.views.user.question.report import ReportView
 from app.views.user.question.list import QuestionListView
 
+from app.views.admin.management.account import AccountView
 from app.views.admin.question.response import ResponseView
 from app.views.admin.question.list import ResponseListView
 
@@ -45,8 +47,10 @@ from flask import render_template, Blueprint
 socketServiceOn()
 
 admin = Blueprint('admin', __name__)
-admin.add_url_rule(rule='/question/list', endpoint='response_list', view_func=login_required(ResponseListView.as_view('response_list_view')), methods=['GET'])
-admin.add_url_rule(rule='/question/<string:question_id>', endpoint='response', view_func=login_required(ResponseView.as_view('response_view')), methods=['GET', 'POST'])
+#admin.add_url_rule(rule='/account/password', endpoint='password', view_func)
+admin.add_url_rule(rule='/management/account', endpoint='account', view_func=login_required(check_admin(AccountView.as_view('account_view'))), methods=['GET', 'POST'])
+admin.add_url_rule(rule='/question/list', endpoint='response_list', view_func=login_required(check_admin(ResponseListView.as_view('response_list_view'))), methods=['GET'])
+admin.add_url_rule(rule='/question/<string:question_id>', endpoint='response', view_func=login_required(check_admin(ResponseView.as_view('response_view'))), methods=['GET', 'POST'])
 app.register_blueprint(admin, url_prefix='/admin')
 
 app.add_url_rule(rule='/', endpoint='index', view_func=IndexView.as_view('index_view'), methods=['GET'])

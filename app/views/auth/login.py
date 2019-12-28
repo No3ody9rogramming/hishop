@@ -37,6 +37,8 @@ def validate_account(form, account):
     elif user.status == 0:
         send_mail("HiShop帳號認證", [user.email], url_for("verification", _external=True, user_id=user.id))
         raise ValidationError('此帳號尚未認證')
+    elif user.status == 3:
+        raise ValidationError('此帳號已被凍結')
 
 def validate_password(form, password):
     user = User.objects(account=form.account.data).first()
