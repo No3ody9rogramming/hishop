@@ -1,6 +1,6 @@
 import datetime
 
-from app.models.catogory import Catogory
+from app.models.category import Category
 from app.models.user import User
 from app import db
 
@@ -20,7 +20,7 @@ class Product(db.Document):
     detail = db.StringField(required=True, max_length=40000)
     image = db.StringField(required=True)
     view = db.IntField(required=True, default=0)
-    categories = db.ListField(db.ReferenceField(Catogory), default=list)
+    categories = db.ListField(db.ReferenceField(Category), default=list)
     bidding = db.BooleanField(requried=True)
     status = db.IntField(requried=True, default=0)
     create_time = db.DateTimeField(default=datetime.datetime.utcnow())
