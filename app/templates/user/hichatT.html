@@ -26,22 +26,15 @@
   <div class="row" id="content">
 
     <div id="usersWindow" class="col-4 overflow-auto">
-      <ul id="usersList" class="list-group">
-        {% for u in users %}
-            <li id="{{u['_id'][0]['_id']}}" username="{{u['_id'][0]['name']}}" class="list-group-item pointer hover-bg" onclick="changeObject(this)">
-                <div>{{u['_id'][0]['name']}}</div>
-                <div class="text-muted small text-break">{{u['messages'][0]['sender'][0]}}: {{u['messages'][0]['message']}}</div>
-            </li>
-        {% endfor %}
-      </ul>
-      <!--
-      <hr>
-      <ul id="users">
-        {% for user in Tusers %}
-          <li><a id="{{user.id}}" href="#" onclick="changeObject(this)">{{user.name}}</a></li>
-        {% endfor %}
-      </ul>
-      -->
+        <ul id="usersList" class="list-group">
+            {% for u in users %}
+                <li id="{{u['_id'][0]['_id']}}" username="{{u['_id'][0]['name']}}" class="list-group-item pointer hover-bg" onclick="changeObject(this)">
+                    <div class="text-break">{{u['_id'][0]['name']}}</div>
+                    <div class="text-muted small text-break d-sm-none d-md-block">{{u['messages'][0]['sender'][0]}}: {{u['messages'][0]['message']}}</div>
+                </li>
+            {% endfor %}
+        </ul>
+
     </div>
 
     <div class="col-8">
@@ -126,7 +119,7 @@
                 }
             }
             else if(chatObjectLI.length == 0){
-                console.log("a");
+                console.log("User not found");
             }
         }
 
