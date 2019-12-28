@@ -16,7 +16,11 @@
 				success: function(data) {
 					if (data != "error") {
 						form.children("input#submit").val(data);
-						console.log(data);
+
+						if (data == "凍結")
+							$("#" + form.find("input[id=user_id]").val()).text("已認證");
+						else if (data == "解凍")
+							$("#" + form.find("input[id=user_id]").val()).text("已凍結");
 					}
 				}
 			});
@@ -61,7 +65,7 @@
 										<td>
 											{{ user.products }}
 										</td>
-										<td>
+										<td id="{{ user.id }}">
 											{% if user.status == ACCOUNT_STATUS['NO_ACTIVE'] %}
 												未認證
 											{% elif user.status == ACCOUNT_STATUS['ACTIVE'] %}

@@ -4,12 +4,12 @@
 
 我的帳戶
 <ol>
-	<li><a href="">密碼設定</a></li>
+	<li><a href="{{ url_for('admin.password') }}">密碼設定</a></li>
 </ol>
 管理
 <ol>
 	<li><a href="{{ url_for('admin.account') }}">帳號管理</a></li>
-	<li><a href="">商品管理</a></li>
+	<li><a href="{{ url_for('admin.product') }}">商品管理</a></li>
 </ol>
 問題管理
 <ol>
