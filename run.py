@@ -31,7 +31,9 @@ from app.views.user.selling.order import OrderListView
 from app.views.user.question.report import ReportView
 from app.views.user.question.list import QuestionListView
 
+from app.views.admin.account.password import AdminPasswordView
 from app.views.admin.management.account import AccountView
+from app.views.admin.management.product import ProductView
 from app.views.admin.question.response import ResponseView
 from app.views.admin.question.list import ResponseListView
 
@@ -47,8 +49,10 @@ from flask import render_template, Blueprint
 socketServiceOn()
 
 admin = Blueprint('admin', __name__)
-#admin.add_url_rule(rule='/account/password', endpoint='password', view_func)
+admin.add_url_rule(rule='/account/password', endpoint='password', view_func=login_required(check_admin(AdminPasswordView.as_view('password_view'))), methods=['GET', 'POST'])
 admin.add_url_rule(rule='/management/account', endpoint='account', view_func=login_required(check_admin(AccountView.as_view('account_view'))), methods=['GET', 'POST'])
+admin.add_url_rule(rule='/management/product', endpoint='product', view_func=login_required(check_admin(ProductView.as_view('product_view'))), methods=['GET', 'POST'])
+
 admin.add_url_rule(rule='/question/list', endpoint='response_list', view_func=login_required(check_admin(ResponseListView.as_view('response_list_view'))), methods=['GET'])
 admin.add_url_rule(rule='/question/<string:question_id>', endpoint='response', view_func=login_required(check_admin(ResponseView.as_view('response_view'))), methods=['GET', 'POST'])
 app.register_blueprint(admin, url_prefix='/admin')
