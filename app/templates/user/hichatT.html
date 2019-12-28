@@ -155,7 +155,7 @@
             chatObjectName = thisObj.attr('username');
 
             socket.on(chatObjectID + 'To{{ currentUser.id|string }}', function(data){
-                appendMessage(data.sender, data.message);
+                appendMessage(data.sender.id, data.message);
                 $("#messageWindow").scrollTop($("#messages").height());
                 if(data.sender.id == "{{ currentUser.id|string }}")
                     prependUser(chatObjectID, data.message, "{{ currentUser.name|string }}")
@@ -180,8 +180,8 @@
             resizeContent();
         }
 
-        function appendMessage(sender, message) {
-            if(sender.id == "{{ currentUser.id }}") {
+        function appendMessage(senderID, message) {
+            if(senderID == "{{ currentUser.id }}") {
                 var newLI = '<div class="row justify-content-end"><div class=" text-break background px-2 py-1 message" style="max-width:80%;">' + message + '</div></div>'
                 $('#messages').append(newLI);
             }
