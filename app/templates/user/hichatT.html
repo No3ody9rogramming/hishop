@@ -84,6 +84,13 @@
                 return false;
             });
 
+            socket.on('messageTo{{ currentUser.id|string }}', function(data){
+                if(data.sender.id == "{{ currentUser.id|string }}")
+                    prependUser(chatObjectID, data.message, "{{ currentUser.name|string }}")
+                else
+                    prependUser(data.sender.id, data.message, data.sender.name);
+            });
+
 
         });
 
@@ -115,7 +122,8 @@
             var windowHeight = $(window).innerHeight();            
             var navHeight = $("#header").innerHeight();
             var formHeight = $("#inputForm").innerHeight();
-            $("#messageWindow").height(windowHeight- formHeight - navHeight);
+            var messageWindow = $("#messageWindow");
+            messageWindow.innerHeight(windowHeight- formHeight - navHeight);
             $("#usersWindow").height(windowHeight - navHeight);
         }
 
@@ -156,11 +164,7 @@
 
             socket.on(chatObjectID + 'To{{ currentUser.id|string }}', function(data){
                 appendMessage(data.sender.id, data.message);
-                $("#messageWindow").scrollTop($("#messages").height());
-                if(data.sender.id == "{{ currentUser.id|string }}")
-                    prependUser(chatObjectID, data.message, "{{ currentUser.name|string }}")
-                else
-                    prependUser(data.sender.id, data.message, data.sender.name);
+                $("#messageWindow").scrollTop($("#messages").height());                
             });
 
             $('#messages').text("");

@@ -42,7 +42,9 @@ def sendMessageViaSocketIO(senderID, receiverID, message):
         "messageID": str(messageDocument.id)
     }
     socketio.emit(senderID + 'To' + receiverID, data, broadcast=True)
+    socketio.emit('messageTo' + receiverID, data, broadcast=True)
     # send to object
     if receiverID != senderID:
         socketio.emit(receiverID + 'To' + senderID, data, broadcast=True)
+        socketio.emit('messageTo' + senderID, data, broadcast=True)
         # send to sender
