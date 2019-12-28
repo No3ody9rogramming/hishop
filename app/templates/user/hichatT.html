@@ -15,8 +15,23 @@
         }
 
         .message {
-            padding: 10px;
-            border-radius: 15px;
+            border-radius: 10px;
+        }
+
+        .justify-content-end + .justify-content-end {
+            margin-top: 2px;
+        }
+
+        .justify-content-start + .justify-content-start {
+            margin-top: 2px;
+        }
+
+        .justify-content-end + .justify-content-start {
+            margin-top: 20px;
+        }
+
+         .justify-content-start + .justify-content-end {
+            margin-top: 20px;
         }
 
 	</style>
@@ -38,8 +53,8 @@
     </div>
 
     <div class="col-8">
-        <div id="messageWindow" class="overflow-auto">
-            <ul id="messages" class="list-group"></ul>            
+        <div id="messageWindow" class="overflow-auto bg-white px-2">
+            <div id="messages" class="container" ></div>            
         </div>
         <form id="inputForm" action="">
             <input id="message" class="form-control" autocomplete="off" /><button style="display:none;">Send</button>
@@ -63,8 +78,7 @@
                 e.preventDefault(); // prevents page reloading\
                 let inputObj = $('#message');
                 if(inputObj.val().trim()) {
-                    socket.emit('client send message', "{{ currentUser.id|string }}", chatObjectID, inputObj.val());
-                    prependUser(chatObjectID, inputObj.val(), "{{ currentUser.name|string }}");
+                    socket.emit('client send message', "{{ currentUser.id|string }}", chatObjectID, inputObj.val());                    
                 }
                 inputObj.val('');
                 return false;
@@ -141,7 +155,12 @@
             chatObjectName = thisObj.attr('username');
 
             socket.on(chatObjectID + 'To{{ currentUser.id|string }}', function(data){
-                appendMessage(data.senderID, data.message);
+                appendMessage(data.sender, data.message);
+                $("#messageWindow").scrollTop($("#messages").height());
+                if(data.sender.id == "{{ currentUser.id|string }}")
+                    prependUser(chatObjectID, data.message, "{{ currentUser.name|string }}")
+                else
+                    prependUser(data.sender.id, data.message, data.sender.name);
             });
 
             $('#messages').text("");
@@ -155,24 +174,21 @@
                     for (messageInfo in messageInfos) {
                         appendMessage(messageInfos[messageInfo].sender_id.$oid, messageInfos[messageInfo].message);
                     }
+                    $("#messageWindow").scrollTop($("#messages").height());
                 }
             });
             resizeContent();
         }
 
-        function appendMessage(senderID, message) {
-            var senderName = "";
-            if(senderID == "{{ currentUser.id }}") {
-                senderName = "{{ currentUser.name}}";
-                var newLI = '<li class="list-group-item"><div class="float-right text-break background message" style="max-width:80%;">' + message + '</div></li>'
-                $('#messages').append(newLI);          
-            }
-            else {
-                senderName = chatObjectName;
-                var newLI = '<li class="list-group-item"><div class="float-left text-break background message" style="max-width:80%;">' +  message + '</div></li>'
+        function appendMessage(sender, message) {
+            if(sender.id == "{{ currentUser.id }}") {
+                var newLI = '<div class="row justify-content-end"><div class=" text-break background px-2 py-1 message" style="max-width:80%;">' + message + '</div></div>'
                 $('#messages').append(newLI);
             }
-            $("#messageWindow").scrollTop($("#messages").height());
+            else {
+                var newLI = '<div class="row justify-content-start"><div class="text-break background px-2 py-1 message" style="max-width:80%;">' +  message + '</div></div>'
+                $('#messages').append(newLI);
+            }
         }
         
     </script>

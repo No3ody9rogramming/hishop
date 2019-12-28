@@ -95,7 +95,10 @@ class HiChatView(MethodView):
 
         users = sorted(users, key=lambda i: i['create_time'], reverse=True)
 
-        return render_template('user/hichatT.html', Tusers=User.objects, users=users, currentUser=current_user)
+        return render_template(
+            'user/hichatT.html',
+            Tusers=User.objects,
+            users=users, currentUser=current_user)
 
     def post(self):
         receiverID = request.values["receiverID"]
