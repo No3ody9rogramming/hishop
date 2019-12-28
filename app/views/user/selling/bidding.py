@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for
+from flask import redirect, render_template, url_for, request
 from flask.views import MethodView
 from flask_login import current_user
 from flask_ckeditor import CKEditorField
@@ -11,20 +11,24 @@ from wtforms.validators import InputRequired, Length, EqualTo, ValidationError, 
 
 from app import bcrypt
 from app.models.product import Product, Bid
-from app.models.catogory import Catogory
+from app.models.category import Category
 
 import os
 
 class BiddingView(MethodView):
     def get(self):
         form = BiddingForm()
-        return render_template('user/selling/bidding.html', form=form)
+
+        categories = Category.objects()
+
+        return render_template('user/selling/bidding.html', form=form, categories=categories)
     
     def post(self):
         form = BiddingForm()
 
-        print('hello')
+        categories = Category.objects()
         if form.validate_on_submit():
+            
             bid = Bid(per_price=form.per_price.data,
                       low_price=form.low_price.data,
                       now_price=form.low_price.data,
@@ -34,8 +38,9 @@ class BiddingView(MethodView):
                               name=form.name.data,
                               price=form.price.data,
                               detail=form.detail.data,
-                              bid = bid,
+                              bid=bid,
                               image="product." + form.image.data.filename[-3:].lower(),
+                              categories=request.form.getlist("categories"),
                               bidding=True,
                               status=0)
             product.save()
@@ -46,7 +51,7 @@ class BiddingView(MethodView):
 
             return redirect(url_for('user.profile'))
         
-        return render_template('user/selling/bidding.html', form=form)
+        return render_template('user/selling/bidding.html', form=form, categories=categories)
 
 class BiddingForm(FlaskForm):
     image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png', 'gif'], '只能上傳圖片')])

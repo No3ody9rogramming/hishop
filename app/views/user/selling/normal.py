@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for
+from flask import redirect, render_template, url_for, request
 from flask.views import MethodView
 from flask_login import current_user
 from flask_ckeditor import CKEditorField
@@ -11,18 +11,22 @@ from wtforms.validators import InputRequired, Length, EqualTo, ValidationError, 
 
 from app import bcrypt
 from app.models.product import Product, Bid
-from app.models.catogory import Catogory
+from app.models.category import Category
 
 import os
 
 class NormalView(MethodView):
     def get(self):
         form = NormalForm()
-        return render_template('user/selling/normal.html', form=form)
+
+        categories = Category.objects()
+
+        return render_template('user/selling/normal.html', form=form, categories=categories)
     
     def post(self):
         form = NormalForm()
 
+        categories = Category.objects()
         if form.validate_on_submit():
 
             product = Product(seller_id=current_user.id,
@@ -30,6 +34,7 @@ class NormalView(MethodView):
                               price=form.price.data,
                               detail=form.detail.data,
                               image="product." + form.image.data.filename[-3:].lower(),
+                              categories=request.form.getlist("categories"),
                               bidding=False,
                               status=0)
             product.save()
@@ -40,7 +45,7 @@ class NormalView(MethodView):
 
             return redirect(url_for('user.profile'))
         
-        return render_template('user/selling/normal.html', form=form)
+        return render_template('user/selling/normal.html', form=form, categories=categories)
 
 class NormalForm(FlaskForm):
     image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png', 'gif'], '只能上傳圖片')])
