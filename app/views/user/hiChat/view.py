@@ -82,8 +82,11 @@ class HiChatView(MethodView):
             )
 
         users = list(messagesOwners)
-        print(users)
-        # currentUserMessage = Message.objects(sender_id=current_user.id, receiver_id=current_user.id).order_by("+create_time").limit(20)
+        # print(users)
+        # currentUserMessage = Message.objects(
+        #     sender_id=current_user.id,
+        #     receiver_id=current_user.id
+        #     ).order_by("+create_time").limit(20)
 
         for u in users:
             if(len(u['_id']) == 0):
