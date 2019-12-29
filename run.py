@@ -4,7 +4,7 @@ from app import app, login_manager, mail, socketio
 from app.models.user import check_admin, check_activate
 
 from app.views.index import IndexView
-from app.views.search import SearchView, LineChatbotSearch
+from app.views.search import SearchView, CatSearchView, LineChatbotSearch
 from app.views.product.normal import ShowNormalView
 from app.views.product.bidding import ShowBiddingView
 from app.views.product.like import ProductLikeView
@@ -59,6 +59,7 @@ app.register_blueprint(admin, url_prefix='/admin')
 app.add_url_rule(rule='/', endpoint='index', view_func=IndexView.as_view('index_view'), methods=['GET'])
 app.add_url_rule(rule='/index', view_func=IndexView.as_view('index_view'), methods=['GET'])
 app.add_url_rule(rule='/search', endpoint='search', view_func=SearchView.as_view('search_view'), methods=['GET'])
+app.add_url_rule(rule='/search/<string:type_of>', endpoint='catsearch', view_func=CatSearchView.as_view('cat_search_view'), methods=['GET'])
 app.add_url_rule(rule='/linesearch', endpoint='linesearch', view_func=LineChatbotSearch.as_view('line_chatbot_search'), methods=['POST'])
 app.add_url_rule(rule='/normal/<string:product_id>', endpoint='show_normal', view_func=ShowNormalView.as_view('show_normal_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/bidding/<string:product_id>', endpoint='show_bidding', view_func=ShowBiddingView.as_view('show_bidding_view'), methods=['GET', 'POST'])

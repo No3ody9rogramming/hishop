@@ -36,6 +36,26 @@ class SearchView(MethodView):
 
         return render_template('search.html', products=products, way=way, now=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
 
+class CatSearchView(MethodView):
+    def get(self, type_of):
+        # if request.args.get('way') == "bidding":
+        #     products = Product.objects(name__icontains=request.args.get('keyword'), bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8), status=0, bidding=True)
+        #     way = "bidding"
+        # elif request.args.get('way') == "normal":
+        products = Product.objects(categories=type_of, status=0, bidding=False)
+        way = "normal"
+        #else:
+        #    abort(404)
+
+        # if request.args.get('keyword') not in ["", None]:
+        #     keyword = Keyword.objects(keyword=request.args.get('keyword')).first()
+        #     if keyword == None:
+        #         keyword = Keyword(keyword=request.args.get('keyword'))
+        #     keyword.count += 1
+        #     keyword.save()
+
+        return render_template('search.html', products=products, way=way, now=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
+
 line_bot_api = LineBotApi(app.config['LINE_CHATBOT_ACCESS_TOKEN'])
 handler = WebhookHandler(app.config['LINE_CHATBOT_SECRET'])
 
