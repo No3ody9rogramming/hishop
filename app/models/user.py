@@ -6,7 +6,7 @@ from app import db, login_manager
 
 class User(UserMixin, db.Document):
     account = db.StringField(required=True, unique=True, min_length=4, max_length=20)
-    password = db.StringField(required=True, min_length=6, max_length=20)
+    password = db.StringField(required=True)
     name = db.StringField(required=True, min_length=2, max_length=20)
     store_name = db.StringField(required=True, min_length=2, max_length=20)
     icon = db.StringField(required=True, default="default.png")
