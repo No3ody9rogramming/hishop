@@ -33,7 +33,7 @@ class NormalView(MethodView):
                               name=form.name.data,
                               price=form.price.data,
                               detail=form.detail.data,
-                              image="product." + form.image.data.filename[-3:].lower(),
+                              image="product." + form.image.data.filename.split(".")[1].lower(),
                               categories=request.form.getlist("categories"),
                               bidding=False,
                               status=0)
@@ -48,7 +48,7 @@ class NormalView(MethodView):
         return render_template('user/selling/normal.html', form=form, categories=categories)
 
 class NormalForm(FlaskForm):
-    image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png', 'gif'], '只能上傳圖片')])
+    image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpeg', 'jpg', 'png', 'gif'], '只能上傳圖片(.jpg, .jpeg, .png, .gif)')])
     name = StringField("商品名稱", validators=[InputRequired("商品名稱不得為空"), Length(max=50)])
     price = IntegerField("商品價格", validators=[InputRequired("商品價格不得為空"), NumberRange(min=1, max=100000)])
     detail = CKEditorField("商品詳情")

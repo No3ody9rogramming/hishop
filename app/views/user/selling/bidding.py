@@ -54,7 +54,7 @@ class BiddingView(MethodView):
         return render_template('user/selling/bidding.html', form=form, categories=categories)
 
 class BiddingForm(FlaskForm):
-    image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png', 'gif'], '只能上傳圖片')])
+    image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png', 'gif'], '只能上傳圖片(.jpg, .png, .gif)')])
     name = StringField("商品名稱", validators=[InputRequired(), Length(max=50)])
     price = IntegerField("商品直購價", validators=[InputRequired(), NumberRange(min=1, max=100000)])
     low_price = IntegerField("起標價", validators=[InputRequired(), NumberRange(min=1, max=10000)])
