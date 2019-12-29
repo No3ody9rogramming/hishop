@@ -39,7 +39,7 @@ class BiddingView(MethodView):
                               price=form.price.data,
                               detail=form.detail.data,
                               bid=bid,
-                              image="product." + form.image.data.filename[-3:].lower(),
+                              image="product." + form.image.data.filename.split(".")[1].lower(),
                               categories=request.form.getlist("categories"),
                               bidding=True,
                               status=0)
@@ -54,11 +54,11 @@ class BiddingView(MethodView):
         return render_template('user/selling/bidding.html', form=form, categories=categories)
 
 class BiddingForm(FlaskForm):
-    image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpg', 'png', 'gif'], '只能上傳圖片(.jpg, .png, .gif)')])
-    name = StringField("商品名稱", validators=[InputRequired(), Length(max=50)])
-    price = IntegerField("商品直購價", validators=[InputRequired(), NumberRange(min=1, max=100000)])
-    low_price = IntegerField("起標價", validators=[InputRequired(), NumberRange(min=1, max=10000)])
-    per_price = IntegerField("每刀價格", validators=[InputRequired(), NumberRange(min=1, max=1000)])
-    due_time = DateTimeLocalField("截標時間", format="%Y-%m-%dT%H:%M", validators=[InputRequired()])
+    image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpeg', 'jpg', 'png', 'gif'], '只能上傳圖片(.jpg, .jpeg, .png, .gif)')])
+    name = StringField("商品名稱", validators=[InputRequired("商品名稱不得為空"), Length(max=30, message="商品名稱不得超過30個字")])
+    price = IntegerField("商品價格", validators=[InputRequired("商品價格不得為空"), NumberRange(min=1, max=100000, message="商品價格介於1~100000")])
+    low_price = IntegerField("起標價", validators=[InputRequired("起標價不得為空"), NumberRange(min=1, max=10000, message="起標價介於1~10000")])
+    per_price = IntegerField("每刀價格", validators=[InputRequired("每刀價格不得為空"), NumberRange(min=1, max=1000, message="每刀價格介於1~1000")])
+    due_time = DateTimeLocalField("結標時間", format="%Y-%m-%dT%H:%M", validators=[InputRequired("結標時間不得為空")])
     detail = CKEditorField("商品詳情")
     submit = SubmitField('上架')

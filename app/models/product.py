@@ -13,7 +13,7 @@ class Bid(db.EmbeddedDocument):
 
 class Product(db.Document):
     seller_id = db.ReferenceField(User, required=True)
-    name = db.StringField(required=True, max_length=20)
+    name = db.StringField(required=True, max_length=30)
     price = db.IntField(required=True, min_value=1, max_value=100000)
     bid = db.EmbeddedDocumentField(Bid, null=True)
     discount = db.FloatField(required=True, min_value=0., max_value=1., default=1.)
