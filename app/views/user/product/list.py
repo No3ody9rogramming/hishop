@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, request
+from flask import redirect, render_template, url_for, request, flash
 from flask.views import MethodView
 from flask_login import current_user, login_required
 from wtforms import SubmitField, TextAreaField, HiddenField, StringField
@@ -59,6 +59,10 @@ class PurchaseListView(MethodView):
             orders = Order.objects(buyer_id=current_user.id)
         #print(orders)
         orders = sorted(orders, key=lambda k: k.create_time, reverse=False)
+
+        if 'score' not in request.form:
+            flash('請點選評價星星',category='error')
+
         if form.validate_on_submit() and 'score' in request.form:   #correct
             order = Order.objects(product_id=request.values['commentProductID']).first()  # correct
             order.buyer_comment = form.detail.data      # correct
