@@ -12,6 +12,7 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage, TemplateS
 
 from app.models.keyword import Keyword
 from app.models.product import Product
+from app.models.category import Category
 from app import app
 
 import os, datetime
@@ -38,22 +39,11 @@ class SearchView(MethodView):
 
 class CatSearchView(MethodView):
     def get(self, type_of):
-        # if request.args.get('way') == "bidding":
-        #     products = Product.objects(name__icontains=request.args.get('keyword'), bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8), status=0, bidding=True)
-        #     way = "bidding"
-        # elif request.args.get('way') == "normal":
-        products = Product.objects(categories=type_of, status=0, bidding=False)
+        categories = Category.objects(category__contains= type_of)
+        #for c in categories:
+        #    print(c.category)
+        products = Product.objects(categories__in = categories )
         way = "normal"
-        #else:
-        #    abort(404)
-
-        # if request.args.get('keyword') not in ["", None]:
-        #     keyword = Keyword.objects(keyword=request.args.get('keyword')).first()
-        #     if keyword == None:
-        #         keyword = Keyword(keyword=request.args.get('keyword'))
-        #     keyword.count += 1
-        #     keyword.save()
-
         return render_template('search.html', products=products, way=way, now=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
 
 line_bot_api = LineBotApi(app.config['LINE_CHATBOT_ACCESS_TOKEN'])
