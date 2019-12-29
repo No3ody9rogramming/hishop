@@ -7,6 +7,7 @@ from wtforms.validators import DataRequired, InputRequired, Length, EqualTo, Val
 
 from app.models.order import Order
 from app.models.product import Product
+from app.models.user import User
 
 #移交中 領收中 已完成 已取消 全部
 ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "1", "COMPLETE" : "2", "CANCEL" : "3", "ALL" : "4"}
@@ -37,6 +38,7 @@ class OrderListView(MethodView):
         #print(request.values['ProductID'])
         if 'score' not in request.form:
             flash('請點選評價星星',category='error')
+            
 
         if form.validate_on_submit and 'score' in request.form:
             order = Order.objects(product_id=request.values['ProductID']).first()

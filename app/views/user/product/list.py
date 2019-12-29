@@ -7,6 +7,7 @@ from wtforms.validators import DataRequired, InputRequired, Length, EqualTo, Val
 
 from app.models.order import Order
 from app.models.product import Product
+from app.models.user import User
 
 #移交中 領收中 已完成 已取消 全部
 ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "1", "COMPLETE" : "2", "CANCEL" : "3", "ALL" : "4"}
@@ -68,6 +69,9 @@ class PurchaseListView(MethodView):
             order.buyer_comment = form.detail.data      # correct
             order.buyer_rating = request.values['score']  # correct
             order.status = ORDER_STATUS['COMPLETE']
+            seller = User.objects(id=order.product_id.seller_id.id).first()
+            seller.hicoin +=1000
+            seller.save()
             order.save()
             print(request.values['score'])   
              
