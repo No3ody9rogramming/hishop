@@ -70,7 +70,7 @@ class PurchaseListView(MethodView):
             order.buyer_rating = request.values['score']  # correct
             order.status = ORDER_STATUS['COMPLETE']
             seller = User.objects(id=order.product_id.seller_id.id).first()
-            seller.hicoin +=1000
+            seller.hicoin += order.product_id.price
             seller.save()
             order.save()
             print(request.values['score'])   
