@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, request
+from flask import redirect, render_template, url_for, request, flash
 from flask.views import MethodView
 from flask_login import current_user, login_required
 from wtforms import SubmitField, TextAreaField, HiddenField, StringField
@@ -35,6 +35,9 @@ class OrderListView(MethodView):
         form = OrderListForm()
         #print(form.ProductID)
         #print(request.values['ProductID'])
+        if 'score' not in request.form:
+            flash('請點選評價星星',category='error')
+
         if form.validate_on_submit and 'score' in request.form:
             order = Order.objects(product_id=request.values['ProductID']).first()
             print(request.values['ProductID'])
@@ -64,6 +67,9 @@ class OrderListView(MethodView):
         orders = sorted(orders, key=lambda k: k.create_time, reverse=False)
 
         return render_template('user/selling/order.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status,form=form)
+
+
+
 
 class OrderListForm(FlaskForm):
     #ProductID = HiddenField()
