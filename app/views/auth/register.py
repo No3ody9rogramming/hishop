@@ -61,14 +61,13 @@ def validate_email(form, email):
         raise ValidationError('信箱必須為@email.ntou.edu.tw或@mail.ntou.edu.tw結尾')
         
 class RegisterForm(FlaskForm):
-    account = StringField('帳號', validators=[InputRequired("帳號不得為空"), Length(min=4, max=20), validate_account])
-    password = PasswordField("密碼", validators=[InputRequired("密碼不得為空"), Length(min=6,max=20)])
+    account = StringField('帳號', validators=[InputRequired("帳號不得為空"), Length(min=4, max=20,message="帳號介於4~20個字"), validate_account])
+    password = PasswordField("密碼", validators=[InputRequired("密碼不得為空"), Length(min=6,max=20,message="密碼介於6~20個字")])
     confirm  = PasswordField("確認密碼", validators=[
-        InputRequired("密碼不得為空"),
-        Length(min=6,max=20),
-        EqualTo('password', "密碼不一致")])
-    name = StringField("姓名", validators=[InputRequired("姓名不得為空"), Length(min=2, max=20)])
+        InputRequired("確認密碼不得為空"),
+        EqualTo('password', "密碼前後不一致")])
+    name = StringField("姓名", validators=[InputRequired("姓名不得為空"), Length(min=2, max=20, message="姓名介於2~20個字")])
     email = EmailField("海大信箱", validators=[InputRequired("信箱不得為空"), validate_email])
-    phone = StringField("電話", validators=[InputRequired("電話不得為空"), Length(max=15)])
+    phone = StringField("電話", validators=[InputRequired("電話不得為空"), Length(max=15,message="電話不得超過15個字")])
     birth = DateField('生日', validators=[InputRequired("生日不得為空")])
     submit = SubmitField('註冊')

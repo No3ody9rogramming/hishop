@@ -1,7 +1,7 @@
 from flask_login import login_required
 
 from app import app, login_manager, mail, socketio
-from app.models.user import check_admin
+from app.models.user import check_admin, check_activate
 
 from app.views.index import IndexView
 from app.views.search import SearchView, LineChatbotSearch
@@ -63,35 +63,35 @@ app.add_url_rule(rule='/linesearch', endpoint='linesearch', view_func=LineChatbo
 app.add_url_rule(rule='/normal/<string:product_id>', endpoint='show_normal', view_func=ShowNormalView.as_view('show_normal_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/bidding/<string:product_id>', endpoint='show_bidding', view_func=ShowBiddingView.as_view('show_bidding_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/like/<string:product_id>', endpoint='product_like', view_func=ProductLikeView.as_view('product_like_view'), methods=['POST'])
-app.add_url_rule(rule='/cart', endpoint='cart', view_func=login_required(CartView.as_view('cart_view')), methods=['GET', 'POST'])
-app.add_url_rule(rule='/cart/opration', endpoint='cartOperation', view_func=login_required(CartOperationView.as_view('cartOperation_view')), methods=['POST'])
+app.add_url_rule(rule='/cart', endpoint='cart', view_func=login_required(check_activate(CartView.as_view('cart_view'))), methods=['GET', 'POST'])
+app.add_url_rule(rule='/cart/opration', endpoint='cartOperation', view_func=login_required(check_activate(CartOperationView.as_view('cartOperation_view'))), methods=['POST'])
 
 app.add_url_rule(rule='/registration', endpoint='registration', view_func=RegisterView.as_view('register_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/login', endpoint='login', view_func=LoginView.as_view('login_view'), methods=['GET', 'POST'])
-app.add_url_rule(rule='/logout', endpoint='logout', view_func=login_required(LogoutView.as_view('logout_view')), methods=['GET', 'POST'])
+app.add_url_rule(rule='/logout', endpoint='logout', view_func=login_required(check_activate(LogoutView.as_view('logout_view'))), methods=['GET', 'POST'])
 app.add_url_rule(rule='/verification/<string:user_id>', endpoint='verification', view_func=VerificationView.as_view('verification_view'), methods=['GET'])
 app.add_url_rule(rule='/password/reset', endpoint='forgot', view_func=ForgotPasswordView.as_view('forgot_password_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/password/reset/<string:reset_token>', endpoint='reset', view_func=ResetPasswordView.as_view('reset_password_view'), methods=['GET', 'POST'])
 
 user = Blueprint('user', __name__)
-user.add_url_rule(rule='/account/profile', endpoint='profile', view_func=login_required(ProfileView.as_view('profile_view')), methods=['GET', 'POST'])
-user.add_url_rule(rule='/account/password', endpoint='password', view_func=login_required(PasswordView.as_view('password_view')), methods=['GET', 'POST'])
-user.add_url_rule(rule='/account/payment', endpoint='payment', view_func=login_required(PaymentView.as_view('payment_view')), methods=['GET', 'POST'])
-user.add_url_rule(rule='/account/payment/confirm', endpoint='payment_confirm', view_func=login_required(PaymentConfirmView.as_view('payment_confirm_view')), methods=['GET'])
+user.add_url_rule(rule='/account/profile', endpoint='profile', view_func=login_required(check_activate(ProfileView.as_view('profile_view'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/account/password', endpoint='password', view_func=login_required(check_activate(PasswordView.as_view('password_view'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/account/payment', endpoint='payment', view_func=login_required(check_activate(PaymentView.as_view('payment_view'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/account/payment/confirm', endpoint='payment_confirm', view_func=login_required(check_activate(PaymentConfirmView.as_view('payment_confirm_view'))), methods=['GET'])
 
-user.add_url_rule(rule='/product/list', endpoint='purchase_list', view_func=login_required(PurchaseListView.as_view('purchase_list_view')), methods=['GET', 'POST'])
-user.add_url_rule(rule='/product/like', endpoint='like', view_func=login_required(LikeView.as_view('like_view')), methods=['GET', 'POST'])
-user.add_url_rule(rule='/product/history', endpoint='history', view_func=login_required(HistoryView.as_view('history_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/product/list', endpoint='purchase_list', view_func=login_required(check_activate(PurchaseListView.as_view('purchase_list_view'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/product/like', endpoint='like', view_func=login_required(check_activate(LikeView.as_view('like_view'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/product/history', endpoint='history', view_func=login_required(check_activate(HistoryView.as_view('history_view'))), methods=['GET', 'POST'])
 
-user.add_url_rule(rule='/selling/normal', endpoint='normal', view_func=login_required(NormalView.as_view('normal_view')), methods=['GET', 'POST'])
-user.add_url_rule(rule='/selling/bidding', endpoint='bidding', view_func=login_required(BiddingView.as_view('bidding_view')), methods=['GET', 'POST'])
-user.add_url_rule(rule='/selling/list', endpoint='selling_list', view_func=login_required(SellingListView.as_view('selling_list_view')), methods=['GET'])
-user.add_url_rule(rule='/selling/order', endpoint='order_list', view_func=login_required(OrderListView.as_view('order_list_view')), methods=['GET', 'POST'])
+user.add_url_rule(rule='/selling/normal', endpoint='normal', view_func=login_required(check_activate(NormalView.as_view('normal_view'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/selling/bidding', endpoint='bidding', view_func=login_required(check_activate(BiddingView.as_view('bidding_view'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/selling/list', endpoint='selling_list', view_func=login_required(check_activate(SellingListView.as_view('selling_list_view'))), methods=['GET'])
+user.add_url_rule(rule='/selling/order', endpoint='order_list', view_func=login_required(check_activate(OrderListView.as_view('order_list_view'))), methods=['GET', 'POST'])
 
-user.add_url_rule(rule='/question/report', endpoint='report', view_func=login_required(ReportView.as_view('report_view')), methods=['GET', 'POST'])
-user.add_url_rule(rule='/question/list', endpoint='question_list', view_func=login_required(QuestionListView.as_view('question_list_view')), methods=['GET'])
-user.add_url_rule(rule='/hichat', endpoint='hichat', view_func=login_required(HiChatView.as_view('hichat_view')), methods=['GET', 'POST'])
-user.add_url_rule(rule='/hichat_update', endpoint='hichat_update', view_func=login_required(HiChatUpdate.as_view('hichat_update')), methods=['POST'])
+user.add_url_rule(rule='/question/report', endpoint='report', view_func=login_required(check_activate(ReportView.as_view('report_view'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/question/list', endpoint='question_list', view_func=login_required(check_activate(QuestionListView.as_view('question_list_view'))), methods=['GET'])
+user.add_url_rule(rule='/hichat', endpoint='hichat', view_func=login_required(check_activate(HiChatView.as_view('hichat_view'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/hichat_update', endpoint='hichat_update', view_func=login_required(check_activate(HiChatUpdate.as_view('hichat_update'))), methods=['POST'])
 app.register_blueprint(user, url_prefix='/user')
 
 if __name__ == '__main__':

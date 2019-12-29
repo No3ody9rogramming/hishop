@@ -1,12 +1,12 @@
 from flask import abort
-from flask_login import UserMixin, current_user
+from flask_login import UserMixin, current_user, logout_user
 import datetime
 
 from app import db, login_manager
 
 class User(UserMixin, db.Document):
     account = db.StringField(required=True, unique=True, min_length=4, max_length=20)
-    password = db.StringField(required=True)
+    password = db.StringField(required=True, min_length=6, max_length=20)
     name = db.StringField(required=True, min_length=2, max_length=20)
     store_name = db.StringField(required=True, min_length=2, max_length=20)
     icon = db.StringField(required=True, default="default.png")
@@ -28,6 +28,15 @@ def load_user(user_id):
 def check_admin(func):
     def wrap(*args, **kwargs):
         if current_user.status != 2:
+            return abort(403)
+        else:
+            return func(*args, **kwargs)
+    return wrap
+
+def check_activate(func):
+    def wrap(*args, **kwargs):
+        if current_user.status not in [1, 2]:
+            logout_user()
             return abort(403)
         else:
             return func(*args, **kwargs)
