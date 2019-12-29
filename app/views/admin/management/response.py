@@ -18,7 +18,7 @@ class ResponseView(MethodView):
 
         question = Question.objects(id=question_id).first()
 
-        return render_template('admin/question/response.html', form=form, question=question)
+        return render_template('admin/management/response.html', form=form, question=question)
     
     def post(self, question_id):
         form = ResponseForm()
@@ -31,7 +31,7 @@ class ResponseView(MethodView):
                 question.save()
 
             return redirect(url_for('admin.response_list', status=QUESTION_STATUS["ANSWER"]))
-        return render_template('admin/question/response.html', form=form)
+        return render_template('admin/management/response.html', form=form)
         
 class ResponseForm(FlaskForm):
     response = TextAreaField("問題回覆", render_kw={'rows': 7}, validators=[InputRequired(), Length(max=4000)])

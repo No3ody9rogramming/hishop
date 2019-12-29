@@ -14,9 +14,9 @@
 	    			所有問題
 	    		</div>
 	    		<div class="card-body border border-dark">
-					<a class="btn btn-primary {% if status == QUESTION_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('admin.response_list', status=QUESTION_STATUS['ALL']) }}">全部</a>
-					<a class="btn btn-primary {% if status == QUESTION_STATUS['NO_ANSWER'] %} active {% endif %}" href="{{ url_for('admin.response_list', status=QUESTION_STATUS['NO_ANSWER']) }}">未回答</a>
-					<a class="btn btn-primary {% if status == QUESTION_STATUS['ANSWER'] %} active {% endif %}" href="{{ url_for('admin.response_list', status=QUESTION_STATUS['ANSWER']) }}">已回答</a>
+					<a class="btn btn-primary {% if status == QUESTION_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('admin.question', status=QUESTION_STATUS['ALL']) }}">全部</a>
+					<a class="btn btn-primary {% if status == QUESTION_STATUS['NO_ANSWER'] %} active {% endif %}" href="{{ url_for('admin.question', status=QUESTION_STATUS['NO_ANSWER']) }}">未回答</a>
+					<a class="btn btn-primary {% if status == QUESTION_STATUS['ANSWER'] %} active {% endif %}" href="{{ url_for('admin.question', status=QUESTION_STATUS['ANSWER']) }}">已回答</a>
 					<div class="table-responsive-lg">
 						<table class="table table-striped table-border">
 							<thead>

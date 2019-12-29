@@ -8,4 +8,4 @@ class Message(db.Document):
     receiver_id = db.ReferenceField(User, required=True)
     message = db.StringField(required=True, max_length=300)
     isRead = db.BooleanField(required=True, default=False)
-    create_time = db.DateTimeField(require=True, default=datetime.datetime.utcnow())
+    create_time = db.DateTimeField(require=True, default=datetime.datetime.utcnow()+datetime.timedelta(hours=8))

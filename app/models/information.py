@@ -7,7 +7,7 @@ from app import db, login_manager
 
 class History(db.EmbeddedDocument):
     product = db.ReferenceField(Product, required=True)
-    create_time = db.DateTimeField(default=datetime.datetime.utcnow())
+    create_time = db.DateTimeField(default=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
 
 class Information(db.Document):
     user_id = db.ReferenceField(User, unique=True, required=True)

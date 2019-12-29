@@ -10,7 +10,7 @@ from wtforms.validators import DataRequired, Email, InputRequired, Length, Equal
 from app.models.question import Question
 
 QUESTION_STATUS = {"NO_ANSWER": "0", "ANSWER" : "1", "ALL": "2"}
-class ResponseListView(MethodView):
+class AdminQuestionView(MethodView):
     def get(self):
         questions = Question.objects()
 
@@ -25,4 +25,4 @@ class ResponseListView(MethodView):
 
         questions = sorted(questions, key=lambda k: k.create_time, reverse=False)
 
-        return render_template('admin/question/list.html', questions=questions, QUESTION_STATUS=QUESTION_STATUS, status=status)
+        return render_template('admin/management/question.html', questions=questions, QUESTION_STATUS=QUESTION_STATUS, status=status)
