@@ -11,6 +11,24 @@
 	</style>
 {% endblock styles %}
 
+{% block scripts %}
+	{{ super() }}
+	<script type="text/javascript">
+	
+		function setID(id)
+		{
+			var ProductID = document.getElementById("ProductID");
+
+			ProductID.value = id;
+		}
+
+		
+
+
+	</script>
+
+{% endblock scripts %}
+
 {% block page %}
 	<br>
 	<div class="row">
@@ -63,6 +81,7 @@
 											{% endif %}
 										</td>
 										<td>
+											
 											{% if product.status|string == PRODUCT_STATUS['SELLING'] %}
 												販賣中
 											{% elif product.status|string == PRODUCT_STATUS['FROZEN'] %}
@@ -71,7 +90,18 @@
 												已下架
 											{% endif %}
 										</td>
-										<td>None</td>
+										<td>
+											{% if product.status|string == PRODUCT_STATUS['SELLING'] %}
+												<form method="POST" action="{{ url_for('user.selling_list') }}">
+													{{ form.csrf_token }}
+													<input type="hidden" id="ProductID" name="ProductID" value="">
+													<input type="submit"" class="btn btn-primary" id="remove" name="remove" value="下架此商品" onclick="setID('{{product.id}}')">
+													{{form.edit(class="btn btn-primary")}}
+												</form>
+											{% else %}
+												None
+											{% endif %}
+										</td>
 								    </tr>
 								{% endfor %}
 							</tbody>

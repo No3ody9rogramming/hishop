@@ -86,7 +86,7 @@ user.add_url_rule(rule='/product/history', endpoint='history', view_func=login_r
 
 user.add_url_rule(rule='/selling/normal', endpoint='normal', view_func=login_required(check_activate(NormalView.as_view('normal_view'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/selling/bidding', endpoint='bidding', view_func=login_required(check_activate(BiddingView.as_view('bidding_view'))), methods=['GET', 'POST'])
-user.add_url_rule(rule='/selling/list', endpoint='selling_list', view_func=login_required(check_activate(SellingListView.as_view('selling_list_view'))), methods=['GET'])
+user.add_url_rule(rule='/selling/list', endpoint='selling_list', view_func=login_required(check_activate(SellingListView.as_view('selling_list_view'))), methods=['GET','POST'])
 user.add_url_rule(rule='/selling/order', endpoint='order_list', view_func=login_required(check_activate(OrderListView.as_view('order_list_view'))), methods=['GET', 'POST'])
 
 user.add_url_rule(rule='/question/report', endpoint='report', view_func=login_required(check_activate(ReportView.as_view('report_view'))), methods=['GET', 'POST'])
