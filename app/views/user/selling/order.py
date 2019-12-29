@@ -36,18 +36,26 @@ class OrderListView(MethodView):
         form = OrderListForm()
         #print(form.ProductID)
         #print(request.values['ProductID'])
-        if 'score' not in request.form:
-            flash('請點選評價星星',category='error')
+        #print(request.values)
+        if 'cancelOrderID' in request.form:
+            if form.validate_on_submit:
+                print(request.values['cancelOrderID'])
+                order = Order.objects(id=request.values['cancelOrderID']).first()
+                order.status = ORDER_STATUS['CANCEL']
+                order.save()
+        else:
+            if 'score' not in request.form:
+                flash('請點選評價星星',category='error')
             
 
-        if form.validate_on_submit and 'score' in request.form:
-            order = Order.objects(product_id=request.values['ProductID']).first()
-            print(request.values['ProductID'])
-            order.seller_comment = form.detail.data      # correct
-            order.seller_rating = request.values['score']  # correct
-            order.status = ORDER_STATUS["RECEIPTING"]
-            order.save()
-            print(request.values['score']) 
+            if form.validate_on_submit and 'score' in request.form:
+                order = Order.objects(product_id=request.values['ProductID']).first()
+                print(request.values['ProductID'])
+                order.seller_comment = form.detail.data      # correct
+                order.seller_rating = request.values['score']  # correct
+                order.status = ORDER_STATUS["RECEIPTING"]
+                order.save()
+                print(request.values['score']) 
 
         products = Product.objects(seller_id=current_user.id)
 
@@ -77,3 +85,4 @@ class OrderListForm(FlaskForm):
     #ProductID = HiddenField()
     detail = StringField("評論")
     submit = SubmitField('確定')
+    cancel = SubmitField('取消訂單')

@@ -62,7 +62,10 @@ label {
     background: url({{url_for('static', filename = 'star.png')}}) repeat-x 0 -20px;
     left: 0; z-index: 1;
 }
-
+.table th
+{
+width: 20vw;
+}
 	</style>
 {% endblock styles %}
 
@@ -77,7 +80,13 @@ label {
 			ProductID.value = id;
 		}
 
-		
+		function setCancelID(id)	
+		{
+			var OrderID = document.getElementById("cancelOrderID");
+			//console.log(id)
+			OrderID.value = id;
+			console.log(OrderID.value)
+		}
 
 
 	</script>
@@ -105,7 +114,7 @@ label {
 	    			<a class="btn btn-primary {% if status == ORDER_STATUS['CANCEL'] %} active {% endif %}" href="{{ url_for('user.order_list', status=ORDER_STATUS['CANCEL']) }}">已取消</a>
 
 					<div class="table-responsive-lg">
-						<table class="table table-striped">
+						<table class="table table-striped table-responsive">
 							<thead>
 								<tr>
 									<th scope="col">圖片</th>
@@ -113,6 +122,7 @@ label {
 									<th scope="col">價格</th>
 									<th scope="col">狀態</th>
 									<th scope="col">評價</th>
+									<th scope="col">操作</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -137,7 +147,19 @@ label {
 												已取消
 											{% endif %}
 										</td>
-										<td>{{ order.product_id.price }}</td>
+										<td>{{ order.seller_comment }}</td>
+										<td>
+											{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
+												<form method="POST" action="{{ url_for('user.order_list') }}">
+													{{ form.csrf_token }}
+													<input type="hidden" id="cancelOrderID" name="cancelOrderID" value={{order.id}}>
+													<input type="submit" class="btn btn-primary" id="remove" name="remove" value="取消訂單" onclick="setCancelID('{{order.id}}')">
+													
+												</form>
+											{% else %}
+												None
+											{% endif %}
+										</td>
 								    </tr>
 								{% endfor %}
 								<!-- Modal -->
