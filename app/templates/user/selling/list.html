@@ -94,7 +94,7 @@
 											{% if product.status|string == PRODUCT_STATUS['SELLING'] %}
 												<form method="POST" action="{{ url_for('user.selling_list') }}">
 													{{ form.csrf_token }}
-													<input type="hidden" id="ProductID" name="ProductID" value="">
+													<input type="hidden" id="ProductID" name="ProductID" value={{product.id}}>
 													<input type="submit" class="btn btn-primary" id="remove" name="remove" value="下架此商品" onclick="setID('{{product.id}}')">
 													{{form.edit(class="btn btn-primary")}}
 												</form>
