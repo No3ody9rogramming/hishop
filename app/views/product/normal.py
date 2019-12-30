@@ -11,17 +11,18 @@ import datetime
 
 from app.models.product import Product
 from app.models.order import Order
+from app.models.category import Category
 from app.models.information import Information, History
 
 PRODUCT_STATUS = {"SELLING" : "0", "SOLD" : "1", "FROZEN" : "2", "REMOVE" : "3", "ALL" : "4"}
 
 class ShowNormalView(MethodView):
     def get(self, product_id):
-        form = NormalForm()
-        
+        form = NormalForm()  
         product = Product.objects(id=product_id, bidding=False).first()
+        categories = Category.objects(categorycontains = product.categories)
         orders = Order.objects(product_id__in=Product.objects(seller_id=product.seller_id))
-        similar_products = Product.objects(bidding=False, status=0).order_by('-view')[:12]
+        similar_products = Product.objects(bidding=False, status=0, categories__in=product.categories).order_by('-view')[:12]
         like = "far fa-heart"
         cart = "加入購物車"
         
