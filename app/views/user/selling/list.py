@@ -5,7 +5,8 @@ from flask_login import current_user, login_required
 from app.models.order import Order
 from app.models.product import Product
 
-from wtforms import SubmitField
+from wtforms.validators import InputRequired
+from wtforms import SubmitField, HiddenField
 from flask_wtf import FlaskForm
 
 import datetime
@@ -34,10 +35,10 @@ class SellingListView(MethodView):
     def post(self):
         form = SellingListForm()
         #print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
-        print(request.values['ProductID'])
+        #print(request.values['ProductID'])
         if form.validate_on_submit:
-            print(request.values['ProductID'])
-            product = Product.objects(id=request.values['ProductID']).first()
+            #print(request.values['ProductID'])
+            product = Product.objects(id=form.product_id.data).first()
             product.status = PRODUCT_STATUS['REMOVE']
             product.save()
             
@@ -60,6 +61,6 @@ class SellingListView(MethodView):
 
         return render_template('user/selling/list.html', products=products, PRODUCT_STATUS=PRODUCT_STATUS, status=status, form=form)
 class SellingListForm(FlaskForm):
-    
+    product_id = HiddenField("", validators=[InputRequired()])
     remove = SubmitField('下架此商品')
     edit = SubmitField('編輯商品')
