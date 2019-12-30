@@ -20,6 +20,9 @@ class ShowBiddingView(MethodView):
     def get(self, product_id):
         form = BiddingForm()
         product = Product.objects(id=product_id, bidding=True).first()
+        orders = Order.objects(product_id__in=Product.objects(seller_id=product.seller_id))
+        similar_product =  Product.objects(bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8),
+                         bidding=True, status=0).order_by('-create_time')[:12]
         like = "far fa-heart"
         
         if product == None:
@@ -40,7 +43,7 @@ class ShowBiddingView(MethodView):
 
             product.view += 1
             product.save()
-        return render_template('product/bidding.html', form=form, product=product, PRODUCT_STATUS=PRODUCT_STATUS, like=like, now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
+        return render_template('product/bidding.html', form=form, orders=orders, product=product, similar_product=similar_product, PRODUCT_STATUS=PRODUCT_STATUS, like=like, now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
 
     @login_required
     def post(self, product_id):

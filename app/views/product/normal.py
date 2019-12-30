@@ -10,6 +10,7 @@ from wtforms.validators import DataRequired, Email, InputRequired, Length, Equal
 import datetime
 
 from app.models.product import Product
+from app.models.order import Order
 from app.models.information import Information, History
 
 PRODUCT_STATUS = {"SELLING" : "0", "SOLD" : "1", "FROZEN" : "2", "REMOVE" : "3", "ALL" : "4"}
@@ -17,7 +18,10 @@ PRODUCT_STATUS = {"SELLING" : "0", "SOLD" : "1", "FROZEN" : "2", "REMOVE" : "3",
 class ShowNormalView(MethodView):
     def get(self, product_id):
         form = NormalForm()
+        
         product = Product.objects(id=product_id, bidding=False).first()
+        orders = Order.objects(product_id__in=Product.objects(seller_id=product.seller_id))
+        similar_products = Product.objects(bidding=False, status=0).order_by('-view')[:12]
         like = "far fa-heart"
         cart = "加入購物車"
         
@@ -42,7 +46,7 @@ class ShowNormalView(MethodView):
 
             product.view += 1
             product.save()
-        return render_template('product/normal.html', form=form, product=product, PRODUCT_STATUS=PRODUCT_STATUS, like=like, cart=cart, product_json=product.to_json())
+        return render_template('product/normal.html', orders=orders, form=form, product=product, similar_products=similar_products, PRODUCT_STATUS=PRODUCT_STATUS, like=like, cart=cart, product_json=product.to_json())
 
 
     
@@ -53,6 +57,7 @@ class ShowNormalView(MethodView):
         if product == None:
             abort(404)
         if form.validate_on_submit():
+            print("123")
             information = Information.objects(user_id=current_user.id).first()
 
             if form.like.data == True:
@@ -67,6 +72,7 @@ class ShowNormalView(MethodView):
                 return like
 
             elif form.cart.data == True and product.seller_id.id != current_user.id:
+                print("hi")
                 if product in information.cart:
                     information.cart.remove(product)
                     cart = "加入購物車"
@@ -74,11 +80,18 @@ class ShowNormalView(MethodView):
                     information.cart.append(product)
                     cart = "移出購物車"
                 information.save()
-
                 return cart
+
+            elif form.remove.data == True:
+                print("123")
+                product = Product.objects(id=request.values['ProductID']).first()
+                product.status = PRODUCT_STATUS['REMOVE']
+                product.save()
 
         abort(404)
         
 class NormalForm(FlaskForm):
     like = SubmitField('喜歡')
     cart = SubmitField('加入購物車')
+    remove = SubmitField('下架此商品')
+    

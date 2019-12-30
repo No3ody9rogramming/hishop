@@ -29,6 +29,10 @@
 			min-height: 150px;
 		}
 
+		.card-img-top{
+			min-height: 150px;
+		}
+
 		#productprice{
 			background-color: #FFDDAA;
 			color: #E63F00;
@@ -40,6 +44,7 @@
 {% block scripts %}
 	{{ super() }}
 	<script type="text/javascript">
+	
 		$("#cart").click(function(e){
 			e.preventDefault();
 			{% if current_user.is_anonymous %}
@@ -63,12 +68,27 @@
 			});
 		});
 
-		document.addEventListener("error", function (e) {
+        document.addEventListener("error", function (e) {
             let elem = e.target;
             if (elem.tagName.toLowerCase() == 'img') {
                 elem.src = "{{ url_for('static',filename='errorPic.jpg') }}";
             }
             }, true);
+
+        $(function(){            
+            $.each($(".card-img-top"), function(){
+                var this_image = this;
+                var src = $(this_image).attr('src') || '' ;
+                if(src.length > 0){
+                    var lsrc = $(this_image).attr('lsrc') || '' ;
+                    if(lsrc.length > 0){
+                        var img = new Image();
+                        img.src = lsrc;
+                        this_image.src = img.src;
+                    }
+                }
+            });
+        });
 
 		var url = "{{ url_for('product_like', product_id="") }}";
 		function like(element, product_id) {
@@ -93,28 +113,40 @@
 
 			return false;
 		}
+
+		function setID(id)
+		{
+			var ProductID = document.getElementById("ProductID");
+
+			ProductID.value = id;
+		}
 	</script>
 {% endblock scripts %}
 
 {% block page %}
 	<div id="row" class="row" style="margin-top: 50px;">
 		<div class="col-md-6">
-			<img class="productImg" src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}"> 
+			<img class="card-img-top" src="{{url_for('static', filename = 'imageLoading.gif')}}" lsrc="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}"> 
 		</div>
 
 		<div class="col-md-6">
 			<h3>{{ product.name }}</h3>
 			<p>已有 {{ product.view}} 人觀看此商品</p>
 			<h5 id="productprice">$ {{ product.price}} </h5>
+			<h5>商品分類: {{ product.categories_id }}</h5>
 			<br>
 			<form id="form" role="form" style="margin-top: 10px;"> 
 				{{ form.csrf_token }}
-				{% if product.status|string == PRODUCT_STATUS['SELLING']%}
-				<button id="cart" name="cart" type="submit" class="btn btn-sencondary" style="position:absolute; bottom:0; right:50px;">{{ cart }}</button>
+				{% if product.status|string != PRODUCT_STATUS['SELLING']%}
+					<p style="position:absolute; bottom:0; right:50px;">已售出</p>
+				{% elif current_user.status == 2%}
+					<input type="hidden" id="ProductID" name="ProductID" value={{product.id}}>
+					<button id="remove" name="remove" type="submit" class="btn btn-sencondary" style="position:absolute; bottom:0; right:50px;" onclick="setID('{{product.id}}')">下架商品</button>
 				{% else %}
-				<p style="position:absolute; bottom:0; right:50px;">已售出</p>
+					<button id="cart" name="cart" type="submit" class="btn btn-sencondary" style="position:absolute; bottom:0; right:50px;" >{{ cart }}</button>
+					<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red; position:absolute; bottom:0; right:0;" ><i class="{{ like }}"></i></a>
 				{% endif %}
-				<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red; position:absolute; bottom:0; right:0;" ><i class="{{ like }}"></i></a>
+				
 			</form>
 		</div>
 	</div>
@@ -138,15 +170,17 @@
 
 	<div id="row" class="row">
 		<div class="col-md-12">
-			商品評價 :
+			賣家評價 :						
+			{% for order in orders %}
+			<div class="row">
+				{%if order.seller_rating != None and order.seller_comment != None%}
+				<p>商品名稱 : {{order.product_id.name}}</p>
+				<p>評價 : {{order.seller_rating}}</p>
+				<p>評論 : {{order.seller_comment}}</p>
+				{%endif%}
+			</div>
+			{%endfor%}
 		</div>
-		
-		<div class="col-md-12">
-			買家資訊 :
-			評價 :
-			評論 :
-		</div>
-	
 	</div>
 
 	<div class="row">
@@ -159,11 +193,11 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="row">
-                                    {% for product in popular_products %}
+                                    {% for product in similar_products %}
 
                                         <div class="col-md-3 col-6">
                                             <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
-                                            <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
+                                            <img class="card-img-top" src="{{url_for('static', filename = 'imageLoading.gif')}}" lsrc="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
                                             </a>
                                             <div>
                                                 <a style="display: inline-block; width: 55%; overflow: hidden; text-overflow: ellipsis; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_normal', product_id=product.id|string) }}">{{product.name}}</a>
