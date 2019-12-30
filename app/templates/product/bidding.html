@@ -37,47 +37,9 @@
 
 {% block scripts %}
 	{{ super() }}
-	<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
 	<script>
 		var url = "{{ url_for('product_like', product_id="") }}";
-
-		$(document).ready(function(){
-
-			$('#formBtn').click(function(e){
-				var price = $("#price").val();
-				
-					{% if current_user.is_anonymous %}
-						window.location = "{{ url_for('login', _external=True, next=request.url) }}";
-					{% else %}
-						if(price<=0){
-							Swal.fire({
-								position: 'top',
-								icon: 'error',
-								title: '請輸入正確刀數',
-								showConfirmButton: false,
-								timer: 1500
-							});
-						}
-						else{
-							let $form = $(this).closest('form');
-							Swal.fire({
-								position: 'top',
-								icon: 'success',
-								title: '出價成功',
-								showConfirmButton: false,
-								timer: 1500
-							}).then((result) => {
-								$form.submit();
-							});
-						}	
-					{% endif %}
-			});
-			socket.on('{{ product.id|string }}', function(data){
-	          	$('#currentPrice').text(data.newPrice);
-	        });
-			
-		});
 
 		document.addEventListener("error", function (e) {
 	            let elem = e.target;
@@ -127,23 +89,60 @@
 			<p>目前價格 : <span id="currentPrice" >{{ product.bid.now_price }}</span></p>
 			<p>{{product.bid.per_price}}/一刀(輸入格內為刀數)</p>
 		    <div class="row">
-			<form id="form" action="{{ url_for('show_bidding', product_id=product.id|string) }}" method="POST" role="form" class="form-inline" style="margin-top: 5px; margin-right: 5px;">
-				{{ form.csrf_token }}
+				<form id="form" action="{{ url_for('show_bidding', product_id=product.id|string) }}" method="POST" role="form" class="form-inline" style="margin-top: 5px; margin-right: 5px;">
+					{{ form.csrf_token }}
 
-				{% if product.status|string == PRODUCT_STATUS['SELLING']%}
-					<div class="col-md-8 form-group required" style="margin-right: 5px;">
-						<input id="price" name="price" type="number" class="form-control" placeholder="請輸入價格" value="0" required>
+					{% if product.status|string == PRODUCT_STATUS['SELLING']%}
+					<div class="col-md-5 form-group required row">
+						{% if form.price.errors %}
+							<input id="price" name="price" type="number" class="form-control is-invalid" placeholder="請輸入價格" value="{{ form.price.data }}" required>
+							{% for error in form.price.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+						{% else %}
+							<input id="price" name="price" type="number" class="form-control" placeholder="請輸入價格" value="0" required>
+						{% endif %}
+					
+						{{ form.submit(class="btn btn-sencondary") }}
+						{% else %}
+						<p style="position:absolute; bottom:0; right:50px;">競標已結束</p>
+						{% endif %}
+						<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red;"><i class="{{ like }}"></i></a>
 					</div>
-
-				<button type="button" class="btn btn-sencondary" id="formBtn">出價</button>
-				{% else %}
-				<p style="position:absolute; bottom:0; right:50px;">競標已結束</p>
-				{% endif %}
-				<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red;"><i class="{{ like }}"></i></a>
-			</form>
-		</div>
+				</form>
+			</div>
 		</div>
 	</div>
+
+	{% with messages = get_flashed_messages(category_filter=['success']) %}
+		{% if messages %}
+			{% for message in messages %}
+			<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+			<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+			<script>Swal.fire({
+				position: 'top',
+				icon: 'success',
+				title: '出價成功',
+				showConfirmButton: false,
+				timer: 1500
+			});</script>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+
+	{% with messages = get_flashed_messages(category_filter=['error']) %}
+		{% if messages %}
+			{% for message in messages %}
+			<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+			<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+			<script>Swal.fire({
+				position: 'top',
+				icon: 'error',
+				title: '出價資訊有誤請重新出價',
+				showConfirmButton: false,
+				timer: 1500
+			});</script>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
 
 	
 
