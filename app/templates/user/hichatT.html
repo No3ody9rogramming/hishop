@@ -79,7 +79,7 @@
             $('form').submit(function(e){
                 e.preventDefault(); // prevents page reloading\
                 let inputObj = $('#message');
-                if(inputObj.val().trim()) {
+                if(inputObj.val().trim() && chatObjectID != null) {
                     socket.emit('client send message', "{{ currentUser.id|string }}", chatObjectID, inputObj.val());
                     showCurrentUserMessage(inputObj.val());
                     makeMessageWindowToEnd();
