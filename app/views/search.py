@@ -124,7 +124,10 @@ def handle_message(event):
 class CompSearch(MethodView):
     def get(self):
         if request.args.get('way') == "bidding":
-            products = Product.objects(name__icontains=request.args.get('keyword'), bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8), status=0, bidding=True, price_lte=request.args.get('lteprice'), price_gte=request.args.get('gteprice'))
+            productsA = Product.objects(name__icontains=request.args.get('keyword'), bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8), status=0, bidding=True)
+            productsB = productsA.filter( price__lte=request.args.get('lteprice'), price__gte=request.args.get('gteprice'))
+            a = int(request.args.get('create_time'))
+            products = productsB.filter(create_time__gt=datetime.datetime.utcnow()-datetime.timedelta(hours=8)-datetime.timedelta(days = a))
             way = "bidding"
         elif request.args.get('way') == "normal":
             productsA = Product.objects(name__icontains=request.args.get('keyword'), status=0, bidding=False)
