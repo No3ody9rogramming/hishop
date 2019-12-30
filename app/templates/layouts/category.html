@@ -1,41 +1,34 @@
 {% if request.user_agent.platform in config['PC_PLATFORM'] %}
 <div  class="list-group background">
         <a  class="list-group-item list-group-item-action disabled list-group-item-secondary bg-secondary  text-white font-weight-bold h-5"  >商品分類</a>
-        <a href="#" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">3C
+        <!-- {% for category in categories %}
+        <a href="{{ url_for('catsearch', type_of='category.category') }}" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">{{category.category}}
             <span class="badge badge-light badge-pill">1</span>
         </a>
-        <a href="#" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">家電
-            <span class="badge badge-light badge-pill">2</span>
+        {%endfor%} -->
+        <a href="{{ url_for('catsearch', type_of='3C產品') }}" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">3C
         </a>
-        <a href="#" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">服飾
-            <span class="badge badge-light badge-pill">3</span>
+        <a href="{{ url_for('catsearch', type_of='家電') }}" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">家電
         </a>
-        <a href="#" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">美妝
-            <span class="badge badge-light badge-pill">4</span>
+        <a href="{{ url_for('catsearch', type_of='服飾') }}" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">服飾
         </a>
-        <a href="#" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">食品
-            <span class="badge badge-light badge-pill">5</span>
+        <a href="{{ url_for('catsearch', type_of='美妝') }}" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">美妝
         </a>
-        <a href="#" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">日用
-            <span class="badge badge-light badge-pill">6</span>
+        <a href="{{ url_for('catsearch', type_of='食品') }}" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">食品
         </a>
-        <a href="#" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">書籍
-            <span class="badge badge-light badge-pill">7</span>
+        <a href="{{ url_for('catsearch', type_of='日用') }}" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">日用
         </a>
-        <a href="#" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">文具
-            <span class="badge badge-light badge-pill">8</span>
+        <a href="{{ url_for('catsearch', type_of='書籍') }}" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">書籍
         </a>
-        <a href="#" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">運動
-            <span class="badge badge-light badge-pill">9</span>
+        <a href="{{ url_for('catsearch', type_of='文具') }}" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">文具
         </a>
-        <a href="#" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">娛樂
-            <span class="badge badge-light badge-pill">10</span>
+        <a href="{{ url_for('catsearch', type_of='運動') }}" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">運動
         </a>
-        <a href="#" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">票券
-            <span class="badge badge-light badge-pill">11</span>
+        <a href="{{ url_for('catsearch', type_of='娛樂') }}" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">娛樂
         </a>
-        <a href="#" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">其他
-            <span class="badge badge-light badge-pill">12</span>
+        <a href="{{ url_for('catsearch', type_of='票券') }}" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">票券
+        </a>
+        <a href="{{ url_for('catsearch', type_of='其他') }}" class="btn btn-secondary list-group-item list-group-item-action background font-weight-bold">其他
         </a>
 </div>
 {% endif %}

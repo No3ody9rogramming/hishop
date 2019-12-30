@@ -12,6 +12,7 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage, TemplateS
 
 from app.models.keyword import Keyword
 from app.models.product import Product
+from app.models.category import Category
 from app import app
 
 import os, datetime
@@ -26,7 +27,7 @@ class SearchView(MethodView):
             way = "normal"
         else:
             abort(404)
-
+        k = request.args.get('keyword')
         if request.args.get('keyword') not in ["", None]:
             keyword = Keyword.objects(keyword=request.args.get('keyword')).first()
             if keyword == None:
@@ -34,6 +35,15 @@ class SearchView(MethodView):
             keyword.count += 1
             keyword.save()
 
+        return render_template('search.html', products=products, way=way, now=datetime.datetime.utcnow()+datetime.timedelta(hours=8), keyword = k)
+
+class CatSearchView(MethodView):
+    def get(self, type_of):
+        categories = Category.objects(category__contains= type_of)
+        #for c in categories:
+        #    print(c.category)
+        products = Product.objects(categories__in = categories )
+        way = "normal"
         return render_template('search.html', products=products, way=way, now=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
 
 line_bot_api = LineBotApi(app.config['LINE_CHATBOT_ACCESS_TOKEN'])
@@ -110,3 +120,23 @@ def handle_message(event):
 #     line_bot_api.reply_message(
 #         event.reply_token,
 #         TextSendMessage(text=event.message.text))
+
+class CompSearch(MethodView):
+    def get(self):
+        if request.args.get('way') == "bidding":
+            productsA = Product.objects(name__icontains=request.args.get('keyword'), bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8), status=0, bidding=True)
+            productsB = productsA.filter( price__lte=request.args.get('lteprice'), price__gte=request.args.get('gteprice'))
+            a = int(request.args.get('create_time'))
+            products = productsB.filter(create_time__gt=datetime.datetime.utcnow()-datetime.timedelta(hours=8)-datetime.timedelta(days = a))
+            way = "bidding"
+        elif request.args.get('way') == "normal":
+            productsA = Product.objects(name__icontains=request.args.get('keyword'), status=0, bidding=False)
+            productsB = productsA.filter( price__lte=request.args.get('lteprice'), price__gte=request.args.get('gteprice'))
+            a = int(request.args.get('create_time'))
+            products = productsB.filter(create_time__gt=datetime.datetime.utcnow()-datetime.timedelta(hours=8)-datetime.timedelta(days = a))
+            way = "normal"
+        else:
+            abort(404)
+        keyword = request.args.get('keyword')
+
+        return render_template('search.html', products=products, way=way, now=datetime.datetime.utcnow()+datetime.timedelta(hours=8), keyward = keyword)

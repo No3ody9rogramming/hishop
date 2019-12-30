@@ -62,7 +62,10 @@ label {
     background: url({{url_for('static', filename = 'star.png')}}) repeat-x 0 -20px;
     left: 0; z-index: 1;
 }
-
+.table th
+{
+width: 20vw;
+}
 	</style>
 {% endblock styles %}
 
@@ -72,10 +75,19 @@ label {
 	
 		function setID(id)
 		{
-			var ProductID = document.getElementById("ProductID")
+			var ProductID = document.getElementById("ProductID");
 
-			ProductID.value = id
+			ProductID.value = id;
 		}
+
+		function setCancelID(id)	
+		{
+			var OrderID = document.getElementById("cancelOrderID");
+			//console.log(id)
+			OrderID.value = id;
+			console.log(OrderID.value)
+		}
+
 
 	</script>
 
@@ -102,7 +114,7 @@ label {
 	    			<a class="btn btn-primary {% if status == ORDER_STATUS['CANCEL'] %} active {% endif %}" href="{{ url_for('user.order_list', status=ORDER_STATUS['CANCEL']) }}">已取消</a>
 
 					<div class="table-responsive-lg">
-						<table class="table table-striped">
+						<table class="table table-striped table-responsive">
 							<thead>
 								<tr>
 									<th scope="col">圖片</th>
@@ -110,6 +122,7 @@ label {
 									<th scope="col">價格</th>
 									<th scope="col">狀態</th>
 									<th scope="col">評價</th>
+									<th scope="col">操作</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -134,7 +147,19 @@ label {
 												已取消
 											{% endif %}
 										</td>
-										<td>{{ order.product_id.price }}</td>
+										<td>{{ order.seller_comment }}</td>
+										<td>
+											{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
+												<form method="POST" action="{{ url_for('user.order_list') }}">
+													{{ form.csrf_token }}
+													<input type="hidden" id="cancelOrderID" name="cancelOrderID" value={{order.id}}>
+													<input type="submit" class="btn btn-primary" id="remove" name="remove" value="取消訂單" onclick="setCancelID('{{order.id}}')">
+													
+												</form>
+											{% else %}
+												None
+											{% endif %}
+										</td>
 								    </tr>
 								{% endfor %}
 								<!-- Modal -->
@@ -157,6 +182,7 @@ label {
 													<div class="col-auto">
 														<p>評分:</p>
 													</div>
+
 													<div class="col-auto">
 														<div id="starBg" class="star_bg">                    	
 																<input type="radio" id="starScore1" class="score score_1" value="1" name="score">
@@ -171,6 +197,21 @@ label {
 																<a href="#5" class="star star_5" title="好"><label for="starScore5">好</label></a>
 														</div>
 													</div>
+
+													{% with messages = get_flashed_messages(category_filter=['error']) %}
+														{% if messages %}
+															{% for message in messages %}
+																
+																	<div class="col-auto">
+																		<div class="alert alert-danger" role="alert">
+																			{{ message }}
+																		</div>
+																	</div>
+																
+															{% endfor %}
+														{% endif %}
+													{% endwith %}
+
 												</div>
 
 												<div class="row">

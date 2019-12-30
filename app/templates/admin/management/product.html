@@ -47,7 +47,7 @@
 	    			<a class="btn btn-primary {% if status == PRODUCT_STATUS['FROZEN'] %} active {% endif %}" href="{{ url_for('admin.product', status=PRODUCT_STATUS['FROZEN']) }}">已凍結</a>
 	    			<a class="btn btn-primary {% if status == PRODUCT_STATUS['REMOVE'] %} active {% endif %}" href="{{ url_for('admin.product', status=PRODUCT_STATUS['REMOVE']) }}">已下架</a>
 					<div class="table-responsive-lg">
-						<table class="table table-striped table-border">
+						<table class="table table-striped table-border text-center">
 							<thead>
 								<tr>
 									<th scope="col">名稱</th>
@@ -60,23 +60,23 @@
 							<tbody>
 								{% for product in products %}
 								    <tr>
-										<td>{{ product.name }}</td>
-										<td>{{ product.create_time.strftime('%Y-%m-%d') }}</td>
-										<td>
+										<td class="align-middle">{{ product.name }}</td>
+										<td class="align-middle">{{ product.create_time.strftime('%Y-%m-%d') }}</td>
+										<td class="align-middle">
 											{{ product.seller_id.name }}
 										</td>
-										<td id="{{ product.id }}">
+										<td id="{{ product.id }}" class="align-middle">
 											{% if product.status == PRODUCT_STATUS['SELLING'] %}
-												販賣中
+												<div style="color: #00A600;">販賣中</div>
 											{% elif product.status == PRODUCT_STATUS['SOLD'] %}
 												已售出
 											{% elif product.status == PRODUCT_STATUS['FROZEN'] %}
-												已凍結
+												<div style="color: red;">已凍結</div>
 											{% elif product.status == PRODUCT_STATUS['REMOVE'] %}
 												已下架
 											{% endif %}
 										</td>
-										<td>
+										<td class="align-middle">
 											{% if product.status == PRODUCT_STATUS['SELLING'] %}
 												<form id="form" action="{{ url_for('admin.product') }}">
 													{{ form.csrf_token }}
@@ -87,7 +87,7 @@
 												<form id="form" action="{{ url_for('admin.product') }}">
 													{{ form.csrf_token }}
 													{{ form.product_id(value=product.id|string) }}
-													{{ form.submit(class="btn btn-secondary", value="解凍") }}
+													{{ form.submit(class="btn btn-danger", value="解凍") }}
 												</form>
 											{% else %}
 												無

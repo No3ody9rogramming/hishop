@@ -1,6 +1,18 @@
 {% extends "layouts/app.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block styles %}
+{{ super() }}
+<style type = "text/css">
+
+.table th
+{
+width: 50vw;
+}
+
+</style>
+{% endblock styles %}
+
 {% block page %}
 	<div class="row">
 		<div class="col-auto">
@@ -13,19 +25,51 @@
 			<div class="card">
 				<div class="card-header text-center bg-warning p-2 border border-dark"> 所有問題 </div>
 				<div class="card-body border border-dark">
-					<table class="table">
+					<table class="table table-responsive text-center">
 					<thead>
 						<tr>
 						<th scope="col">問題主旨</th>
-						<th scope="col">問題描述</th>
+						<th scope="col">提問時間</th>
+						<th scope="col">狀態</th>
 						</tr>
 					</thead>
 					<tbody>
 						{% for question in questions %}
-							<tr>
-							<th scope="row"><a >{{ question.title }}</a></th>
-							<td>{{ question.detail }}</td>
-							</tr>
+						<tr data-toggle="modal" data-target="#qaModal{{ question.id }}" style="cursor: pointer;">
+							<th scope="row">{{ question.title }}</th>
+
+							<!-- Modal -->
+							<div class="modal fade" id="qaModal{{ question.id }}" tabindex="-1" role="dialog" aria-labelledby="qaModalLabel" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+								<div class="modal-content">
+									<div class="modal-header bg-warning">
+									<h5 class="modal-title" id="qaModalLabel">問題回報</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									</div>
+									<div class="modal-body">
+										<div>問題主旨：{{ question.title }}</div>
+										<div>問題描述：{{ question.detail }}</div>
+										<hr>
+										{% if question.response == None %}
+										<div>問題回覆：<span style="color: red;">尚未回覆</span></div>
+										{% else %}
+										<div>問題回覆：{{ question.response }}</div>
+										{% endif%}
+									</div>
+								</div>
+								</div>
+							</div>
+
+							<td>{{ question.create_time.strftime('%Y-%m-%d') }}</td>
+
+							{% if question.response == None %}
+								<td style="color: red;">尚未回覆</td>
+							{% else %}
+								<td style="color:#00A600">查看回覆</td>
+							{% endif%}
+						</tr>
 						{% endfor %}	    
 					</tbody>
 					</table>

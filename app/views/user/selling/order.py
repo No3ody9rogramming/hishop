@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, request
+from flask import redirect, render_template, url_for, request, flash
 from flask.views import MethodView
 from flask_login import current_user, login_required
 from wtforms import SubmitField, TextAreaField, HiddenField, StringField
@@ -7,6 +7,7 @@ from wtforms.validators import DataRequired, InputRequired, Length, EqualTo, Val
 
 from app.models.order import Order
 from app.models.product import Product
+from app.models.user import User
 
 #移交中 領收中 已完成 已取消 全部
 ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "1", "COMPLETE" : "2", "CANCEL" : "3", "ALL" : "4"}
@@ -35,14 +36,26 @@ class OrderListView(MethodView):
         form = OrderListForm()
         #print(form.ProductID)
         #print(request.values['ProductID'])
-        if form.validate_on_submit and 'score' in request.form:
-            order = Order.objects(product_id=request.values['ProductID']).first()
-            print(request.values['ProductID'])
-            order.seller_comment = form.detail.data      # correct
-            order.seller_rating = request.values['score']  # correct
-            order.status = ORDER_STATUS["RECEIPTING"]
-            order.save()
-            print(request.values['score']) 
+        #print(request.values)
+        if 'cancelOrderID' in request.form:
+            if form.validate_on_submit:
+                print(request.values['cancelOrderID'])
+                order = Order.objects(id=request.values['cancelOrderID']).first()
+                order.status = ORDER_STATUS['CANCEL']
+                order.save()
+        else:
+            if 'score' not in request.form:
+                flash('請點選評價星星',category='error')
+            
+
+            if form.validate_on_submit and 'score' in request.form:
+                order = Order.objects(product_id=request.values['ProductID']).first()
+                print(request.values['ProductID'])
+                order.seller_comment = form.detail.data      # correct
+                order.seller_rating = request.values['score']  # correct
+                order.status = ORDER_STATUS["RECEIPTING"]
+                order.save()
+                print(request.values['score']) 
 
         products = Product.objects(seller_id=current_user.id)
 
@@ -65,7 +78,11 @@ class OrderListView(MethodView):
 
         return render_template('user/selling/order.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status,form=form)
 
+
+
+
 class OrderListForm(FlaskForm):
     #ProductID = HiddenField()
     detail = StringField("評論")
     submit = SubmitField('確定')
+    cancel = SubmitField('取消訂單')

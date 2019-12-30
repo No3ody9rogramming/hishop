@@ -1,0 +1,96 @@
+{% extends "layouts/app.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block scripts %}
+	{{ super() }}
+	<script type="text/javascript">
+		$("form").submit(function(e) {
+			var form = $(this);
+			var url = form.attr('action');
+
+			$.ajax({
+				type:"POST",
+				url: url,
+				data: form.serialize(),
+				success: function(data) {
+					if (data != "error") {
+						form.children("input#submit").val(data);
+
+						if (data == "凍結")
+							$("#" + form.find("input[id=coupon_id]").val()).text("已認證");
+						else if (data == "解凍")
+							$("#" + form.find("input[id=coupon_id]").val()).text("已凍結");
+					}
+				}
+			});
+			e.preventDefault();
+		});
+	</script>
+{% endblock scripts %}
+
+{% block page %}
+	<br>
+	<div class="row">
+		<div class="col-auto">
+			{% include "layouts/admin.html" %}
+		</div>
+
+	   	<div class="col-md-9">
+	    	<div class="card">
+	    		<div class="card-header text-center bg-warning p-2 border border-dark">
+	    			優惠券
+	    		</div>
+	    		<div class="card-body border border-dark">
+	    			<a class="btn btn-primary {% if status == COUPON_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('admin.coupon') }}">全部</a>
+	    			<a class="btn btn-primary {% if status == COUPON_STATUS['ACTIVE'] %} active {% endif %}" href="{{ url_for('admin.coupon', status=COUPON_STATUS['ACTIVE']) }}">正在發放</a>
+	    			<a class="btn btn-primary {% if status == COUPON_STATUS['NO_ACTIVE'] %} active {% endif %}" href="{{ url_for('admin.coupon', status=COUPON_STATUS['NO_ACTIVE']) }}">停止發放</a>
+					<div class="table-responsive-lg">
+						<table class="table table-striped table-border">
+							<thead>
+								<tr>
+									<th scope="col">名稱</th>
+									<th scope="col">開始時間</th>
+									<th scope="col">截止時間</th>
+									<th scope="col">狀態</th>
+									<th scope="col">操作</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for coupon in coupons %}
+								    <tr>
+										<td>{{ coupon.title }}</td>
+										<td>{{ coupon.create_time.strftime('%Y-%m-%d') }}</td>
+										<td>
+											{{ coupon.due_time.strftime('%Y-%m-%d') }}
+										</td>
+										<td id="{{ coupon.id }}">
+											{% if coupon.status == COUPON_STATUS['NO_ACTIVE'] %}
+												停止發放
+											{% elif coupon.status == COUPON_STATUS['ACTIVE'] %}
+												正在發放
+											{% else %}
+												已凍結
+											{% endif %}
+										</td>
+										<td>
+											<form id="form" action="{{ url_for('admin.account') }}">
+												{{ form.csrf_token }}
+												{{ form.coupon_id(value=coupon.id|string) }}
+												{% if coupon.status == COUPON_STATUS["ACTIVE"] %}
+													{{ form.submit(class="btn btn-secondary", value="凍結")}}
+												{% elif coupon.status == COUPON_STATUS["LOCK"] %}
+													{{ form.submit(class="btn btn-secondary", value="解凍")}}
+												{% endif %}
+											</form>
+										</td>
+								    </tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+	    	</div>
+		</div>
+	</div>
+{% endblock page %}

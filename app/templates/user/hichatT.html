@@ -12,6 +12,7 @@
 
         .hover-bg:hover {
             background-color: Khaki;
+            cursor: pointer;
         }
 
         .message {
@@ -43,7 +44,7 @@
     <div id="usersWindow" class="col-4 overflow-auto">
         <ul id="usersList" class="list-group">
             {% for u in users %}
-                <li id="{{u['_id'][0]['_id']}}" username="{{u['_id'][0]['name']}}" class="list-group-item pointer hover-bg" onclick="changeObject(this)">
+                <li id="{{u['_id'][0]['_id']}}" username="{{u['_id'][0]['name']}}" class="list-group-item hover-bg" onclick="changeObject(this)">
                     <div class="text-break">{{u['_id'][0]['name']}}</div>
                     <div class="text-muted small text-break d-none d-md-block">{{u['messages'][0]['sender'][0]}}: {{u['messages'][0]['message']}}</div>
                 </li>
@@ -69,6 +70,7 @@
     <script>
         var chatObjectID;
         var chatObjectName;
+        var lastReadPos;
 
         $(function () {
             resizeContent();
@@ -78,45 +80,40 @@
                 e.preventDefault(); // prevents page reloading\
                 let inputObj = $('#message');
                 if(inputObj.val().trim()) {
-                    socket.emit('client send message', "{{ currentUser.id|string }}", chatObjectID, inputObj.val());                    
+                    socket.emit('client send message', "{{ currentUser.id|string }}", chatObjectID, inputObj.val());
+                    showCurrentUserMessage(inputObj.val());
+                    makeMessageWindowToEnd();
+                    prependUser(chatObjectID, inputObj.val(), "{{ currentUser.name|string }}")
                 }
                 inputObj.val('');
                 return false;
             });
 
             socket.on('messageTo{{ currentUser.id|string }}', function(data){
-                if(data.sender.id == "{{ currentUser.id|string }}")
-                    prependUser(chatObjectID, data.message, "{{ currentUser.name|string }}")
-                else
-                    prependUser(data.sender.id, data.message, data.sender.name);
+                prependUser(data.sender_id.$oid, data.message, data.sender_id.name);
             });
 
 
         });
 
-      // $( "#message" ).focus(function() {
+        function showCurrentUserMessage(message){
+            var data = {
+                sender_id: {
+                    $oid: "{{ currentUser.id|string }}",
+                },
+                message: message,
+                isRead: "false"
+            }
+            appendMessage(data);
+        }
 
-      //   socket.on('{{ currentUser.id|string }}', function(data){
-      //     $('#messages').append($('<li>').text(data.senderName + ": " + data.message));
-      //     $.ajax({
-      //       type:"POST",
-      //       url: "{{ url_for('user.hichat_update') }}",
-      //       data: { senderID : chatObjectID, receiverID : "{{ currentUser.id|string }}", message : data.messageID},
-      //       success: function(data) {
-      //         messageInfos = JSON.parse(data)
-      //         for (messageInfo in messageInfos) {
-      //           var senderName;
-      //           if (messageInfos[messageInfo].sender_id.$oid == "{{ currentUser.id|string }}")
-      //             senderName = "{{ currentUser.name}}";
-      //           else
-      //             senderName = chatObjectName
-      //           $('#messages').append($('<li>').text(senderName + ": " + messageInfos[messageInfo].message));
-      //         }            
-      //       }
-      //     });
-      //   });
-
-      // });
+        function setMessageToRead(){
+            $.ajax({
+                type:"POST",
+                url: "{{ url_for('user.hichat_update') }}",
+                data: { senderID : chatObjectID, receiverID : "{{ currentUser.id|string }}"}
+            });
+        }
 
         function resizeContent(){
             var windowHeight = $(window).innerHeight();            
@@ -158,13 +155,24 @@
 
         function changeObject(obj) {
             socket.off(chatObjectID + 'To{{ currentUser.id|string }}'); //unsubscribe last event
+            socket.off(chatObjectID + 'updateTo{{ currentUser.id|string }}');            
             var thisObj = $(obj);
             chatObjectID = thisObj.attr('id');
             chatObjectName = thisObj.attr('username');
 
-            socket.on(chatObjectID + 'To{{ currentUser.id|string }}', function(data){
-                appendMessage(data.sender.id, data.message);
-                $("#messageWindow").scrollTop($("#messages").height());                
+            $(".active").removeClass("active");
+            $("#" + chatObjectID).addClass("active");
+
+            socket.on(chatObjectID + 'To{{ currentUser.id|string }}', function(data){                
+                appendMessage(data);
+                setMessageToRead();
+                removeLastRead();
+                makeMessageWindowToEnd();
+            });
+
+            socket.on(chatObjectID + 'updateTo{{ currentUser.id|string }}', function(){
+                updateLastRead();
+                makeMessageWindowToEnd();
             });
 
             $('#messages').text("");
@@ -176,23 +184,74 @@
                 success: function(data) {
                     messageInfos = JSON.parse(data);
                     for (messageInfo in messageInfos) {
-                        appendMessage(messageInfos[messageInfo].sender_id.$oid, messageInfos[messageInfo].message);
-                    }
-                    $("#messageWindow").scrollTop($("#messages").height());
+                        appendMessage(messageInfos[messageInfo]);
+                    }                        
+                    findLastRead();
+                    makeMessageWindowToEnd();
+                    setMessageToRead();
                 }
             });
-            resizeContent();
         }
 
-        function appendMessage(senderID, message) {
+        function findLastRead(){
+            var allElements = $('#messages').children(".justify-content-end")
+            var lastElementPos = allElements.length - 1;
+            while(lastElementPos > -1){
+                if(allElements.eq(lastElementPos).attr("isread") == "true"){
+                    var lastElement = allElements.eq(lastElementPos);
+                    if(lastElement.next().hasClass("justify-content-start"))
+                        break;
+                    insertReadMessage(lastElement);
+                    lastReadPos = lastElementPos;
+                    break;
+                }
+                lastElementPos--;
+            }
+        }
+
+        function updateLastRead(){            
+            var lastElement = $('#messages').children().last();
+            if(lastElement.attr("isread") == "false" && lastElement.hasClass("justify-content-end")) {
+                removeLastRead();
+                lastElement.attr("isread", "true");
+                insertReadMessage(lastElement);
+                lastReadPos = $('#messages').children(".justify-content-end").length - 1;
+            }
+        }
+
+        function insertReadMessage(lastElement){
+            if(chatObjectID == "{{ currentUser.id|string }}")
+                return;
+            var readInfo = '<div class="text-muted small">read</div>';
+            lastElement.append(readInfo);
+        }
+
+        function removeLastRead(){
+            $('#messages').children(".justify-content-end").eq(lastReadPos).children(".text-muted").remove();
+        }
+
+        function appendMessage(messageInfo) {
+            var senderID = messageInfo.sender_id.$oid;
+            var message = messageInfo.message;
             if(senderID == "{{ currentUser.id }}") {
-                var newLI = '<div class="row justify-content-end"><div class=" text-break background px-2 py-1 message" style="max-width:80%;">' + message + '</div></div>'
+                var isRead = messageInfo.isRead;
+                var newLI = '<div class="row justify-content-end" isread=' + isRead + '>' +
+                            '<div class=" text-break background px-2 py-1 message" style="max-width:80%;">' +
+                            message + '</div>' +                            
+                            '<div class="w-100"></div></div>';
                 $('#messages').append(newLI);
             }
             else {
-                var newLI = '<div class="row justify-content-start"><div class="text-break background px-2 py-1 message" style="max-width:80%;">' +  message + '</div></div>'
+                var newLI = '<div class="row justify-content-start">' +
+                            '<div class="text-break background px-2 py-1 message" style="max-width:80%;">' +
+                            message + '</div>' +
+                            '<div class="w-100"></div></div>';
                 $('#messages').append(newLI);
             }
+        }
+
+        function makeMessageWindowToEnd(){
+            $("#messageWindow").scrollTop($("#messages").height());
         }
         
     </script>
