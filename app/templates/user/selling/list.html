@@ -94,8 +94,14 @@
 											{% if product.status|string == PRODUCT_STATUS['SELLING'] %}
 												<form method="POST" action="{{ url_for('user.selling_list') }}">
 													{{ form.csrf_token }}
-													<input type="hidden" id="ProductID" name="ProductID" value={{product.id}}>
-													<input type="submit" class="btn btn-primary" id="remove" name="remove" value="下架此商品" onclick="setID('{{product.id}}')">
+													{{form.product_id(value=product.id|string)}}
+													{{form.remove(class="btn btn-primary")}}
+													
+												</form>
+												<form method="GET" action="{{ url_for('user.edit') }}">
+													{{ form.csrf_token }}
+													{{form.product_id(value=product.id|string)}}
+													
 													{{form.edit(class="btn btn-primary")}}
 												</form>
 											{% else %}

@@ -25,6 +25,7 @@ from app.views.user.product.like import LikeView
 from app.views.user.product.history import HistoryView
 from app.views.user.product.list import PurchaseListView
 from app.views.user.selling.normal import NormalView
+from app.views.user.selling.edit import EditView
 from app.views.user.selling.bidding import BiddingView
 from app.views.user.selling.list import SellingListView
 from app.views.user.selling.order import OrderListView
@@ -88,6 +89,7 @@ user.add_url_rule(rule='/selling/normal', endpoint='normal', view_func=login_req
 user.add_url_rule(rule='/selling/bidding', endpoint='bidding', view_func=login_required(check_activate(BiddingView.as_view('bidding_view'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/selling/list', endpoint='selling_list', view_func=login_required(check_activate(SellingListView.as_view('selling_list_view'))), methods=['GET','POST'])
 user.add_url_rule(rule='/selling/order', endpoint='order_list', view_func=login_required(check_activate(OrderListView.as_view('order_list_view'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/selling/edit', endpoint='edit', view_func=login_required(check_activate(EditView.as_view('edit_view'))), methods=['GET', 'POST'])
 
 user.add_url_rule(rule='/question/report', endpoint='report', view_func=login_required(check_activate(ReportView.as_view('report_view'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/question/list', endpoint='question_list', view_func=login_required(check_activate(QuestionListView.as_view('question_list_view'))), methods=['GET'])
