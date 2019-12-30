@@ -22,7 +22,7 @@ class ShowNormalView(MethodView):
         product = Product.objects(id=product_id, bidding=False).first()
         categories = Category.objects(categorycontains = product.categories)
         orders = Order.objects(product_id__in=Product.objects(seller_id=product.seller_id))
-        similar_products = Product.objects(bidding=False, status=0, categories__in=product.categories).order_by('-view')[:12]
+        similar_products = Product.objects(id__ne=product_id, bidding=False, status=0, categories__in=product.categories).order_by('-view')[:12]
         like = "far fa-heart"
         cart = "加入購物車"
         

@@ -10,6 +10,7 @@ import datetime
 
 from app.models.user import User
 from app.models.product import Product
+from app.models.category import Category
 from app.models.information import Information, History
 from app.models.order import Order
 from app.socketioService import updatePriceViaSocketIO
@@ -20,9 +21,10 @@ class ShowBiddingView(MethodView):
     def get(self, product_id):
         form = BiddingForm()
         product = Product.objects(id=product_id, bidding=True).first()
+        categories = Category.objects(categorycontains = product.categories)
         orders = Order.objects(product_id__in=Product.objects(seller_id=product.seller_id))
-        similar_product =  Product.objects(bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8),
-                         bidding=True, status=0).order_by('-create_time')[:12]
+        similar_product =  Product.objects(id__ne=product_id, bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8),
+                         bidding=True, status=0, categories__in=product.categories).order_by('-create_time')[:12]
         like = "far fa-heart"
         
         if product == None:

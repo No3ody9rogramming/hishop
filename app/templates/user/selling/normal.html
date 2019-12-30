@@ -12,12 +12,30 @@
 			<br>
             <form id="form" action="{{ url_for('user.normal') }}" method="POST" enctype="multipart/form-data">
                 {{ form.csrf_token }}
-                {% for category in categories %}
-                    <div class="form-check">
-                        <input id="categories" name="categories" value="{{ category.id }}" type="checkbox" class="form-check-input" {% if category.id|string in request.form.getlist('categories') %}checked="checked"{% endif %}>
-                        <label class="form-check-label" for="{{ category.id }}">{{ category.category }}</label>
+
+                <div class="card">
+                    <div class="card-header" style="height: auto;">選擇分類</div>
+                    <div class="card-body">
+                        <div id="bidProductIndicators" class="carousel slide" data-ride="false"  data-interval="false">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="row justify-content-center"> 
+                                        <div class="row">
+                                        {% for category in categories %}
+                                            <div class="form-check-inline">
+                                                <input id="categories" name="categories" value="{{ category.id }}" type="checkbox" class="form-check-input" {% if category.id|string in request.form.getlist('categories') %}checked="checked"{% endif %}>
+                                                <label class="form-check-label" for="{{ category.id }}">{{ category.category }}</label>
+                                            </div>
+                                        {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>  
+                            </div>
+                        </div>
                     </div>
-                {% endfor %}
+                </div>
+            
+
                 <div class="form-group">
                     {% if form.image.errors %}
                         {{ form.image.label(class="form-control-label") }}
