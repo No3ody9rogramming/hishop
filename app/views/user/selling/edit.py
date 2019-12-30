@@ -15,6 +15,7 @@ from app.models.category import Category
 
 import os
 
+
 class EditView(MethodView):
     def get(self):
         form = EditForm()
@@ -51,6 +52,8 @@ class EditView(MethodView):
                     print(e)
                 product.image = "product." + form.image.data.filename.split('.')[-1].lower()  #上傳成功設定圖片名稱
                 form.image.data.save(os.path.join(image_path, product.image)) #儲存上傳的檔案
+                #response.headers['Cache-Control'] = 'public, max-age=0'
+                
 
             product.save()
 
