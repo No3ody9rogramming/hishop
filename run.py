@@ -52,7 +52,7 @@ admin = Blueprint('admin', __name__)
 admin.add_url_rule(rule='/account/password', endpoint='password', view_func=login_required(check_admin(AdminPasswordView.as_view('password_view'))), methods=['GET', 'POST'])
 admin.add_url_rule(rule='/management/account', endpoint='account', view_func=login_required(check_admin(AccountView.as_view('account_view'))), methods=['GET', 'POST'])
 admin.add_url_rule(rule='/management/product', endpoint='product', view_func=login_required(check_admin(ProductView.as_view('product_view'))), methods=['GET', 'POST'])
-admin.add_url_rule(rule='/management/question', endpoint='question', view_func=login_required(check_admin(AdminQuestionView.as_view('admin_question_view'))), methods=['GET'])
+admin.add_url_rule(rule='/management/question', endpoint='question', view_func=login_required(check_admin(AdminQuestionView.as_view('admin_question_view'))), methods=['GET', 'POST'])
 admin.add_url_rule(rule='/management/<string:question_id>', endpoint='response', view_func=login_required(check_admin(ResponseView.as_view('response_view'))), methods=['GET', 'POST'])
 app.register_blueprint(admin, url_prefix='/admin')
 

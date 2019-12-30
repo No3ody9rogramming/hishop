@@ -1,14 +1,33 @@
 
-<h3>{{ current_user.name }}</h3>
-<hr>
+<div class="p-3 " style="background-color: silver;">
+            
+    <div class="text-right">
+            
+        <p>{{ current_user.name }}</p>
+        <hr>
+	</div>
+    
+    {% if request.user_agent.platform not in config['PC_PLATFORM'] %}
+    <a href="#sidebar" data-toggle="collapse"><i class="fa fa-navicon fa-lg"></i></a>
+    
+    <div class="row collapse in" id="sidebar">
 
-我的帳戶
-<ol>
-	<li><a href="{{ url_for('admin.password') }}">密碼設定</a></li>
-</ol>
-管理
-<ol>
-	<li><a href="{{ url_for('admin.account') }}">帳號管理</a></li>
-	<li><a href="{{ url_for('admin.product') }}">商品管理</a></li>
-	<li><a href="{{ url_for('admin.question') }}">問題管理</a></li>
-</ol>
+    {% endif %}
+        <div class="list-group panel" >
+            <a href="#account" class="list-group-item collapsed bg-warning text-muted font-weight-bold" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down text-dark">我的帳戶</span> </a>
+            <div class="collapse" id="account">
+                <a href="{{ url_for('admin.password') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#account">密碼設定</a>
+            </div>
+            
+            <a href="#info" class="list-group-item collapsed bg-warning text-muted font-weight-bold" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down text-dark">網頁管理</span> </a>
+            <div class="collapse" id="info">
+                <a href="{{ url_for('admin.account') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#info">帳號管理</a>
+                <a href="{{ url_for('admin.product') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#info">商品管理</a>
+                <a href="{{ url_for('admin.question') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#info">問題管理</a>
+            </div>
+            
+        </div>
+    {% if request.user_agent.platform not in config['PC_PLATFORM'] %}
+    </div>
+    {% endif %}
+</div>

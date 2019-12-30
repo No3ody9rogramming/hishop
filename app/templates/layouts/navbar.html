@@ -26,7 +26,7 @@
             </div>
 
             <ul class="navbar-nav ml-auto">
-                {% if current_user.statut != 2 %}
+                {% if current_user.status != 2 %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('cart') }}"><i class="fas fa-shopping-cart"></i></a>
                     </li>
