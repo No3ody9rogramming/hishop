@@ -25,7 +25,7 @@ width: 50vw;
 			<div class="card">
 				<div class="card-header text-center bg-warning p-2 border border-dark"> 所有問題 </div>
 				<div class="card-body border border-dark">
-					<table class="table table-responsive">
+					<table class="table table-responsive text-center">
 					<thead>
 						<tr>
 						<th scope="col">問題主旨</th>
@@ -53,7 +53,7 @@ width: 50vw;
 										<div>問題描述：{{ question.detail }}</div>
 										<hr>
 										{% if question.response == None %}
-										<div>問題回覆：無。</div>
+										<div>問題回覆：<span style="color: red;">尚未回覆</span></div>
 										{% else %}
 										<div>問題回覆：{{ question.response }}</div>
 										{% endif%}
@@ -65,9 +65,9 @@ width: 50vw;
 							<td>{{ question.create_time.strftime('%Y-%m-%d') }}</td>
 
 							{% if question.response == None %}
-								<td style="color: red;">未收到回覆</td>
+								<td style="color: red;">尚未回覆</td>
 							{% else %}
-								<td style="color:#00A600">已獲得回覆</td>
+								<td style="color:#00A600">查看回覆</td>
 							{% endif%}
 						</tr>
 						{% endfor %}	    
