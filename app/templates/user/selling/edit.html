@@ -21,6 +21,17 @@
                 {% endfor %}
                 
                 <div class="form-group">
+                    {% if form.image.errors %}
+                        {{ form.image.label(class="form-control-label") }}
+                        {{ form.image(class="form-control-file is-invalid") }}
+                        {% for error in form.image.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+                    {% else %}
+                        {{ form.image.label(class="form-control-label") }}
+                        {{ form.image(class="form-control-file") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
                     {{form.product_id()}}
                 </div>
                 <div class="form-group">
