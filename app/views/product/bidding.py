@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, abort, request
+from flask import redirect, render_template, url_for, abort, request, flash
 from flask.views import MethodView
 from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
@@ -55,28 +55,34 @@ class ShowBiddingView(MethodView):
             if your_price > product.price:
                 your_price = product.price
 
-            if current_user != product.bid.buyer_id and current_user.hicoin < your_price:
-                form.price.errors.append('金額不足')
-            elif current_user == product.bid.buyer_id and current_user.hicoin < (your_price - product.bid.now_price):
-                form.price.errors.append('金額不足')
+            if product.bid.per_price * form.price.data <= 0 or product.seller_id.id == current_user.id:
+                flash('錯誤', 'error')
             else:
-                if product.bid.buyer_id != None:
-                    if product.bid.buyer_id == current_user:
-                        current_user.hicoin += product.bid.now_price
-                    else:
-                        pre_buyer = User.objects(id=product.bid.buyer_id.id).first()
-                        pre_buyer.hicoin += product.bid.now_price
-                        pre_buyer.save()
+                if current_user != product.bid.buyer_id and current_user.hicoin < your_price:
+                    form.price.errors.append('金額不足')
+                    flash('金額不足', 'error')
+                elif current_user == product.bid.buyer_id and current_user.hicoin < (your_price - product.bid.now_price):
+                    form.price.errors.append('金額不足')
+                    flash('金額不足', 'error')
+                else:
+                    if product.bid.buyer_id != None:
+                        if product.bid.buyer_id == current_user:
+                            current_user.hicoin += product.bid.now_price
+                        else:
+                            pre_buyer = User.objects(id=product.bid.buyer_id.id).first()
+                            pre_buyer.hicoin += product.bid.now_price
+                            pre_buyer.save()
+                            flash('出價成功', 'success')
 
-                product.bid.buyer_id = current_user.id
-                if your_price >= product.price:
-                    Order(buyer_id=current_user.id, product_id=product_id).save()
-                    product.status = 1
-                product.bid.now_price = your_price
-                current_user.hicoin -= your_price
-                current_user.save()
-                product.save()
-                updatePriceViaSocketIO(product.id, your_price)
+                    product.bid.buyer_id = current_user.id
+                    if your_price >= product.price:
+                        Order(buyer_id=current_user.id, product_id=product_id).save()
+                        product.status = 1
+                    product.bid.now_price = your_price
+                    current_user.hicoin -= your_price
+                    current_user.save()
+                    product.save()
+                    updatePriceViaSocketIO(product.id, your_price)
 
 
         like = "far fa-heart"
