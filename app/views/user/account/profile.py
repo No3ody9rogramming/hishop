@@ -23,19 +23,22 @@ class ProfileView(MethodView):
         seller_orders = Order.objects(product_id__in=Product.objects(seller_id=current_user.id),status=ORDER_STATUS["COMPLETE"])
         buyer_orders = Order.objects(product_id__in=Product.objects(seller_id=current_user.id),status=ORDER_STATUS["COMPLETE"])
         rating = 0
-        
+        count_seller_orders = 0
+        count_buyer_orders = 0
         for order in seller_orders:
             print(order.seller_rating)
             if order.seller_rating != None:
                 rating += order.seller_rating
+                count_seller_orders += 1
             
         for order in buyer_orders:
             print(order.buyer_rating)
             if order.buyer_rating!= None:
                 rating += order.buyer_rating
+                count_buyer_orders += 1
             #rating += buyer_orders.buyer_rating
 
-        rating /= len(buyer_orders) + len(seller_orders)
+        rating /= count_buyer_orders + count_seller_orders
 
         print(rating)
 
