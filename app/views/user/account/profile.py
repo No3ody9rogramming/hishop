@@ -9,15 +9,37 @@ from wtforms.fields.html5 import EmailField, DateField
 from wtforms.validators import DataRequired, Email, InputRequired, Length, EqualTo, ValidationError, Optional
 
 from app.models.user import User
+from app.models.order import Order
+from app.models.product import Product
 
 import os
-
+#移交中 領收中 已完成 已取消 全部
+ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "1", "COMPLETE" : "2", "CANCEL" : "3", "ALL" : "4"}
 class ProfileView(MethodView):
     def get(self):
         form = ProfileForm(name=current_user.name, birth=current_user.birth, phone=current_user.phone,
         store_name=current_user.store_name ,icon=current_user.icon, address=current_user.address, prefer_begin_time=current_user.prefer_begin_time, prefer_end_time=current_user.prefer_end_time)
         
-        return render_template('user/account/profile.html', form=form)
+        seller_orders = Order.objects(product_id__in=Product.objects(seller_id=current_user.id),status=ORDER_STATUS["COMPLETE"])
+        buyer_orders = Order.objects(product_id__in=Product.objects(seller_id=current_user.id),status=ORDER_STATUS["COMPLETE"])
+        rating = 0
+        
+        for order in seller_orders:
+            print(order.seller_rating)
+            if order.seller_rating != None:
+                rating += order.seller_rating
+            
+        for order in buyer_orders:
+            print(order.buyer_rating)
+            if order.buyer_rating!= None:
+                rating += order.buyer_rating
+            #rating += buyer_orders.buyer_rating
+
+        rating /= len(buyer_orders) + len(seller_orders)
+
+        print(rating)
+
+        return render_template('user/account/profile.html', form=form,rating=rating)
     
     def post(self):
         form = ProfileForm()
