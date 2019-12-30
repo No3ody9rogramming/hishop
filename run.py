@@ -4,7 +4,7 @@ from app import app, login_manager, mail, socketio
 from app.models.user import check_admin, check_activate
 
 from app.views.index import IndexView
-from app.views.search import SearchView, CatSearchView, LineChatbotSearch
+from app.views.search import SearchView, CatSearchView, LineChatbotSearch, CompSearch
 from app.views.product.normal import ShowNormalView
 from app.views.product.bidding import ShowBiddingView
 from app.views.product.like import ProductLikeView
@@ -36,7 +36,7 @@ from app.views.admin.account.password import AdminPasswordView
 from app.views.admin.management.account import AccountView
 from app.views.admin.management.product import ProductView
 from app.views.admin.management.question import AdminQuestionView
-from app.views.admin.management.response import ResponseView
+from app.views.admin.management.coupon import AdminCouponView
 
 from app.views.user.hiChat.view import HiChatView
 from app.views.user.hiChat.update import HiChatUpdate
@@ -53,13 +53,14 @@ admin = Blueprint('admin', __name__)
 admin.add_url_rule(rule='/account/password', endpoint='password', view_func=login_required(check_admin(AdminPasswordView.as_view('password_view'))), methods=['GET', 'POST'])
 admin.add_url_rule(rule='/management/account', endpoint='account', view_func=login_required(check_admin(AccountView.as_view('account_view'))), methods=['GET', 'POST'])
 admin.add_url_rule(rule='/management/product', endpoint='product', view_func=login_required(check_admin(ProductView.as_view('product_view'))), methods=['GET', 'POST'])
-admin.add_url_rule(rule='/management/question', endpoint='question', view_func=login_required(check_admin(AdminQuestionView.as_view('admin_question_view'))), methods=['GET'])
-admin.add_url_rule(rule='/management/<string:question_id>', endpoint='response', view_func=login_required(check_admin(ResponseView.as_view('response_view'))), methods=['GET', 'POST'])
+admin.add_url_rule(rule='/management/question', endpoint='question', view_func=login_required(check_admin(AdminQuestionView.as_view('admin_question_view'))), methods=['GET', 'POST'])
+admin.add_url_rule(rule='/management/coupon', endpoint='coupon', view_func=login_required(check_admin(AdminCouponView.as_view('admin_coupon_view'))), methods=['GET', 'POST'])
 app.register_blueprint(admin, url_prefix='/admin')
 
 app.add_url_rule(rule='/', endpoint='index', view_func=IndexView.as_view('index_view'), methods=['GET'])
 app.add_url_rule(rule='/index', view_func=IndexView.as_view('index_view'), methods=['GET'])
 app.add_url_rule(rule='/search', endpoint='search', view_func=SearchView.as_view('search_view'), methods=['GET'])
+app.add_url_rule(rule='/compsearch', endpoint='compsearch', view_func=CompSearch.as_view('comp_search_view'), methods=['GET'])
 app.add_url_rule(rule='/search/<string:type_of>', endpoint='catsearch', view_func=CatSearchView.as_view('cat_search_view'), methods=['GET'])
 app.add_url_rule(rule='/linesearch', endpoint='linesearch', view_func=LineChatbotSearch.as_view('line_chatbot_search'), methods=['POST'])
 app.add_url_rule(rule='/normal/<string:product_id>', endpoint='show_normal', view_func=ShowNormalView.as_view('show_normal_view'), methods=['GET', 'POST'])

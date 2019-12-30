@@ -1,6 +1,70 @@
 {% extends "layouts/app.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+
+{% block styles %}
+	{{ super() }}
+	<style type = "text/css">
+		.productImg {
+			width: 100px;
+		    height:100px;
+		}
+		/* 星星点灯照亮我的家门 */
+.star_bg {
+    width: 120px; height: 20px;
+    background: url({{url_for('static', filename = 'star.png')}}) repeat-x;
+    position: relative;
+    overflow: hidden;
+}
+.star {
+    height: 100%; width: 24px;
+    line-height: 6em;
+    position: absolute;
+    z-index: 3;
+}
+.star:hover {    
+    background: url({{url_for('static', filename = 'star.png')}}) repeat-x 0 -20px!important;
+    left: 0; z-index: 2;
+}
+.star_1 { left: 0; }
+.star_2 { left: 24px; }
+.star_3 { left: 48px; }
+.star_4 { left: 72px; }
+.star_5 { left: 96px; }
+.star_1:hover { width: 24px; }
+.star_2:hover { width: 48px; }
+.star_3:hover { width: 72px; }
+.star_4:hover { width: 96px; }
+.star_5:hover { width: 120px; }
+
+label { 
+    display: block; _display:inline;
+    height: 100%; width: 100%;
+    cursor: pointer;
+}
+
+/* 按紐 */
+.score { position: absolute; clip: rect(0 0 0 0); }
+.score:checked + .star {    
+    background: url({{url_for('static', filename = 'star.png')}}) repeat-x 0 -20px;
+    left: 0; z-index: 1;
+}
+.score_1:checked ~ .star_1 { width: 24px; }
+.score_2:checked ~ .star_2 { width: 48px; }
+.score_3:checked ~ .star_3 { width: 72px; }
+.score_4:checked ~ .star_4 { width: 96px; }
+.score_5:checked ~ .star_5 { width: 120px; }
+
+.star_bg:hover .star {  background-image: none; }
+
+/* for IE6-IE8 JS 交互 */
+.star_checked {    
+    background: url({{url_for('static', filename = 'star.png')}}) repeat-x 0 -20px;
+    left: 0; z-index: 1;
+}
+	</style>
+{% endblock styles %}
+
 {% block page %}
 	
 		<div class = "row">
@@ -14,68 +78,53 @@
 				</button>
 				<div class="collapse" id="searchCheckBox">
 					<div class = "card-body">
-					<form class="form  required" action="{{ url_for('search', type='normal') }}" method="GET">
-							<input name="keyword" type="hidden" value = "進階">
-							<label class="form-check-label">價格:</label><br>
-							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
-								<input class="form-check-input" type="checkbox" name="price" id="inlineRadio1" value="100">
-								<label class="form-check-label" for="inlineRadio1">0~100</label>
+					<form class="form  required" action="{{ url_for('compsearch', type='normal') }}" method="GET">
+							<input name="keyword" type="hidden" value = {{keyword}}>
+							<label class="form-check-label">價格:</label>
+							<div class="input-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+								<input type="number" class="form-control " aria-label="Amount (to the nearest dollar)" name = "gteprice" value = "1">
+								<span class="input-group-text">元以上</span>
+								<input type="number" class="form-control " aria-label="Amount (to the nearest dollar)" name = "lteprice" value = "10000">
+								<span class="input-group-text">元以下</span>
 							</div>
-							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
-								<input class="form-check-input" type="checkbox" name="price" id="inlineRadio2" value="500">
-								<label class="form-check-label" for="inlineRadio2">101~500</label>
+							<label class="form-check-label">評價:</label>
+							<div class="col-auto">
+								<div id="starBg" class="star_bg">                    	
+										<input type="radio" id="starScore1" class="score score_1" value="1" name="score" checked="checked">
+										<a href="#starScore1" class="star star_1" title="差"><label for="starScore1">差</label></a>
+										<input type="radio" id="starScore2" class="score score_2" value="2" name="score">
+										<a href="#starScore2" class="star star_2" title="較差"><label for="starScore2">較差</label></a>
+										<input type="radio" id="starScore3" class="score score_3" value="3" name="score">
+										<a href="#starScore3" class="star star_3" title="普通"><label for="starScore3">普通</label></a>
+										<input type="radio" id="starScore4" class="score score_4" value="4" name="score">
+										<a href="#starScore4" class="star star_4" title="較好"><label for="starScore4">較好</label></a>
+										<input type="radio" id="starScore5" class="score score_5" value="5" name="score">
+										<a href="#5" class="star star_5" title="好"><label for="starScore5">好</label></a>
+								</div>
 							</div>
+							<label class="form-check-label form-check-inline">上架時間:</label>
 							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
-								<input class="form-check-input" type="checkbox" name="price" id="inlineRadio3" value="1000">
-								<label class="form-check-label" for="inlineRadio3">501~10000</label>
-							</div>
-							<br>
-								<label class="form-check-label">評價:</label>
-							<br>
-							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">		
-								<input class="form-check-input" type="checkbox" name="rate" id="inlineRadio4" value="1">
-								<label class="form-check-label" for="inlineRadio4"><i class="far fa-star"></i></label>
-							</div>
-							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
-								<input class="form-check-input" type="checkbox" name="rate" id="inlineRadio5" value="3">
-								<label class="form-check-label" for="inlineRadio5">
-									<i class="far fa-star"></i>
-									<i class="far fa-star"></i>
-									<i class="far fa-star"></i>
-								</label>
-							</div>
-							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
-								<input class="form-check-input" type="checkbox" name="rate" id="inlineRadio6" value="5">
-								<label class="form-check-label" for="inlineRadio6">
-									<i class="far fa-star"></i>
-									<i class="far fa-star"></i>
-									<i class="far fa-star"></i>
-									<i class="far fa-star"></i>
-									<i class="far fa-star"></i>
-								</label>
-							</div>
-							<br>
-							<label class="form-check-label">上架時間:</label><br>
-							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
-								<input class="form-check-input" type="checkbox" name="creat_time" id="inlineRadio7" value="1">
+								<input class="form-check-input" type="radio" name="create_time" id="inlineRadio7" value="1" checked="checked">
 								<label class="form-check-label" for="inlineRadio7">今天</label>
 							</div>
 							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
-								<input class="form-check-input" type="checkbox" name="creat_time" id="inlineRadio8" value="7">
+								<input class="form-check-input" type="radio" name="create_time" id="inlineRadio8" value="7">
 								<label class="form-check-label" for="inlineRadio8">七天內</label>
 							</div>
 							<div class="form-check form-check-inline col-lg-3 col-md-3 col-sm-3 col-xs-12">
-								<input class="form-check-input" type="checkbox" name="creat_time" id="inlineRadio9" value="30">
+								<input class="form-check-input" type="radio" name="create_time" id="inlineRadio9" value="30">
 								<label class="form-check-label" for="inlineRadio9">一個月內</label>
 							</div>
 							<br>
 							<input name="way" type="hidden" value= "{{way}}"><br>
+							<input name="complicate" type="hidden" value= "true">
+							
 					<button class="btn btn-secondary" type="submit">進階搜尋<i class="fas fa-search"></i></button>
 					</form> 
 					</div>
 				</div>
 				<div class="card">
-					<div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">搜尋結果 \\</div>
+					<div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">搜尋結果</div>
 					<div class="card-body">
 						<div class="box">
 							<div class="container">
@@ -89,7 +138,7 @@
 													剩餘時間：
 													{{"%s days"|format(( product.bid.due_time - now).days)}}
 											</div>
-											<img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Card image" height="180px">
+											<img class="card-img-top" src="{{url_for('static', filename = 'imageLoading.gif')}}" lsrc="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Card image" height="180px">
 												<div>
 													
 													<a style="display: inline-block; width: 55%; overflow: hidden; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_bidding', product_id=product.id|string) }}">{{product.name}}</a>
@@ -107,7 +156,7 @@
 									<div class="col-lg-3 col-md-6 col-sm-6 col-xs-6">
 										<div class="box-part ">
 											<a href="{{ url_for('show_normal', product_id=product.id|string) }}">
-											<img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Card image" height="180px">
+											<img class="card-img-top" src="{{url_for('static', filename = 'imageLoading.gif')}}" lsrc="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Card image" height="180px">
 												<div>
 													{% if way == "bidding" %}
 													<a style = "text-align: center; display: inline-block; width :100%; overflow: hidden; background-color: black; color:white; text-decoration:none;"href="{{ url_for('show_normal', product_id=product.id|string) }}">
@@ -134,3 +183,32 @@
 		</div>
 	
 {% endblock page %}
+
+{% block scripts %}
+    {{ super() }}
+    <script type="text/javascript"> 
+        //當圖片載入失敗，使用預設圖片代替//
+        document.addEventListener("error", function (e) {
+            let elem = e.target;
+            if (elem.tagName.toLowerCase() == 'img') {
+                elem.src = "{{ url_for('static',filename='errorPic.jpg') }}";
+            }
+            }, true);
+
+        $(function(){            
+            $.each($(".card-img-top"), function(){
+                var this_image = this;
+                var src = $(this_image).attr('src') || '' ;
+                if(src.length > 0){
+                    var lsrc = $(this_image).attr('lsrc') || '' ;
+                    if(lsrc.length > 0){
+                        var img = new Image();
+                        img.src = lsrc;
+                        this_image.src = img.src;
+                    }
+                }
+            });
+        });
+		
+    </script>
+{% endblock scripts %}
