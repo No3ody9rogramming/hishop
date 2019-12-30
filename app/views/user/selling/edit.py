@@ -13,6 +13,7 @@ from app import bcrypt
 from app.models.product import Product, Bid
 from app.models.category import Category
 
+from app import app
 import os
 
 
@@ -60,6 +61,12 @@ class EditView(MethodView):
             return redirect(url_for('user.selling_list'))
         
         return render_template('user/selling/edit.html', form=form, categories=categories, product=product)
+
+#update the browser cache, let the image be correct on window 
+@app.after_request
+def add_header(response):
+    response.cache_control.max_age = 0
+    return response
 
 class EditForm(FlaskForm):
     product_id = HiddenField("", validators=[InputRequired()])
