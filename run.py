@@ -36,6 +36,7 @@ from app.views.admin.management.account import AccountView
 from app.views.admin.management.product import ProductView
 from app.views.admin.management.question import AdminQuestionView
 from app.views.admin.management.response import ResponseView
+from app.views.admin.management.coupon import AdminCouponView
 
 from app.views.user.hiChat.view import HiChatView
 from app.views.user.hiChat.update import HiChatUpdate
@@ -54,6 +55,7 @@ admin.add_url_rule(rule='/management/account', endpoint='account', view_func=log
 admin.add_url_rule(rule='/management/product', endpoint='product', view_func=login_required(check_admin(ProductView.as_view('product_view'))), methods=['GET', 'POST'])
 admin.add_url_rule(rule='/management/question', endpoint='question', view_func=login_required(check_admin(AdminQuestionView.as_view('admin_question_view'))), methods=['GET'])
 admin.add_url_rule(rule='/management/<string:question_id>', endpoint='response', view_func=login_required(check_admin(ResponseView.as_view('response_view'))), methods=['GET', 'POST'])
+admin.add_url_rule(rule='/management/coupon', endpoint='coupon', view_func=login_required(check_admin(AdminCouponView.as_view('admin_coupon_view'))), methods=['GET', 'POST'])
 app.register_blueprint(admin, url_prefix='/admin')
 
 app.add_url_rule(rule='/', endpoint='index', view_func=IndexView.as_view('index_view'), methods=['GET'])
