@@ -101,7 +101,7 @@ class HiChatView(MethodView):
         return render_template(
             'user/hichatT.html',
             Tusers=User.objects,
-            users=users, currentUser=current_user)
+            users=users)
 
     def post(self):
         receiverID = request.values["receiverID"]

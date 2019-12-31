@@ -73,35 +73,35 @@
         var lastReadPos;
 
         $(function () {
-            resizeContent();
+            resizeMessageWindow();
             appendUnforeSeenUser();
 
             $('form').submit(function(e){
                 e.preventDefault(); // prevents page reloading\
                 let inputObj = $('#message');
                 if(inputObj.val().trim() && chatObjectID != null) {
-                    socket.emit('client send message', "{{ currentUser.id|string }}", chatObjectID, inputObj.val());
+                    socket.emit('client send message', "{{ current_user.id|string }}", chatObjectID, inputObj.val());
                     showCurrentUserMessage(inputObj.val());
                     makeMessageWindowToEnd();
-                    prependUser(chatObjectID, inputObj.val(), "{{ currentUser.name|string }}")
+                    prependUser(chatObjectID, inputObj.val(), "{{ current_user.name|string }}")
                 }
                 inputObj.val('');
                 return false;
             });
 
-            socket.on('messageTo{{ currentUser.id|string }}', function(data){
+            socket.on('messageTo{{ current_user.id|string }}', function(data){
                 prependUser(data.sender_id.$oid, data.message, data.sender_id.name);
             });
 
 
         });
 
-        $( window ).resize(resizeContent);
+        $( window ).resize(resizeMessageWindow);
 
         function showCurrentUserMessage(message){
             var data = {
                 sender_id: {
-                    $oid: "{{ currentUser.id|string }}",
+                    $oid: "{{ current_user.id|string }}",
                 },
                 message: message,
                 isRead: "false"
@@ -113,11 +113,11 @@
             $.ajax({
                 type:"POST",
                 url: "{{ url_for('user.hichat_update') }}",
-                data: { senderID : chatObjectID, receiverID : "{{ currentUser.id|string }}"}
+                data: { senderID : chatObjectID, receiverID : "{{ current_user.id|string }}"}
             });
         }
 
-        function resizeContent(){
+        function resizeMessageWindow(){
             var windowHeight = $(window).innerHeight();            
             var navHeight = $("#header").innerHeight();
             var formHeight = $("#inputForm").innerHeight();
@@ -156,8 +156,8 @@
         }
 
         function changeObject(obj) {
-            socket.off(chatObjectID + 'To{{ currentUser.id|string }}'); //unsubscribe last event
-            socket.off(chatObjectID + 'updateTo{{ currentUser.id|string }}');            
+            socket.off(chatObjectID + 'To{{ current_user.id|string }}'); //unsubscribe last event
+            socket.off(chatObjectID + 'updateTo{{ current_user.id|string }}');            
             var thisObj = $(obj);
             chatObjectID = thisObj.attr('id');
             chatObjectName = thisObj.attr('username');
@@ -165,14 +165,14 @@
             $(".active").removeClass("active");
             $("#" + chatObjectID).addClass("active");
 
-            socket.on(chatObjectID + 'To{{ currentUser.id|string }}', function(data){                
+            socket.on(chatObjectID + 'To{{ current_user.id|string }}', function(data){                
                 appendMessage(data);
                 setMessageToRead();
                 removeLastRead();
                 makeMessageWindowToEnd();
             });
 
-            socket.on(chatObjectID + 'updateTo{{ currentUser.id|string }}', function(){
+            socket.on(chatObjectID + 'updateTo{{ current_user.id|string }}', function(){
                 updateLastRead();
                 makeMessageWindowToEnd();
             });
@@ -182,12 +182,12 @@
             $.ajax({
                 type:"POST",
                 url: "{{ url_for('user.hichat') }}",
-                data: { senderID : "{{ currentUser.id|string }}", receiverID : chatObjectID},
+                data: { senderID : "{{ current_user.id|string }}", receiverID : chatObjectID},
                 success: function(data) {
                     messageInfos = JSON.parse(data);
                     for (messageInfo in messageInfos) {
                         appendMessage(messageInfos[messageInfo]);
-                    }                        
+                    }
                     findLastRead();
                     makeMessageWindowToEnd();
                     setMessageToRead();
@@ -222,7 +222,7 @@
         }
 
         function insertReadMessage(lastElement){
-            if(chatObjectID == "{{ currentUser.id|string }}")
+            if(chatObjectID == "{{ current_user.id|string }}")
                 return;
             var readInfo = '<div class="text-muted small">read</div>';
             lastElement.append(readInfo);
@@ -235,7 +235,7 @@
         function appendMessage(messageInfo) {
             var senderID = messageInfo.sender_id.$oid;
             var message = messageInfo.message;
-            if(senderID == "{{ currentUser.id }}") {
+            if(senderID == "{{ current_user.id }}") {
                 var isRead = messageInfo.isRead;
                 var newLI = '<div class="row justify-content-end" isread=' + isRead + '>' +
                             '<div class=" text-break background px-2 py-1 message" style="max-width:80%;">' +
