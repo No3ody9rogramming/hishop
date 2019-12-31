@@ -38,7 +38,11 @@ class ProfileView(MethodView):
                 count_buyer_orders += 1
             #rating += buyer_orders.buyer_rating
 
-        rating /= count_buyer_orders + count_seller_orders
+        if(count_buyer_orders + count_seller_orders!=0):
+            rating /= count_buyer_orders + count_seller_orders
+        else:
+            rating = 0
+
 
         print(rating)
 
