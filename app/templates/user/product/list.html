@@ -139,130 +139,130 @@
 					</div>
 					<div class="table-responsive-lg">
 						<div class="col custom-table-width">
-						<table class="table table-st2iped table-border">
-							<thead >
-								<tr>
-									<th scope="col">圖片</th>
-									<th scope="col">名稱</th>
-									<th scope="col">價格</th>
-									<th scope="col">狀態</th>
-									<th scope="col">評價</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for order in orders %}
-								    <tr>
-										<td>
-											<img class="productImg" src="{{url_for('static', filename = 'image/'+order.product_id.id|string +'/' + order.product_id.image)}}">
-										</td>
-										<td>{{ order.product_id.name }}</td>
-										<td>$ {{ order.product_id.price }}</td>
-										<td>
-											{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
-												移交中
-											{% elif order.status|string == ORDER_STATUS['RECEIPTING'] %}
-												領收中
-											{% elif order.status|string == ORDER_STATUS['COMPLETE'] %}
-												已完成
-											{% elif order.status|string == ORDER_STATUS['CANCEL'] %}
-												已取消
-											{% endif %}
-										</td>
-										<td>
-											{% if order.status|string == ORDER_STATUS['COMPLETE'] %}
-												<p style="color: #00A600;">已評價</p>
-											{% elif order.status|string == ORDER_STATUS['RECEIPTING'] %}
-												<!-- Button trigger modal -->
-												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong" onclick="comment( '{{ order.product_id.name }}', '{{order.product_id.id}}', '{{order.product_id.image}}', '{{order.product_id.price}}','{{order.product_id.seller_id.account}}' )">
-														未評價
-												</button>	
-											{% else %}
-												<p style="color: red;">未評價</p>
-											{%  endif %}
-										</td>
-								    </tr>
-								{% endfor %}
+							<table class="table table-st2iped table-border">
+								<thead >
+									<tr>
+										<th scope="col">圖片</th>
+										<th scope="col">名稱</th>
+										<th scope="col">價格</th>
+										<th scope="col">狀態</th>
+										<th scope="col">評價</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for order in orders %}
+										<tr>
+											<td>
+												<img class="productImg" src="{{url_for('static', filename = 'image/'+order.product_id.id|string +'/' + order.product_id.image)}}">
+											</td>
+											<td>{{ order.product_id.name }}</td>
+											<td>$ {{ order.product_id.price }}</td>
+											<td>
+												{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
+													移交中
+												{% elif order.status|string == ORDER_STATUS['RECEIPTING'] %}
+													領收中
+												{% elif order.status|string == ORDER_STATUS['COMPLETE'] %}
+													已完成
+												{% elif order.status|string == ORDER_STATUS['CANCEL'] %}
+													已取消
+												{% endif %}
+											</td>
+											<td>
+												{% if order.status|string == ORDER_STATUS['COMPLETE'] %}
+													<p style="color: #00A600;">已評價</p>
+												{% elif order.status|string == ORDER_STATUS['RECEIPTING'] %}
+													<!-- Button trigger modal -->
+													<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong" onclick="comment( '{{ order.product_id.name }}', '{{order.product_id.id}}', '{{order.product_id.image}}', '{{order.product_id.price}}','{{order.product_id.seller_id.account}}' )">
+															未評價
+													</button>	
+												{% else %}
+													<p style="color: red;">未評價</p>
+												{%  endif %}
+											</td>
+										</tr>
+									{% endfor %}
 
-								<!-- Modal -->
-								<div class="modal fade " id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="transform: translate(0,30vh);">
-									<div class="modal-dialog" role="document">
-									<div class="modal-content ">
-										<div class="modal-header border border-dark bg-warning">
-										<h5 class="modal-title text-center" id="exampleModalLongTitle">評價商品</h5>
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-										</div>
-										<div class="modal-body">
-										<div class="row">
-											<div class="col-auto" id="commentImg">
-												圖片
+									<!-- Modal -->
+									<div class="modal fade " id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" style="transform: translate(0,30vh);">
+										<div class="modal-dialog" role="document">
+										<div class="modal-content ">
+											<div class="modal-header border border-dark bg-warning">
+											<h5 class="modal-title text-center" id="exampleModalLongTitle">評價商品</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
 											</div>
-											<div class="col-5">
-												<p id="commentName">商品AAA</p>
-												<p id="commentAccount" >賣家帳號</p>
-											</div>
-											<div class="col-3">
-												<p id="commentPrice">價錢</p>
-											</div>
-										</div>
-										<form action="{{ url_for('user.purchase_list') }}" method="POST">
-											{{ form.csrf_token }}
+											<div class="modal-body">
 											<div class="row">
-												<input type="hidden" class="form-control" name="commentProductID" id="commentProductID">
-												<div class="col-auto">
-													<p>評分:</p>
+												<div class="col-auto" id="commentImg">
+													圖片
 												</div>
-												<div class="col-auto">
-													<div id="starBg" class="star_bg">                    	
-															<input type="radio" id="starScore1" class="score score_1" value="1" name="score">
-															<a href="#starScore1" class="star star_1" title="差"><label for="starScore1">差</label></a>
-															<input type="radio" id="starScore2" class="score score_2" value="2" name="score">
-															<a href="#starScore2" class="star star_2" title="較差"><label for="starScore2">較差</label></a>
-															<input type="radio" id="starScore3" class="score score_3" value="3" name="score">
-															<a href="#starScore3" class="star star_3" title="普通"><label for="starScore3">普通</label></a>
-															<input type="radio" id="starScore4" class="score score_4" value="4" name="score">
-															<a href="#starScore4" class="star star_4" title="較好"><label for="starScore4">較好</label></a>
-															<input type="radio" id="starScore5" class="score score_5" value="5" name="score">
-															<a href="#5" class="star star_5" title="好"><label for="starScore5">好</label></a>
+												<div class="col-5">
+													<p id="commentName">商品AAA</p>
+													<p id="commentAccount" >賣家帳號</p>
+												</div>
+												<div class="col-3">
+													<p id="commentPrice">價錢</p>
+												</div>
+											</div>
+											<form action="{{ url_for('user.purchase_list') }}" method="POST">
+												{{ form.csrf_token }}
+												<div class="row">
+													<input type="hidden" class="form-control" name="commentProductID" id="commentProductID">
+													<div class="col-auto">
+														<p>評分:</p>
 													</div>
-												</div>
+													<div class="col-auto">
+														<div id="starBg" class="star_bg">                    	
+																<input type="radio" id="starScore1" class="score score_1" value="1" name="score">
+																<a href="#starScore1" class="star star_1" title="差"><label for="starScore1">差</label></a>
+																<input type="radio" id="starScore2" class="score score_2" value="2" name="score">
+																<a href="#starScore2" class="star star_2" title="較差"><label for="starScore2">較差</label></a>
+																<input type="radio" id="starScore3" class="score score_3" value="3" name="score">
+																<a href="#starScore3" class="star star_3" title="普通"><label for="starScore3">普通</label></a>
+																<input type="radio" id="starScore4" class="score score_4" value="4" name="score">
+																<a href="#starScore4" class="star star_4" title="較好"><label for="starScore4">較好</label></a>
+																<input type="radio" id="starScore5" class="score score_5" value="5" name="score">
+																<a href="#5" class="star star_5" title="好"><label for="starScore5">好</label></a>
+														</div>
+													</div>
 
-												{% with messages = get_flashed_messages(category_filter=['error']) %}
-													{% if messages %}
-														{% for message in messages %}
-															
-																<div class="col-auto">
-																	<div class="alert alert-danger" role="alert">
-																		{{ message }}
+													{% with messages = get_flashed_messages(category_filter=['error']) %}
+														{% if messages %}
+															{% for message in messages %}
+																
+																	<div class="col-auto">
+																		<div class="alert alert-danger" role="alert">
+																			{{ message }}
+																		</div>
 																	</div>
-																</div>
-															
-														{% endfor %}
-													{% endif %}
-												{% endwith %}
+																
+															{% endfor %}
+														{% endif %}
+													{% endwith %}
 
-											</div>
-											<div class="row">
-												<div class="col">
-													{% if form.detail.errors %}
-														{{ form.detail(class="form-control is-invalid", placeholder="評論") }}
-														{% for error in form.detail.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-													{% else %}
-														{{ form.detail(class="form-control", placeholder="評論") }}
-													{% endif %}
-												</div>																
-											</div>
-											<div class="modal-footer">
-											{{ form.submit(class="btn btn-primary") }}
-											</div>
-										</form>
+												</div>
+												<div class="row">
+													<div class="col">
+														{% if form.detail.errors %}
+															{{ form.detail(class="form-control is-invalid", placeholder="評論") }}
+															{% for error in form.detail.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+														{% else %}
+															{{ form.detail(class="form-control", placeholder="評論") }}
+														{% endif %}
+													</div>																
+												</div>
+												<div class="modal-footer">
+												{{ form.submit(class="btn btn-primary") }}
+												</div>
+											</form>
+										</div>
+										</div>
 									</div>
-									</div>
-								</div>
 
-							</tbody>
-						</table>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
