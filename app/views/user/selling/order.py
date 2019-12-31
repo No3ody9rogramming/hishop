@@ -5,12 +5,11 @@ from wtforms import SubmitField, TextAreaField, HiddenField, StringField
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, InputRequired, Length, EqualTo, ValidationError
 
-from app.models.order import Order
+from app.models.order import Order, ORDER_STATUS
 from app.models.product import Product
 from app.models.user import User
 
-#移交中 領收中 已完成 已取消 全部
-ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "1", "COMPLETE" : "2", "CANCEL" : "3", "ALL" : "4"}
+import datetime
 class OrderListView(MethodView):
     def get(self):
         form = OrderListForm()
@@ -54,6 +53,7 @@ class OrderListView(MethodView):
                 order.seller_comment = form.detail.data      # correct
                 order.seller_rating = request.values['score']  # correct
                 order.status = ORDER_STATUS["RECEIPTING"]
+                order.transfer_time = datetime.datetime.utcnow()+datetime.timedelta(hours=8)
                 order.save()
                 print(request.values['score']) 
 

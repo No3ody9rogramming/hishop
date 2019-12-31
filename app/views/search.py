@@ -44,7 +44,7 @@ class CatSearchView(MethodView):
         categories = Category.objects(category__contains= type_of)
         #for c in categories:
         #    print(c.category)
-        products = Product.objects(categories__in = categories )
+        products = Product.objects(categories__in = categories, status=0)
         way = "normal"
         return render_template('search.html', products=products, way=way, now=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
 
