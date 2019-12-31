@@ -40,6 +40,14 @@
 			max-height: 90%;
 		}
 
+        .dot {
+            height: 5px;
+            width: 5px;
+            background-color: blue;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
 	</style>
 {% endblock styles %}
 
@@ -68,5 +76,69 @@
 		else
 	      	socket = io.connect({path: "{{config['REVERSE_PROXY_PATH']}}/socket.io"}); // for server deployment
 	</script>
+    <script>
+
+        $(function () {
+
+            resizeNotification();
+
+            $.ajax({
+                type:"GET",
+                url: "{{ url_for('user.notification') }}",
+                success: function(data) {
+                    notificationInfos = JSON.parse(data);
+                    for(notification in notificationInfos){
+                        prependNotification(notificationInfos[notification]);
+                    }
+                }
+            });
+
+            socket.on('{{ config.HISHOP_UID }}To{{ current_user.id|string }}', function(data){                
+                prependNotification(data);
+            });            
+        });
+
+        $( window ).resize(resizeNotification);
+
+        $('#notificationDropdown').on({
+            'shown.bs.dropdown': setMessageToRead,
+            'hide.bs.dropdown': removeUnreadSign
+        });
+
+        function prependNotification(notification) {
+            var isRead = notification.isRead;
+            var message = notification.message;
+            if(!isRead){
+                message = '<span class="dot"></span> ' + message;
+            }
+            var newLI = '<div class="dropdown-item" isread=' + isRead + '>' +
+                        '<div class="text-break text-mute">' +
+                        message + '</div>' +                   
+                        '</div>' +
+                        '<hr>';
+            $('#dropdownWindow').prepend(newLI);            
+        }
+
+        function setMessageToRead(){ //duplicate with hichat one
+            $.ajax({
+                type:"POST",
+                url: "{{ url_for('user.hichat_update') }}",
+                data: { senderID : "{{ config.HISHOP_UID }}", receiverID : "{{ current_user.id|string }}"}
+            });
+        }
+
+        function removeUnreadSign(){
+            $(".dot").remove();
+        }
+
+        function resizeNotification(){
+            var windowObj = $(window);
+            var dropdownWindow = $("#dropdownWindow");
+            var notificationDropdown = $("#notificationDropdown")
+            dropdownWindow.css("maxHeight", windowObj.innerHeight() / 2);
+            dropdownWindow.outerWidth(windowObj.innerWidth() - notificationDropdown.position().left - 10)
+        }
+
+    </script>
 {% endblock scripts %}
 

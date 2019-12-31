@@ -13,6 +13,8 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage, TemplateS
 from app.models.keyword import Keyword
 from app.models.product import Product
 from app.models.category import Category
+from app.models.order import Order
+from app.models.user import User
 from app import app
 
 import os, datetime
@@ -123,20 +125,33 @@ def handle_message(event):
 
 class CompSearch(MethodView):
     def get(self):
+        
+       
         if request.args.get('way') == "bidding":
-            productsA = Product.objects(name__icontains=request.args.get('keyword'), bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8), status=0, bidding=True)
-            productsB = productsA.filter( price__lte=request.args.get('lteprice'), price__gte=request.args.get('gteprice'))
-            a = int(request.args.get('create_time'))
-            products = productsB.filter(create_time__gt=datetime.datetime.utcnow()-datetime.timedelta(hours=8)-datetime.timedelta(days = a))
+            products = Product.objects(name__icontains=request.args.get('keyword'), bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8), status=0, bidding=True)
             way = "bidding"
         elif request.args.get('way') == "normal":
-            productsA = Product.objects(name__icontains=request.args.get('keyword'), status=0, bidding=False)
-            productsB = productsA.filter( price__lte=request.args.get('lteprice'), price__gte=request.args.get('gteprice'))
-            a = int(request.args.get('create_time'))
-            products = productsB.filter(create_time__gt=datetime.datetime.utcnow()-datetime.timedelta(hours=8)-datetime.timedelta(days = a))
+            products = Product.objects(name__icontains=request.args.get('keyword'), status=0, bidding=False)
             way = "normal"
         else:
             abort(404)
+        listUser = []
+        for user in User.objects():
+            products_withUser = Product.objects(seller_id=user.id)
+            orders = Order.objects.filter(product_id__in= products_withUser, seller_rating__gt = 1)
+            mysum = 0 
+            counter = 0
+            for order in orders:
+                mysum += order.seller_rating
+                counter +=1
+            if counter > 0:
+                average = mysum / counter
+                if average > int(request.args.get('score')):
+                    listUser.append(user.id)
+        products = products.filter( price__lte=request.args.get('lteprice'), price__gte=request.args.get('gteprice'))
+        a = int(request.args.get('create_time'))
+        products = products.filter(create_time__gt=datetime.datetime.utcnow()-datetime.timedelta(hours=8)-datetime.timedelta(days = a))
+        products = products.filter(seller_id__in = listUser)
         keyword = request.args.get('keyword')
 
         return render_template('search.html', products=products, way=way, now=datetime.datetime.utcnow()+datetime.timedelta(hours=8), keyward = keyword)

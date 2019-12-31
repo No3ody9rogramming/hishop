@@ -25,6 +25,7 @@
 		.productImg{
 			width: 100%;
 			height: 100%;
+			min-height: 150px;
 		}
 
 		#productprice{
@@ -47,6 +48,21 @@
 	                elem.src = "{{ url_for('static',filename='errorPic.jpg') }}";
 	            }
 	            }, true);
+
+		$(function(){            
+            $.each($(".card-img-top"), function(){
+                var this_image = this;
+                var src = $(this_image).attr('src') || '' ;
+                if(src.length > 0){
+                    var lsrc = $(this_image).attr('lsrc') || '' ;
+                    if(lsrc.length > 0){
+                        var img = new Image();
+                        img.src = lsrc;
+                        this_image.src = img.src;
+                    }
+                }
+            });
+        });
 
 
 		function like(element, product_id) {
@@ -78,13 +94,13 @@
 
 <div id="row" class="row" style="margin-top: 50px;">
 		<div class="col-md-6">
-			<img class="productImg" src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}"> 
+			<img class="card-img-top" src="{{url_for('static', filename = 'imageLoading.gif')}}" lsrc="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture"> 
 		</div>
 		<div class="col-md-6">
 			<h3>{{ product.name }}</h3>
 			<p>已有 {{ product.view}} 人觀看此商品</p>
 			<h5 id="productprice">$ {{ product.price }} </h5>
-			<p>剩餘時間：{{ "%s days"|format(product.bid.due_time.days) }}</p>
+			<p>剩餘時間：{{"%s days"|format(( product.bid.due_time - now).days)}}</p>
 			<p>起標價 : {{ product.bid.low_price }}</p>
 			<p>目前價格 : <span id="currentPrice" >{{ product.bid.now_price }}</span></p>
 			<p>{{product.bid.per_price}}/一刀(輸入格內為刀數)</p>
@@ -92,21 +108,20 @@
 				<form id="form" action="{{ url_for('show_bidding', product_id=product.id|string) }}" method="POST" role="form" class="form-inline" style="margin-top: 5px; margin-right: 5px;">
 					{{ form.csrf_token }}
 
-					{% if product.status|string == PRODUCT_STATUS['SELLING']%}
-					<div class="col-md-5 form-group required row">
+					{% if product.status|string != PRODUCT_STATUS['SELLING'] %}
+						<p style="position:absolute; bottom:0; right:50px;">競標已結束</p>
+					{% elif current_user.status == 2%}
+						<p style="position:absolute; bottom:0; right:50px;">哈哈我是管理員</p>
+					{% else%}
 						{% if form.price.errors %}
 							<input id="price" name="price" type="number" class="form-control is-invalid" placeholder="請輸入價格" value="{{ form.price.data }}" required>
 							{% for error in form.price.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
 						{% else %}
 							<input id="price" name="price" type="number" class="form-control" placeholder="請輸入價格" value="0" required>
 						{% endif %}
-					
 						{{ form.submit(class="btn btn-sencondary") }}
-						{% else %}
-						<p style="position:absolute; bottom:0; right:50px;">競標已結束</p>
-						{% endif %}
 						<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red;"><i class="{{ like }}"></i></a>
-					</div>
+					{% endif %}
 				</form>
 			</div>
 		</div>
@@ -165,61 +180,67 @@
 
 	<div id="row" class="row">
 		<div class="col-md-12">
-			商品評價 :
+			賣家評價 :						
+			{% for order in orders %}
+			<div class="row">
+				{%if order.seller_rating != None and order.seller_comment != None%}
+				<p>商品名稱 : {{order.product_id.name}}</p>
+				<p>評價 : {{order.seller_rating}}</p>
+				<p>評論 : {{order.seller_comment}}</p>
+				{%endif%}
+			</div>
+			{%endfor%}
 		</div>
-		
-		<div class="col-md-12">
-			買家資訊 : 
-			評價 :
-			評論 :
-		</div>
-	
 	</div>
 	
 	<div class="row">
         <div class="col-md-12">
             <br>
-            <div class="card">
-                <div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">相似商品</div>
+			<div class="card">
+                <div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">最新競標商品</div>
                 <div class="card-body">
-                    <div id="hotProductIndicators" class="carousel slide" data-ride="carousel" data-interval="8000">
+                    <div id="bidProductIndicators" class="carousel slide" data-ride="false"  data-interval="false">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="row">
-                                    {% for product in popular_products %}
+                                    {% for product in similar_product %}
 
+                                    <a href="{{ url_for('show_bidding', product_id=product.id|string) }}">
                                         <div class="col-md-3 col-6">
-                                            <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
-                                            <img class="card-img-top" src="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
-                                            </a>
-                                            <div>
-                                                <a style="display: inline-block; width: 55%; overflow: hidden; text-overflow: ellipsis; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_normal', product_id=product.id|string) }}">{{product.name}}</a>
-                                                <a style="display: inline-block; width: 45%; float: right; text-align: center; text-decoration:none;" class="bg-secondary text-white" href="{{ url_for('show_normal', product_id=product.id|string) }}">${{product.price}}</a>
+                                            <div class="bg-dark text-white text-center">
+                                                剩餘時間：
+                                                {{"%s days"|format(( product.bid.due_time - now).days)}}
+                                            </div>
+                                            <img class="card-img-top" src="{{url_for('static', filename = 'imageLoading.gif')}}" lsrc="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
+                                            <div class="align-items-end">
+                                                <a style="display: inline-block; width: 55%; overflow: hidden; text-overflow: ellipsis; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_bidding', product_id=product.id|string) }}">{{product.name}}</a>
+                                                <a style="display: inline-block; width: 45%; float: right; text-align: center; text-decoration:none;" class="bg-secondary text-white" href="{{ url_for('show_bidding', product_id=product.id|string) }}">${{product.price}}</a>
                                             </div>
                                         </div>
-
-                                    {% if loop.index % 4 == 0 and loop.index > 1 %}
+                                    </a>
+    
+                                        {% if loop.index % 4 == 0 and loop.index > 1 %}
+                                    </div>
                                 </div>
-                            </div>
-                                        {% if loop.index != loop.length %}
-                            <div class="carousel-item">
-                                <div class = "row">
+                                            {% if loop.index != loop.length %}
+                                <div class="carousel-item">
+                                    <div class = "row">
+                                            {% endif %}
                                         {% endif %}
-                                    {% endif %}
 
-                                    {% if loop.length % 4 != 0 and loop.index == loop.length%}
+                                        {% if loop.length % 4 != 0 and loop.index == loop.length%}
+                                    </div>
                                 </div>
-                            </div>
-                                    {%endif%}
-
-                                    {% endfor %}
-
+                                        {%endif%}
+    
+                                        {% endfor %}
+                
                         </div>
-                        <a class="carousel-control-prev" href="#hotProductIndicators" role="button" data-slide="prev" style="width: auto;">
+                        <a class="carousel-control-prev" href="#bidProductIndicators" role="button" data-slide="prev" style="width: auto;">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="sr-only">Previous</span>
                         </a>
-                        <a class="carousel-control-next" href="#hotProductIndicators" role="button" data-slide="next" style="width: auto;">
+                        <a class="carousel-control-next" href="#bidProductIndicators" role="button" data-slide="next" style="width: auto;">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="sr-only">Next</span>
                         </a>
