@@ -130,129 +130,129 @@
 
 					<div class="table-responsive">
 						<div class="col custom-table-width">
-						<table class="table table-striped">
-							<thead>
-								<tr>
-									<th scope="col" class="text-nowrap">圖片</th>
-									<th scope="col" class="text-nowrap">名稱</th>
-									<th scope="col" class="text-nowrap">價格</th>
-									<th scope="col" class="text-nowrap">狀態</th>
-									<th scope="col" class="text-nowrap">評價</th>
-									<th scope="col" class="text-nowrap">操作</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for order in orders %}
-								    <tr>
-										<td><img class="productImg" src="{{url_for('static', filename = 'image/'+order.product_id.id|string +'/' + order.product_id.image)}}"></td>
-										<td>{{ order.product_id.name }}</td>
-										<td>$ {{ order.product_id.price }}</td>
-										<td>
-											{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
-												<!-- Button trigger modal -->
-												<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="setID('{{order.product_id.id}}')">
-													移交中
-												</button>
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th scope="col" class="text-nowrap">圖片</th>
+										<th scope="col" class="text-nowrap">名稱</th>
+										<th scope="col" class="text-nowrap">價格</th>
+										<th scope="col" class="text-nowrap">狀態</th>
+										<th scope="col" class="text-nowrap">評價</th>
+										<th scope="col" class="text-nowrap">操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for order in orders %}
+										<tr>
+											<td><img class="productImg" src="{{url_for('static', filename = 'image/'+order.product_id.id|string +'/' + order.product_id.image)}}"></td>
+											<td>{{ order.product_id.name }}</td>
+											<td>$ {{ order.product_id.price }}</td>
+											<td>
+												{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
+													<!-- Button trigger modal -->
+													<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="setID('{{order.product_id.id}}')">
+														移交中
+													</button>
 
-												
-											{% elif order.status|string == ORDER_STATUS['RECEIPTING'] %}
-												領收中
-											{% elif order.status|string == ORDER_STATUS['COMPLETE'] %}
-												已完成
-											{% elif order.status|string == ORDER_STATUS['CANCEL'] %}
-												已取消
-											{% endif %}
-										</td>
-										<td>{{ order.seller_comment }}</td>
-										<td>
-											{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
-												<form method="POST" action="{{ url_for('user.order_list') }}">
-													{{ form.csrf_token }}
-													<input type="hidden" id="cancelOrderID" name="cancelOrderID" value={{order.id}}>
-													<input type="submit" class="btn btn-primary" id="remove" name="remove" value="取消訂單" onclick="setCancelID('{{order.id}}')">
 													
-												</form>
-											{% else %}
-												None
-											{% endif %}
-										</td>
-								    </tr>
-								{% endfor %}
-								<!-- Modal -->
-								<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="transform: translate(0,30vh);">
-									<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										<div class="modal-header border border-dark bg-warning">
-										<h5 class="modal-title" id="exampleModalLabel">更改狀態</h5>
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-										</div>
-										<form action="{{ url_for('user.order_list') }}" method="POST">
-											{{ form.csrf_token }}
-											<div class="modal-body">
-											
-												將狀態更改為領收?
-												<input type="hidden" id="ProductID" name="ProductID">
-												<div class="row">
-													<div class="col-auto">
-														<p>評分:</p>
-													</div>
-
-													<div class="col-auto">
-														<div id="starBg" class="star_bg">                    	
-																<input type="radio" id="starScore1" class="score score_1" value="1" name="score">
-																<a href="#starScore1" class="star star_1" title="差"><label for="starScore1">差</label></a>
-																<input type="radio" id="starScore2" class="score score_2" value="2" name="score">
-																<a href="#starScore2" class="star star_2" title="較差"><label for="starScore2">較差</label></a>
-																<input type="radio" id="starScore3" class="score score_3" value="3" name="score">
-																<a href="#starScore3" class="star star_3" title="普通"><label for="starScore3">普通</label></a>
-																<input type="radio" id="starScore4" class="score score_4" value="4" name="score">
-																<a href="#starScore4" class="star star_4" title="較好"><label for="starScore4">較好</label></a>
-																<input type="radio" id="starScore5" class="score score_5" value="5" name="score">
-																<a href="#5" class="star star_5" title="好"><label for="starScore5">好</label></a>
+												{% elif order.status|string == ORDER_STATUS['RECEIPTING'] %}
+													領收中
+												{% elif order.status|string == ORDER_STATUS['COMPLETE'] %}
+													已完成
+												{% elif order.status|string == ORDER_STATUS['CANCEL'] %}
+													已取消
+												{% endif %}
+											</td>
+											<td>{{ order.seller_comment }}</td>
+											<td>
+												{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
+													<form method="POST" action="{{ url_for('user.order_list') }}">
+														{{ form.csrf_token }}
+														<input type="hidden" id="cancelOrderID" name="cancelOrderID" value={{order.id}}>
+														<input type="submit" class="btn btn-primary" id="remove" name="remove" value="取消訂單" onclick="setCancelID('{{order.id}}')">
+														
+													</form>
+												{% else %}
+													None
+												{% endif %}
+											</td>
+										</tr>
+									{% endfor %}
+									<!-- Modal -->
+									<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="transform: translate(0,30vh);">
+										<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header border border-dark bg-warning">
+											<h5 class="modal-title" id="exampleModalLabel">更改狀態</h5>
+											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+											</div>
+											<form action="{{ url_for('user.order_list') }}" method="POST">
+												{{ form.csrf_token }}
+												<div class="modal-body">
+												
+													將狀態更改為領收?
+													<input type="hidden" id="ProductID" name="ProductID">
+													<div class="row">
+														<div class="col-auto">
+															<p>評分:</p>
 														</div>
+
+														<div class="col-auto">
+															<div id="starBg" class="star_bg">                    	
+																	<input type="radio" id="starScore1" class="score score_1" value="1" name="score">
+																	<a href="#starScore1" class="star star_1" title="差"><label for="starScore1">差</label></a>
+																	<input type="radio" id="starScore2" class="score score_2" value="2" name="score">
+																	<a href="#starScore2" class="star star_2" title="較差"><label for="starScore2">較差</label></a>
+																	<input type="radio" id="starScore3" class="score score_3" value="3" name="score">
+																	<a href="#starScore3" class="star star_3" title="普通"><label for="starScore3">普通</label></a>
+																	<input type="radio" id="starScore4" class="score score_4" value="4" name="score">
+																	<a href="#starScore4" class="star star_4" title="較好"><label for="starScore4">較好</label></a>
+																	<input type="radio" id="starScore5" class="score score_5" value="5" name="score">
+																	<a href="#5" class="star star_5" title="好"><label for="starScore5">好</label></a>
+															</div>
+														</div>
+
+														{% with messages = get_flashed_messages(category_filter=['error']) %}
+															{% if messages %}
+																{% for message in messages %}
+																	
+																		<div class="col-auto">
+																			<div class="alert alert-danger" role="alert">
+																				{{ message }}
+																			</div>
+																		</div>
+																	
+																{% endfor %}
+															{% endif %}
+														{% endwith %}
+
 													</div>
 
-													{% with messages = get_flashed_messages(category_filter=['error']) %}
-														{% if messages %}
-															{% for message in messages %}
-																
-																	<div class="col-auto">
-																		<div class="alert alert-danger" role="alert">
-																			{{ message }}
-																		</div>
-																	</div>
-																
-															{% endfor %}
-														{% endif %}
-													{% endwith %}
+													<div class="row">
+														<div class="col">
+															{% if form.detail.errors %}
+																{{ form.detail(class="form-control is-invalid", placeholder="評論") }}
+																{% for error in form.detail.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+															{% else %}
+																{{ form.detail(class="form-control", placeholder="評論") }}
+															{% endif %}
+														</div>																
+													</div>
 
 												</div>
-
-												<div class="row">
-													<div class="col">
-														{% if form.detail.errors %}
-															{{ form.detail(class="form-control is-invalid", placeholder="評論") }}
-															{% for error in form.detail.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
-														{% else %}
-															{{ form.detail(class="form-control", placeholder="評論") }}
-														{% endif %}
-													</div>																
+												<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
+												{{form.submit(class="btn btn-primary")}}
 												</div>
-
-											</div>
-											<div class="modal-footer">
-											<button type="button" class="btn btn-secondary" data-dismiss="modal">返回</button>
-											{{form.submit(class="btn btn-primary")}}
-											</div>
-										</form>
+											</form>
+										</div>
+										</div>
 									</div>
-									</div>
-								</div>
-								
-							</tbody>
-						</table>
+									
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
