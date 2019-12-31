@@ -3,6 +3,9 @@ import datetime
 from app.models.category import Category
 from app.models.user import User
 from app import db
+import threading
+
+PRODUCT_STATUS = {"SELLING" : 0, "SOLD" : 1, "FROZEN" : 2, "REMOVE" : 3, "ALL" : 4}
 
 class Bid(db.EmbeddedDocument):
     per_price = db.IntField(required=True, min_value=1, max_value=1000)

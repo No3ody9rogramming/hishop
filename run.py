@@ -1,7 +1,9 @@
 from flask_login import login_required
 
 from app import app, login_manager, mail, socketio
+from app.check import check_time
 from app.models.user import check_admin, check_activate
+from app.models.product import Product
 
 from app.views.index import IndexView
 from app.views.search import SearchView, CatSearchView, LineChatbotSearch, CompSearch
@@ -45,8 +47,8 @@ from app.views.user.hiChat.update import HiChatUpdate
 from app.socketioService import socketServiceOn
 
 from flask_mail import Message
-
 from flask import render_template, Blueprint
+from apscheduler.schedulers.background import BackgroundScheduler
 
 socketServiceOn()
 
@@ -101,4 +103,7 @@ user.add_url_rule(rule='/notification', endpoint='notification', view_func=login
 app.register_blueprint(user, url_prefix='/user')
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host='0.0.0.0')
+	scheduler = BackgroundScheduler()
+	scheduler.add_job(func=check_time)
+	#scheduler.start()
+	socketio.run(app, debug=True, host='0.0.0.0', use_reloader=False)
