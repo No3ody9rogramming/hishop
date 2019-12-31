@@ -75,8 +75,8 @@
 		padding-left: 0;
 		}
 		.table {
-		
-		min-width: 170%;
+		min-width: 100%;
+		max-width: 110vw;
 		
 		}
 	</style>
@@ -142,11 +142,11 @@
 							<table class="table table-st2iped table-border">
 								<thead >
 									<tr>
-										<th scope="col">圖片</th>
-										<th scope="col">名稱</th>
-										<th scope="col">價格</th>
-										<th scope="col">狀態</th>
-										<th scope="col">評價</th>
+										<th scope="col" style="width: 10%;">圖片</th>
+										<th scope="col" class="text-nowrap" >名稱</th>
+										<th scope="col" class="text-nowrap">價格</th>
+										<th scope="col" class="text-nowrap">狀態</th>
+										<th scope="col" class="text-nowrap">評價</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -155,7 +155,7 @@
 											<td>
 												<img class="productImg" src="{{url_for('static', filename = 'image/'+order.product_id.id|string +'/' + order.product_id.image)}}">
 											</td>
-											<td>{{ order.product_id.name }}</td>
+											<td style="width: fit-content;">{{ order.product_id.name }}</td>
 											<td>$ {{ order.product_id.price }}</td>
 											<td>
 												{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
