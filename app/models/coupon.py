@@ -6,5 +6,5 @@ class Coupon(db.Document):
     detail = db.StringField(required=True, max_length=40000)
     discount = db.IntField(required=True, min_value=1)
     status = db.IntField(requried=True, default=0)
-    create_time = db.DateTimeField(required=True)
+    begin_time = db.DateTimeField(required=True)
     due_time = db.DateTimeField(requried=True)
