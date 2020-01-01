@@ -64,6 +64,38 @@
             });
         });
 
+		$("#remove").click(function(e){
+			e.preventDefault();
+			{% if current_user.is_anonymous %}
+				window.location = window.location = "{{ url_for('login', _external=True, next=url_for('show_bidding', product_id=product.id|string)) }}";
+			{% endif %}
+
+			console.log(123);
+
+			var data = {
+				csrf_token: $("#csrf_token").val(),
+				remove: true,
+			};
+
+			$.ajax({
+				type:"POST",
+				url: "{{ url_for('show_bidding', product_id=product.id|string) }}",
+				data: data,
+				success: function(data) {
+					$("#remove").text(data);
+				}
+			});
+		});
+
+		$("#bidding").click(function(e){
+			var bla = $('#price').val();
+			bla.toString();
+			console.log(bla)
+			$('#pricetext').text(bla);
+		});
+
+		
+
 
 		function like(element, product_id) {
 			{% if current_user.is_anonymous %}
@@ -108,10 +140,12 @@
 				<form id="form" action="{{ url_for('show_bidding', product_id=product.id|string) }}" method="POST" role="form" class="form-inline" style="margin-top: 5px; margin-right: 5px;">
 					{{ form.csrf_token }}
 
-					{% if product.status|string != PRODUCT_STATUS['SELLING'] %}
+					{% if product.status|string == PRODUCT_STATUS['SOLD']%}
 						<p style="position:absolute; bottom:0; right:50px;">競標已結束</p>
+					{% elif product.status|string == PRODUCT_STATUS['REMOVE']%}
+						<p style="position:absolute; bottom:0; right:50px;">商品已下架</p>
 					{% elif current_user.status == 2%}
-						<p style="position:absolute; bottom:0; right:50px;">哈哈我是管理員</p>
+						<button id="remove" name="remove" type="submit" class="btn btn-sencondary" style="position:absolute; bottom:0; right:50px;">{{remove}}</button>
 					{% else%}
 						{% if form.price.errors %}
 							<input id="price" name="price" type="number" class="form-control is-invalid" placeholder="請輸入價格" value="{{ form.price.data }}" required>
@@ -119,7 +153,27 @@
 						{% else %}
 							<input id="price" name="price" type="number" class="form-control" placeholder="請輸入價格" value="0" required>
 						{% endif %}
-						{{ form.submit(class="btn btn-sencondary") }}
+						<button type="button" id="bidding" name="bidding" class="btn btn-primary" data-toggle="modal" data-target="#biddingModal">出價</button>
+						<div class="modal fade" id="biddingModal" tabindex="-1" role="dialog" aria-labelledby="biddingModalLabel" aria-hidden="true">
+							<div class="modal-dialog" role="document">
+							  <div class="modal-content">
+								<div class="modal-header">
+								  <h5 class="modal-title" id="biddingModalLabel">出價金額</h5>
+								  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								  </button>
+								</div>
+								<div class="modal-body">
+								  <p>輸入刀數為: <span id="pricetext" name="pricetext"></span></p>
+								</div>
+								<div class="modal-footer">
+									{{ form.submit(class="btn btn-sencondary") }}
+								    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+								</div>
+							  </div>
+							</div>
+						</div>
+						
 						<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red;"><i class="{{ like }}"></i></a>
 					{% endif %}
 				</form>
@@ -136,6 +190,22 @@
 				position: 'top',
 				icon: 'success',
 				title: '出價成功',
+				showConfirmButton: false,
+				timer: 1500
+			});</script>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+
+	{% with messages = get_flashed_messages(category_filter=['toomuch']) %}
+		{% if messages %}
+			{% for message in messages %}
+			<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+			<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+			<script>Swal.fire({
+				position: 'top',
+				icon: 'success',
+				title: '成功購買',
 				showConfirmButton: false,
 				timer: 1500
 			});</script>

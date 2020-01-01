@@ -26,6 +26,7 @@ class ShowBiddingView(MethodView):
         similar_product =  Product.objects(id__ne=product_id, bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8),
                          bidding=True, status=0, categories__in=product.categories).order_by('-create_time')[:12]
         like = "far fa-heart"
+        remove = "下架此商品"
         
         if product == None:
             abort(404)
@@ -45,7 +46,7 @@ class ShowBiddingView(MethodView):
 
             product.view += 1
             product.save()
-        return render_template('product/bidding.html', form=form, orders=orders, product=product, similar_product=similar_product, PRODUCT_STATUS=PRODUCT_STATUS, like=like, now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
+        return render_template('product/bidding.html', form=form, orders=orders, product=product, similar_product=similar_product, PRODUCT_STATUS=PRODUCT_STATUS, remove=remove, like=like, now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
 
     @login_required
     def post(self, product_id):
@@ -56,40 +57,51 @@ class ShowBiddingView(MethodView):
             abort(404)
 
         if form.validate_on_submit():
-            your_price = product.bid.now_price + product.bid.per_price * form.price.data
-            if your_price > product.price:
-                your_price = product.price
+            print('123')
 
-            if product.bid.per_price * form.price.data <= 0 or product.seller_id.id == current_user.id:
-                flash('錯誤', 'error')
-            else:
-                if current_user != product.bid.buyer_id and current_user.hicoin < your_price:
-                    form.price.errors.append('金額不足')
-                    flash('金額不足', 'error')
-                elif current_user == product.bid.buyer_id and current_user.hicoin < (your_price - product.bid.now_price):
-                    form.price.errors.append('金額不足')
-                    flash('金額不足', 'error')
+            #if form.remove.data == True:
+              ## product = Product.objects(id=product_id, bidding=False).first()
+               # product.status = PRODUCT_STATUS['REMOVE']
+               # product.save()
+               # return remove
+
+            else:    
+                your_price = product.bid.now_price + product.bid.per_price * form.price.data
+                if your_price > product.price:
+                    your_price = product.price
+                    flash('金額過多', 'toomuch'')
+
+                if product.bid.per_price * form.price.data <= 0 or product.seller_id.id == current_user.id:
+                    flash('錯誤', 'error')
+                    
                 else:
-                    if product.bid.buyer_id != None:
-                        if product.bid.buyer_id == current_user:
-                            current_user.hicoin += product.bid.now_price
-                        else:
-                            pre_buyer = User.objects(id=product.bid.buyer_id.id).first()
-                            pre_buyer.hicoin += product.bid.now_price
-                            pre_buyer.save()
-                            flash('出價成功', 'success')
+                    if current_user != product.bid.buyer_id and current_user.hicoin < your_price:
+                        form.price.errors.append('金額不足')
+                        flash('金額不足', 'error')
+                    elif current_user == product.bid.buyer_id and current_user.hicoin < (your_price - product.bid.now_price):
+                        form.price.errors.append('金額不足')
+                        flash('金額不足', 'error')
+                    else:
+                        if product.bid.buyer_id != None:
+                            if product.bid.buyer_id == current_user:
+                                current_user.hicoin += product.bid.now_price
+                            else:
+                                pre_buyer = User.objects(id=product.bid.buyer_id.id).first()
+                                pre_buyer.hicoin += product.bid.now_price
+                                pre_buyer.save()
+                                flash('出價成功', 'success')
 
-                    product.bid.buyer_id = current_user.id
-                    if your_price >= product.price:
-                        Order(buyer_id=current_user.id, product_id=product_id).save()
-                        product.status = 1
-                    product.bid.now_price = your_price
-                    current_user.hicoin -= your_price
-                    current_user.save()
-                    product.save()
-                    updatePriceViaSocketIO(product.id, your_price)
+                        product.bid.buyer_id = current_user.id
+                        if your_price >= product.price:
+                            Order(buyer_id=current_user.id, product_id=product_id).save()
+                            product.status = 1
+                        product.bid.now_price = your_price
+                        current_user.hicoin -= your_price
+                        current_user.save()
+                        product.save()
+                        updatePriceViaSocketIO(product.id, your_price)
 
-
+       
         like = "far fa-heart"
         information = Information.objects(user_id=current_user.id).first()
         if product in information.like:
@@ -113,3 +125,4 @@ class BiddingForm(FlaskForm):
     like = SubmitField('喜歡')
     price = IntegerField("起標價", validators=[InputRequired(), validate_price])
     submit = SubmitField('出價')
+    remove = SubmitField('下架此商品')
