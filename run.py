@@ -40,9 +40,9 @@ from app.views.admin.management.product import ProductView
 from app.views.admin.management.question import AdminQuestionView
 from app.views.admin.management.coupon import AdminCouponView
 
-from app.views.user.hiChat.view import HiChatView
+from app.views.user.hiChat.view import HiChatView, HiChatUpdate
 from app.views.user.notification.notification import Notification
-from app.views.user.hiChat.update import HiChatUpdate
+# from app.views.user.hiChat.update import HiChatUpdate
 
 from app.socketioService import socketServiceOn
 
