@@ -77,8 +77,17 @@
 	      	socket = io.connect({path: "{{config['REVERSE_PROXY_PATH']}}/socket.io"}); // for server deployment
 	</script>
     <script>
+        var getNotificationUrl = "{{ url_for('user.notification') }}";
+        var HISHOP_UID = '{{ config.HISHOP_UID }}';
+        var currentUser = '{{ current_user.id|string }}';
+        //this is a test of global variable of following js;
+    </script>
+    <script src="{{ url_for('static', filename = 'scripts/notification.js') }}">
+    </script>
+    <script>
 
-        $(function () {            
+        /*
+        $(function () {
 
             $.ajax({
                 type:"GET",
@@ -95,12 +104,13 @@
                 prependNotification(data);
             });
         });
+        */
 
         $( window ).resize(resizeNotification);
 
         $('#notificationDropdown').on({
             'shown.bs.dropdown': resizeNotification,
-            'shown.bs.dropdown': setMessageToRead,
+            'shown.bs.dropdown': setNotificationToRead,
             'hide.bs.dropdown': removeUnreadSign
         });
 
@@ -120,7 +130,7 @@
             $('#dropdownWindow').prepend(newLI);            
         }
 
-        function setMessageToRead(){ //duplicate with hichat one
+        function setNotificationToRead(){ //duplicate with hichat one
             $.ajax({
                 type:"POST",
                 url: "{{ url_for('user.hichat_update') }}",
