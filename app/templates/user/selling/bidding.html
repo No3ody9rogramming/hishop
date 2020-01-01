@@ -18,17 +18,13 @@
                         <div id="bidProductIndicators" class="carousel slide" data-ride="false"  data-interval="false">
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    <div class="row justify-content-center"> 
-                                        <div class="row">
-                                        {% for category in categories %}
-                                            <div class="form-check-inline">
-                                                <input id="categories" name="categories" value="{{ category.id }}" type="checkbox" class="form-check-input" {% if category.id|string in request.form.getlist('categories') %}checked="checked"{% endif %}>
-                                                <label class="form-check-label" for="{{ category.id }}">{{ category.category }}</label>
-                                            </div>
-                                        {% endfor %}
+                                    {% for category in categories %}
+                                        <div class="form-check-inline">
+                                            <input id="categories" name="categories" value="{{ category.id }}" type="checkbox" class="form-check-input" {% if category.id|string in request.form.getlist('categories') %}checked="checked"{% endif %}>
+                                            <label class="form-check-label" for="{{ category.id }}">{{ category.category }}</label>
                                         </div>
-                                    </div>
-                                </div>  
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
                     </div>
