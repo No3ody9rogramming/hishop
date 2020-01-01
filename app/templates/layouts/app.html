@@ -78,9 +78,7 @@
 	</script>
     <script>
 
-        $(function () {
-
-            resizeNotification();
+        $(function () {            
 
             $.ajax({
                 type:"GET",
@@ -95,14 +93,19 @@
 
             socket.on('{{ config.HISHOP_UID }}To{{ current_user.id|string }}', function(data){                
                 prependNotification(data);
-            });            
+            });
         });
 
         $( window ).resize(resizeNotification);
 
         $('#notificationDropdown').on({
+            'shown.bs.dropdown': resizeNotification,
             'shown.bs.dropdown': setMessageToRead,
             'hide.bs.dropdown': removeUnreadSign
+        });
+
+        $('#notificationDropdown').on({
+            'shown.bs.dropdown': resizeNotification
         });
 
         function prependNotification(notification) {
@@ -111,10 +114,8 @@
             if(!isRead){
                 message = '<span class="dot"></span> ' + message;
             }
-            var newLI = '<div class="dropdown-item" isread=' + isRead + '>' +
-                        '<div class="text-break text-mute">' +
+            var newLI = '<div class="text-break text-mute pl-2 pr-1" isread=' + isRead + '>' +
                         message + '</div>' +                   
-                        '</div>' +
                         '<hr>';
             $('#dropdownWindow').prepend(newLI);            
         }
@@ -128,15 +129,15 @@
         }
 
         function removeUnreadSign(){
-            $(".dot").remove();
+            $("span.dot").remove();
         }
 
-        function resizeNotification(){
+        function resizeNotification(){            
             var windowObj = $(window);
             var dropdownWindow = $("#dropdownWindow");
             var notificationDropdown = $("#notificationDropdown")
             dropdownWindow.css("maxHeight", windowObj.innerHeight() / 2);
-            dropdownWindow.outerWidth(windowObj.innerWidth() - notificationDropdown.position().left - 10)
+            dropdownWindow.outerWidth(windowObj.innerWidth() - notificationDropdown.position().left - 16)
         }
 
     </script>

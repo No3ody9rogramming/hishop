@@ -228,7 +228,7 @@
             lastElement.append(readInfo);
         }
 
-        function removeLastRead(){
+        function removeLastRead() {
             $('#messages').children(".justify-content-end").eq(lastReadPos).children(".text-muted").remove();
         }
 
@@ -239,7 +239,7 @@
                 var isRead = messageInfo.isRead;
                 var newLI = '<div class="row justify-content-end" isread=' + isRead + '>' +
                             '<div class=" text-break background px-2 py-1 message" style="max-width:80%;">' +
-                            message + '</div>'
+                            message + '</div>' +
                             '<div class="w-100"></div></div>';
                 $('#messages').append(newLI);
             }
