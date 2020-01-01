@@ -34,16 +34,11 @@ class SellingListView(MethodView):
         return render_template('user/selling/list.html', products=products, PRODUCT_STATUS=PRODUCT_STATUS, status=status, form=form)
     def post(self):
         form = SellingListForm()
-        #print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
-        #print(request.values['ProductID'])
         if form.validate_on_submit:
-            #print(request.values['ProductID'])
             product = Product.objects(id=form.product_id.data).first()
             product.status = PRODUCT_STATUS['REMOVE']
             product.save()
             
-
-
         products = Product.objects(seller_id=current_user.id)
 
         status = request.args.get('status')
