@@ -25,6 +25,7 @@ class ShowNormalView(MethodView):
         similar_products = Product.objects(id__ne=product_id, bidding=False, status=0, categories__in=product.categories).order_by('-view')[:12]
         like = "far fa-heart"
         cart = "加入購物車"
+        remove = "下架此商品"
         
         if product == None:
             abort(404)
@@ -47,7 +48,7 @@ class ShowNormalView(MethodView):
 
             product.view += 1
             product.save()
-        return render_template('product/normal.html', orders=orders, form=form, product=product, similar_products=similar_products, PRODUCT_STATUS=PRODUCT_STATUS, like=like, cart=cart, product_json=product.to_json())
+        return render_template('product/normal.html', orders=orders, form=form, product=product, similar_products=similar_products, PRODUCT_STATUS=PRODUCT_STATUS, remove=remove, like=like, cart=cart, product_json=product.to_json())
 
 
     
@@ -58,7 +59,6 @@ class ShowNormalView(MethodView):
         if product == None:
             abort(404)
         if form.validate_on_submit():
-            print("123")
             information = Information.objects(user_id=current_user.id).first()
 
             if form.like.data == True:
@@ -73,7 +73,6 @@ class ShowNormalView(MethodView):
                 return like
 
             elif form.cart.data == True and product.seller_id.id != current_user.id:
-                print("hi")
                 if product in information.cart:
                     information.cart.remove(product)
                     cart = "加入購物車"
@@ -84,10 +83,12 @@ class ShowNormalView(MethodView):
                 return cart
 
             elif form.remove.data == True:
-                print("123")
-                product = Product.objects(id=request.values['ProductID']).first()
+                remove = "商品已下架"
+                product = Product.objects(id=product_id, bidding=False).first()
                 product.status = PRODUCT_STATUS['REMOVE']
                 product.save()
+                return remove
+
 
         abort(404)
         

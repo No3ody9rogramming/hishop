@@ -68,6 +68,29 @@
 			});
 		});
 
+		$("#remove").click(function(e){
+			e.preventDefault();
+			{% if current_user.is_anonymous %}
+				window.location = "{{ url_for('login', _external=True, next=url_for('show_normal', product_id=product.id|string)) }}";
+			{% endif %}
+
+			console.log(123);
+
+			var data = {
+				csrf_token: $("#csrf_token").val(),
+				remove: true,
+			};
+
+			$.ajax({
+				type:"POST",
+				url: "{{ url_for('show_normal', product_id=product.id|string) }}",
+				data: data,
+				success: function(data) {
+					$("#remove").text(data);
+				}
+			});
+		});
+
         document.addEventListener("error", function (e) {
             let elem = e.target;
             if (elem.tagName.toLowerCase() == 'img') {
@@ -113,13 +136,6 @@
 
 			return false;
 		}
-
-		function setID(id)
-		{
-			var ProductID = document.getElementById("ProductID");
-
-			ProductID.value = id;
-		}
 	</script>
 {% endblock scripts %}
 
@@ -137,11 +153,12 @@
 			<br>
 			<form id="form" role="form" style="margin-top: 10px;"> 
 				{{ form.csrf_token }}
-				{% if product.status|string != PRODUCT_STATUS['SELLING']%}
+				{% if product.status|string == PRODUCT_STATUS['SOLD']%}
 					<p style="position:absolute; bottom:0; right:50px;">已售出</p>
+				{% elif product.status|string == PRODUCT_STATUS['REMOVE']%}
+					<p style="position:absolute; bottom:0; right:50px;">商品已下架</p>
 				{% elif current_user.status == 2%}
-					<input type="hidden" id="ProductID" name="ProductID" value={{product.id}}>
-					<button id="remove" name="remove" type="submit" class="btn btn-sencondary" style="position:absolute; bottom:0; right:50px;" onclick="setID('{{product.id}}')">下架商品</button>
+					<button id="remove" name="remove" type="submit" class="btn btn-sencondary" style="position:absolute; bottom:0; right:50px;">{{remove}}</button>
 				{% else %}
 					<button id="cart" name="cart" type="submit" class="btn btn-sencondary" style="position:absolute; bottom:0; right:50px;" >{{ cart }}</button>
 					<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red; position:absolute; bottom:0; right:0;" ><i class="{{ like }}"></i></a>
