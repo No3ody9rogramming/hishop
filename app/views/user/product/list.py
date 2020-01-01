@@ -16,18 +16,6 @@ class PurchaseListView(MethodView):
         form = PerchaseListForm()
         status = request.args.get('status')
 
-        '''test = Order.objects.aggregate(*[
-            {
-                '$lookup':
-                {
-                    'from': 'Product',
-                    'localField': 'product_id',
-                    'foreignField': 'id',
-                    'as':'order2product',
-                }
-            },
-        ])'''
-
         if status == ORDER_STATUS['TRANSFERING']:
             orders = Order.objects(buyer_id=current_user.id, status=ORDER_STATUS["TRANSFERING"])
         elif status == ORDER_STATUS['RECEIPTING']:
@@ -64,10 +52,10 @@ class PurchaseListView(MethodView):
         if 'score' not in request.form:
             flash('請點選評價星星',category='error')
 
-        if form.validate_on_submit() and 'score' in request.form:   #correct
-            order = Order.objects(product_id=request.values['commentProductID']).first()  # correct
-            order.buyer_comment = form.detail.data      # correct
-            order.buyer_rating = request.values['score']  # correct
+        if form.validate_on_submit() and 'score' in request.form:   
+            order = Order.objects(product_id=request.values['commentProductID']).first()  
+            order.buyer_comment = form.detail.data      
+            order.buyer_rating = request.values['score']  
             order.status = ORDER_STATUS['COMPLETE']
             seller = User.objects(id=order.product_id.seller_id.id).first()
             seller.hicoin += order.product_id.price

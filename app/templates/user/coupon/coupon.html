@@ -1,0 +1,52 @@
+{% extends "layouts/app.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block styles %}
+	{{ super() }}
+	
+{% endblock styles %}
+
+{% block page %}
+	<div class="row">
+		<div class="col-auto">
+			<br>
+			{% include "layouts/user.html" %}
+		</div>
+
+		<div class="col-md-9">
+			<br>
+			<div class="row justify-content-center align-items-center bg-warning border border-dark rounded">
+				<div class="col-auto ">
+					<p class="text-cneter rounded" style="margin: 5px 5px 5px;"> 優惠券 </p>
+				</div>
+			</div>
+
+			<div class="row justify-content-center border border-dark rounded bg-white">
+				<div class="col" style="margin: 5px ;">
+					<form action="{{ url_for('user.coupon') }}" method="POST">
+						{{ form.csrf_token }}
+						<div class="row justify-content-center form-group">
+							<div class="col-md-5 required">
+								{% if form.couponID.errors %}
+									{{ form.couponID(class="form-control is-invalid", placeholder="請輸入優惠券代碼") }}
+									{% for error in form.couponID.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+								{% else %}
+									{{ form.couponID(class="form-control", placeholder="請輸入優惠券代碼") }}
+								{% endif %}
+							</div>
+						</div>
+				
+						<div class="row justify-content-center">
+							<div class="col-md-5 form-group required">
+								{{ form.submit(class="btn btn-primary col-12") }}
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+
+{% endblock page %}

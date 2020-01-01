@@ -35,6 +35,11 @@
                 <a href="{{ url_for('user.order_list', status='4') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#selling">訂單管理</a>
             </div>
             
+            <a href="#coupon" class="list-group-item collapsed bg-warning text-muted font-weight-bold" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down text-dark">我的折扣</span> </a>
+            <div class="collapse" id="coupon">
+                <a href="{{ url_for('user.coupon') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#coupon">優惠券</a>
+            </div>
+
             <a href="#pocket" class="list-group-item collapsed bg-warning text-muted font-weight-bold" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down text-dark">我的Hi幣</span> </a>
             <div class="collapse" id="pocket">
                 <a href="{{ url_for('user.payment') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#pocket">儲值Hi幣</a>

@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, request
+from flask import redirect, render_template, url_for, request, abort
 from flask.views import MethodView
 from flask_login import current_user, login_required
 
@@ -34,16 +34,20 @@ class SellingListView(MethodView):
         return render_template('user/selling/list.html', products=products, PRODUCT_STATUS=PRODUCT_STATUS, status=status, form=form)
     def post(self):
         form = SellingListForm()
-        #print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
-        #print(request.values['ProductID'])
+        #for delete request
         if form.validate_on_submit:
-            #print(request.values['ProductID'])
-            product = Product.objects(id=form.product_id.data).first()
-            product.status = PRODUCT_STATUS['REMOVE']
-            product.save()
+            product = Product.objects(id=form.product_id.data,seller_id=current_user.id).first()
+            try:
+                if product != None:
+                    if product.status == PRODUCT_STATUS['SELLING']:
+                        product.status = PRODUCT_STATUS['REMOVE']
+                        product.save()
+                else:
+                    abort(404)
+            except:
+                print("product type error")
+                abort(404)
             
-
-
         products = Product.objects(seller_id=current_user.id)
 
         status = request.args.get('status')

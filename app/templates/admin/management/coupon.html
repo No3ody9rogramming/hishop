@@ -9,22 +9,27 @@
 			var form = $(this);
 			var url = form.attr('action');
 
-			$.ajax({
-				type:"POST",
-				url: url,
-				data: form.serialize(),
-				success: function(data) {
-					if (data != "error") {
-						form.children("input#submit").val(data);
+			if (form.attr('id') != "addForm") {
+				$.ajax({
+					type:"POST",
+					url: url,
+					data: form.serialize(),
+					success: function(data) {
+						if (data != "error") {
+							form.children("input#submit").val(data);
 
-						if (data == "凍結")
-							$("#" + form.find("input[id=coupon_id]").val()).text("已認證");
-						else if (data == "解凍")
-							$("#" + form.find("input[id=coupon_id]").val()).text("已凍結");
+							if (data == "凍結")
+								$("#" + form.find("input[id=coupon_id]").val()).text("已認證");
+							else if (data == "解凍")
+								$("#" + form.find("input[id=coupon_id]").val()).text("已凍結");
+						}
 					}
-				}
-			});
-			e.preventDefault();
+				});
+				e.preventDefault();
+			}
+			else {
+				form.submit();
+			}
 		});
 	</script>
 {% endblock scripts %}
@@ -42,9 +47,66 @@
 	    			優惠券
 	    		</div>
 	    		<div class="card-body border border-dark">
-	    			<a class="btn btn-primary {% if status == COUPON_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('admin.coupon') }}">全部</a>
-	    			<a class="btn btn-primary {% if status == COUPON_STATUS['ACTIVE'] %} active {% endif %}" href="{{ url_for('admin.coupon', status=COUPON_STATUS['ACTIVE']) }}">正在發放</a>
-	    			<a class="btn btn-primary {% if status == COUPON_STATUS['NO_ACTIVE'] %} active {% endif %}" href="{{ url_for('admin.coupon', status=COUPON_STATUS['NO_ACTIVE']) }}">停止發放</a>
+					<form id="addForm" action="{{ url_for('admin.coupon') }}" method="POST">
+						{{ addForm.csrf_token }}
+						<div class="form-group">
+		                    {% if addForm.title.errors %}
+		                        {{ addForm.title.label(class="form-control-label") }}
+		                        {{ addForm.title(class="form-control is-invalid") }}
+		                        {% for error in addForm.title.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+		                    {% else %}
+		                        {{ addForm.title.label(class="form-control-label") }}
+		                        {{ addForm.title(class="form-control") }}
+		                    {% endif %}
+		                </div>
+						<div class="form-group">
+		                    {% if addForm.detail.errors %}
+		                        {{ addForm.detail.label(class="form-control-label") }}
+		                        {{ addForm.detail(class="form-control is-invalid") }}
+		                        {% for error in addForm.detail.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+		                    {% else %}
+		                        {{ addForm.detail.label(class="form-control-label") }}
+		                        {{ addForm.detail(class="form-control") }}
+		                    {% endif %}
+		                </div>
+						<div class="form-group">
+		                    {% if addForm.discount.errors %}
+		                        {{ addForm.discount.label(class="form-control-label") }}
+		                        {{ addForm.discount(class="form-control is-invalid") }}
+		                        {% for error in addForm.discount.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+		                    {% else %}
+		                        {{ addForm.discount.label(class="form-control-label") }}
+		                        {{ addForm.discount(class="form-control") }}
+		                    {% endif %}
+		                </div>
+						<div class="form-group">
+		                    {% if addForm.begin_time.errors %}
+		                        {{ addForm.begin_time.label(class="form-control-label") }}
+		                        {{ addForm.begin_time(class="form-control is-invalid") }}
+		                        {% for error in addForm.begin_time.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+		                    {% else %}
+		                        {{ addForm.begin_time.label(class="form-control-label") }}
+		                        {{ addForm.begin_time(class="form-control") }}
+		                    {% endif %}
+		                </div>
+						<div class="form-group">
+		                    {% if addForm.due_time.errors %}
+		                        {{ addForm.due_time.label(class="form-control-label") }}
+		                        {{ addForm.due_time(class="form-control is-invalid") }}
+		                        {% for error in addForm.due_time.errors %}<p class="invalid-feedback" role="alert"><strong>{{ error }}</strong></p>{% endfor %}
+		                    {% else %}
+		                        {{ addForm.due_time.label(class="form-control-label") }}
+		                        {{ addForm.due_time(class="form-control") }}
+		                    {% endif %}
+		                </div>
+		                {{ addForm.submit(class="btn btn-secondary") }}
+	    			</form>
+	    			<hr>
+					<div class="form-group">
+		    			<a class="btn btn-primary {% if status == COUPON_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('admin.coupon') }}">全部</a>
+		    			<a class="btn btn-primary {% if status == COUPON_STATUS['ACTIVE'] %} active {% endif %}" href="{{ url_for('admin.coupon', status=COUPON_STATUS['ACTIVE']) }}">正在發放</a>
+		    			<a class="btn btn-primary {% if status == COUPON_STATUS['NO_ACTIVE'] %} active {% endif %}" href="{{ url_for('admin.coupon', status=COUPON_STATUS['NO_ACTIVE']) }}">停止發放</a>
+		            </div>
 					<div class="table-responsive-lg">
 						<table class="table table-striped table-border">
 							<thead>
@@ -60,7 +122,7 @@
 								{% for coupon in coupons %}
 								    <tr>
 										<td>{{ coupon.title }}</td>
-										<td>{{ coupon.create_time.strftime('%Y-%m-%d') }}</td>
+										<td>{{ coupon.begin_time.strftime('%Y-%m-%d') }}</td>
 										<td>
 											{{ coupon.due_time.strftime('%Y-%m-%d') }}
 										</td>
@@ -74,7 +136,7 @@
 											{% endif %}
 										</td>
 										<td>
-											<form id="form" action="{{ url_for('admin.account') }}">
+											<form action="{{ url_for('admin.coupon') }}" method="POST">
 												{{ form.csrf_token }}
 												{{ form.coupon_id(value=coupon.id|string) }}
 												{% if coupon.status == COUPON_STATUS["ACTIVE"] %}

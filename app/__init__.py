@@ -6,8 +6,9 @@ from flask_bcrypt import Bcrypt
 from flask_ckeditor import CKEditor
 from flask_mail import Mail, Message
 from flask_reverse_proxy_fix.middleware import ReverseProxyPrefixFix
-from threading import Thread, Lock
 from flask_socketio import SocketIO, emit, join_room, leave_room, close_room, rooms, disconnect
+
+from threading import Thread, Lock
 
 async_mode = "gevent"
 
@@ -37,3 +38,18 @@ def send_mail(title, recipients, body):
 def send_async_email(app, msg):
 	with app.app_context():
 		mail.send(msg)
+
+PRODUCT_STATUS = {"SELLING" : 0, "SOLD" : 1, "FROZEN" : 2, "REMOVE" : 3, "ALL" : 4}
+
+def check_time():
+    while True:
+        products = Product.objects(status=0, bid__due_time__lte=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
+
+        for product in products:
+            if product.bid.buyer_id == None:
+                product.status = PRODUCT_STATUS["REMOVE"]
+                product.save()
+                print(threading.get_ident())
+            else:
+                pass
+            print(datetime.datetime.utcnow() + datetime.timedelta(hours=8))

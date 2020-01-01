@@ -1,7 +1,9 @@
 from flask_login import login_required
 
 from app import app, login_manager, mail, socketio
+from app.check import check_time
 from app.models.user import check_admin, check_activate
+from app.models.product import Product
 
 from app.views.index import IndexView
 from app.views.search import SearchView, CatSearchView, LineChatbotSearch, CompSearch
@@ -31,6 +33,7 @@ from app.views.user.selling.list import SellingListView
 from app.views.user.selling.order import OrderListView
 from app.views.user.question.report import ReportView
 from app.views.user.question.list import QuestionListView
+from app.views.user.coupon.coupon import CouponView
 
 from app.views.admin.account.password import AdminPasswordView
 from app.views.admin.management.account import AccountView
@@ -38,14 +41,15 @@ from app.views.admin.management.product import ProductView
 from app.views.admin.management.question import AdminQuestionView
 from app.views.admin.management.coupon import AdminCouponView
 
-from app.views.user.hiChat.view import HiChatView
-from app.views.user.hiChat.update import HiChatUpdate
+from app.views.user.hiChat.view import HiChatView, HiChatUpdate
+from app.views.user.notification.notification import Notification
+# from app.views.user.hiChat.update import HiChatUpdate
 
 from app.socketioService import socketServiceOn
 
 from flask_mail import Message
-
 from flask import render_template, Blueprint
+from apscheduler.schedulers.background import BackgroundScheduler
 
 socketServiceOn()
 
@@ -92,11 +96,17 @@ user.add_url_rule(rule='/selling/list', endpoint='selling_list', view_func=login
 user.add_url_rule(rule='/selling/order', endpoint='order_list', view_func=login_required(check_activate(OrderListView.as_view('order_list_view'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/selling/edit', endpoint='edit', view_func=login_required(check_activate(EditView.as_view('edit_view'))), methods=['GET', 'POST'])
 
+user.add_url_rule(rule='/coupon/coupon', endpoint='coupon', view_func=login_required(check_activate(CouponView.as_view('coupon_view'))), methods=['GET', 'POST'])
+
 user.add_url_rule(rule='/question/report', endpoint='report', view_func=login_required(check_activate(ReportView.as_view('report_view'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/question/list', endpoint='question_list', view_func=login_required(check_activate(QuestionListView.as_view('question_list_view'))), methods=['GET'])
 user.add_url_rule(rule='/hichat', endpoint='hichat', view_func=login_required(check_activate(HiChatView.as_view('hichat_view'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/hichat_update', endpoint='hichat_update', view_func=login_required(check_activate(HiChatUpdate.as_view('hichat_update'))), methods=['POST'])
+user.add_url_rule(rule='/notification', endpoint='notification', view_func=login_required(check_activate(Notification.as_view('notification'))), methods=['GET', 'POST'])
 app.register_blueprint(user, url_prefix='/user')
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host='0.0.0.0')
+	scheduler = BackgroundScheduler()
+	scheduler.add_job(func=check_time)
+	#scheduler.start()
+	socketio.run(app, debug=True, host='0.0.0.0', use_reloader=False)

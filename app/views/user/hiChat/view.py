@@ -1,9 +1,10 @@
-from flask import render_template, request
+from flask import render_template, request, abort
 from flask.views import MethodView
 from flask_login import current_user
 
 from app.models.user import User
 from app.models.message import Message
+from app import socketio
 
 from mongoengine.queryset.visitor import Q
 
@@ -101,7 +102,7 @@ class HiChatView(MethodView):
         return render_template(
             'user/hichatT.html',
             Tusers=User.objects,
-            users=users, currentUser=current_user)
+            users=users)
 
     def post(self):
         receiverID = request.values["receiverID"]
@@ -110,3 +111,22 @@ class HiChatView(MethodView):
             (Q(sender_id=receiverID) & Q(receiver_id=current_user))
             ).order_by("+create_time")
         return messages.to_json()
+
+
+class HiChatUpdate(MethodView):
+    def get(self):
+        pass
+
+    def post(self):
+        senderID = request.values["senderID"]
+        receiverID = request.values["receiverID"]
+        if receiverID != str(current_user.id):
+            abort(403)
+
+        Message.objects.filter(
+            sender_id=senderID,
+            receiver_id=receiverID,
+            isRead=False).update(isRead=True)
+
+        socketio.emit(receiverID + "updateTo" + senderID, broadcast=True)
+        return ""
