@@ -11,7 +11,8 @@ import datetime
 
 class CouponView(MethodView):
     def get(self):
-        return render_template('user/coupon/coupon.html')
+        form = CouponForm()
+        return render_template('user/coupon/coupon.html',form=form)
     def post(self):
         form = CouponForm()
         information = Information.objects(user_id=current_user.id).first()
@@ -19,7 +20,7 @@ class CouponView(MethodView):
             coupon = Coupon.objects(id=form.couponID.data).first()
             information.coupon.append(coupon)
             information.save()
-        return render_template('user/coupon/coupon.html')
+        return render_template('user/coupon/coupon.html',form=form)
 
 def validate_coupon(form, couponID):
     coupon = Coupon.objects(id=couponID.data).first()
