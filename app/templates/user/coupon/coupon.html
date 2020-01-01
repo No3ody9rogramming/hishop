@@ -1,0 +1,37 @@
+{% extends "layouts/app.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block styles %}
+	{{ super() }}
+	
+{% endblock styles %}
+
+{% block page %}
+	<div class="row">
+		<div class="col-auto">
+			<br>
+			{% include "layouts/user.html" %}
+		</div>
+
+		<div class="col-md-9">
+			<br>
+			<div class="row justify-content-center align-items-center bg-warning border border-dark rounded">
+				<div class="col-auto ">
+					<p class="text-cneter rounded" style="margin: 5px 5px 5px;"> 優惠券 </p>
+				</div>
+			</div>
+
+			<div class="row justify-content-center border border-dark rounded bg-white">
+				<div class="col" style="margin: 5px ;">
+					<div class="row justify-content-end">
+						
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+	
+
+{% endblock page %}
