@@ -59,17 +59,17 @@ class ShowBiddingView(MethodView):
         if form.validate_on_submit():
             print('123')
 
-            #if form.remove.data == True:
-              ## product = Product.objects(id=product_id, bidding=False).first()
-               # product.status = PRODUCT_STATUS['REMOVE']
-               # product.save()
-               # return remove
+            if form.remove.data == True:
+                product = Product.objects(id=product_id, bidding=False).first()
+                product.status = PRODUCT_STATUS['REMOVE']
+                product.save()
+                return remove
 
             else:    
                 your_price = product.bid.now_price + product.bid.per_price * form.price.data
                 if your_price > product.price:
                     your_price = product.price
-                    flash('金額過多', 'toomuch'')
+                    flash('金額過多', 'toomuch')
 
                 if product.bid.per_price * form.price.data <= 0 or product.seller_id.id == current_user.id:
                     flash('錯誤', 'error')
