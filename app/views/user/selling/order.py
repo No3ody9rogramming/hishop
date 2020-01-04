@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, request, flash
+from flask import redirect, render_template, url_for, request, flash, abort
 from flask.views import MethodView
 from flask_login import current_user, login_required
 from wtforms import SubmitField, TextAreaField, HiddenField, StringField
@@ -33,29 +33,39 @@ class OrderListView(MethodView):
         return render_template('user/selling/order.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status,form=form)
     def post(self):
         form = OrderListForm()
-        #print(form.ProductID)
-        #print(request.values['ProductID'])
-        #print(request.values)
+        
         if 'cancelOrderID' in request.form:
             if form.validate_on_submit:
                 print(request.values['cancelOrderID'])
-                order = Order.objects(id=request.values['cancelOrderID']).first()
-                order.status = ORDER_STATUS['CANCEL']
-                order.save()
+                order = Order.objects(id=request.values['cancelOrderID'],product_id=(Product.objects(seller_id=current_user.id))).first()
+                if(order==None):
+                    abort(404)
+                else:
+                    if order.status == ORDER_STATUS['TRANSFERING']:
+                        order.status = ORDER_STATUS['CANCEL']
+                        order.save()
+                    else:
+                        abort(404)
         else:
             if 'score' not in request.form:
                 flash('請點選評價星星',category='error')
             
 
             if form.validate_on_submit and 'score' in request.form:
-                order = Order.objects(product_id=request.values['ProductID']).first()
+                order = Order.objects(product_id=Product.objects(id=request.values['ProductID'],seller_id=current_user.id)).first()
                 print(request.values['ProductID'])
-                order.seller_comment = form.detail.data      # correct
-                order.seller_rating = request.values['score']  # correct
-                order.status = ORDER_STATUS["RECEIPTING"]
-                order.transfer_time = datetime.datetime.utcnow()+datetime.timedelta(hours=8)
-                order.save()
-                print(request.values['score']) 
+                if order == None:
+                    abort(404)
+                else:
+                    if order.status !=ORDER_STATUS["TRANSFERING"]:
+                        abort(404)
+                    else:
+                        order.seller_comment = form.detail.data      # correct
+                        order.seller_rating = request.values['score']  # correct
+                        order.status = ORDER_STATUS["RECEIPTING"]
+                        order.transfer_time = datetime.datetime.utcnow()+datetime.timedelta(hours=8)
+                        order.save()
+                print(request.values['score'])
 
         products = Product.objects(seller_id=current_user.id)
 
