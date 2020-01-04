@@ -2,15 +2,13 @@ from flask import redirect, render_template, url_for, abort, request
 from flask.views import MethodView
 from flask_login import current_user, login_required
 
-from app.models.product import Product
+from app.models.product import Product, PRODUCT_STATUS
 from app.models.information import Information
 
-from app.models.order import Order
+from app.models.order import Order, ORDER_STATUS
 from app.models.user import User
 
-PRODUCT_STATUS = {"SELLING" : "0", "SOLD" : "1", "FROZEN" : "2", "REMOVE" : "3", "ALL" : "4"}
 SORT_STATUS = {"PRICE":"0","HOT":"1","RATING":"2","CREATE_TIME":"3"}
-ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "1", "COMPLETE" : "2", "CANCEL" : "3", "ALL" : "4"}
 class HistoryView(MethodView):
     def get(self):
         products = Information.objects(user_id=current_user.id).first().history

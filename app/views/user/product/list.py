@@ -1,16 +1,16 @@
-from flask import redirect, render_template, url_for, request, flash
+from flask import redirect, render_template, url_for, request, flash, abort
 from flask.views import MethodView
 from flask_login import current_user, login_required
 from wtforms import SubmitField, TextAreaField, HiddenField, StringField
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, InputRequired, Length, EqualTo, ValidationError
 
-from app.models.order import Order
+from app.models.order import Order, ORDER_STATUS
 from app.models.product import Product
 from app.models.user import User
 
 #移交中 領收中 已完成 已取消 全部
-ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "1", "COMPLETE" : "2", "CANCEL" : "3", "ALL" : "4"}
+#ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "1", "COMPLETE" : "2", "CANCEL" : "3", "ALL" : "4"}
 class PurchaseListView(MethodView):
     def get(self):
         form = PerchaseListForm()
@@ -53,14 +53,23 @@ class PurchaseListView(MethodView):
             flash('請點選評價星星',category='error')
 
         if form.validate_on_submit() and 'score' in request.form:   
-            order = Order.objects(product_id=request.values['commentProductID']).first()  
-            order.buyer_comment = form.detail.data      
-            order.buyer_rating = request.values['score']  
-            order.status = ORDER_STATUS['COMPLETE']
-            seller = User.objects(id=order.product_id.seller_id.id).first()
-            seller.hicoin += order.product_id.price
-            seller.save()
-            order.save()
+            order = Order.objects(product_id=request.values['commentProductID'],buyer_id=current_user.id).first()
+            if order == None:
+                abort(404)
+            else:
+                if order.status != ORDER_STATUS['RECEIPTING']:
+                    abort(404)
+                else:
+                    #order implementaion
+                    order.buyer_comment = form.detail.data      
+                    order.buyer_rating = request.values['score']  
+                    order.status = ORDER_STATUS['COMPLETE']
+                    order.save()
+                    #seller implementation
+                    seller = User.objects(id=order.product_id.seller_id.id).first()
+                    seller.hicoin += order.product_id.price
+                    seller.save()
+                    
             print(request.values['score'])   
              
         return render_template('user/product/list.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status, form=form)
