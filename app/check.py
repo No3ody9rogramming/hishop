@@ -24,4 +24,11 @@ def check_time():
             order.finish_time = datetime.datetime.utcnow()+datetime.timedelta(hours=8)
             order.buyer_rating = 5
             order.comment = ""
+            order.status = ORDER_STATUS["COMPLETE"]
+            user = User.objects(id=order.product_id.seller_id.id).first()
+            if order.product_id.bidding == True:
+                user.hicoin += int(order.product_id.bid.now_price * 0.88)
+            else:
+                user.hicoin += int(order.product_id.price * 0.88)
             order.save()
+            user.save()
