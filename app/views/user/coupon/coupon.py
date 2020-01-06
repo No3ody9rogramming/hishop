@@ -2,11 +2,13 @@ from flask import redirect, render_template, url_for, abort, request
 from flask.views import MethodView
 from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
+from wtforms.validators import InputRequired, Length, ValidationError
 
 from wtforms import StringField, SubmitField
 from app.models.information import Information
 from app.models.coupon import Coupon
 
+from bson.objectid import ObjectId
 import datetime
 
 class CouponView(MethodView):
@@ -23,6 +25,9 @@ class CouponView(MethodView):
         return render_template('user/coupon/coupon.html',form=form)
 
 def validate_coupon(form, couponID):
+    #if the ID type is incorrect return, or it may cause error
+    if ObjectId.is_valid(couponID.data) != True:
+        raise ValidationError('優惠券格式錯誤')
     coupon = Coupon.objects(id=couponID.data).first()
     informations = Information.objects().all()
     if coupon == None:
@@ -39,5 +44,5 @@ def validate_coupon(form, couponID):
 
 
 class CouponForm(FlaskForm):
-    couponID = StringField("序號")
+    couponID = StringField("序號",validators=[InputRequired(), validate_coupon])
     submit = SubmitField('提交')
