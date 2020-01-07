@@ -67,7 +67,7 @@ class PurchaseListView(MethodView):
                     order.save()
                     #seller implementation
                     seller = User.objects(id=order.product_id.seller_id.id).first()
-                    seller.hicoin += order.product_id.price
+                    seller.hicoin += order.product_id.price*0.88
                     seller.save()
                     
             print(request.values['score'])   
