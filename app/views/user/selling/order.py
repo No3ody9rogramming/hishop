@@ -44,6 +44,10 @@ class OrderListView(MethodView):
                     if order.status == ORDER_STATUS['TRANSFERING']:
                         order.status = ORDER_STATUS['CANCEL']
                         order.save()
+                        buyer = User.objects(id=order.buyer_id).first()
+                        buyer.hicoin += order.product_id.price
+                        buyer.save()
+
                     else:
                         abort(404)
         else:
