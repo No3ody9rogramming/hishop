@@ -8,6 +8,11 @@
             text-decoration: none !important;
         }
 
+        .list-group-item.active {
+            background-color: Coral;
+            color: white;
+        }
+
         .pointer {cursor: pointer;}
 
         .hover-bg:hover {
@@ -34,6 +39,7 @@
          .justify-content-start + .justify-content-end {
             margin-top: 20px;
         }
+        
 
 	</style>
 {% endblock styles %}
@@ -157,13 +163,18 @@
 
         function changeObject(obj) {
             socket.off(chatObjectID + 'To{{ current_user.id|string }}'); //unsubscribe last event
-            socket.off(chatObjectID + 'updateTo{{ current_user.id|string }}');            
+            socket.off(chatObjectID + 'updateTo{{ current_user.id|string }}');
+
+
+            $("#" + chatObjectID).addClass("hover-bg");
+
             var thisObj = $(obj);
             chatObjectID = thisObj.attr('id');
             chatObjectName = thisObj.attr('username');
 
             $(".active").removeClass("active");
             $("#" + chatObjectID).addClass("active");
+             $("#" + chatObjectID).removeClass("hover-bg");
 
             socket.on(chatObjectID + 'To{{ current_user.id|string }}', function(data){                
                 appendMessage(data);
@@ -179,12 +190,17 @@
 
             $('#messages').text("");
 
+            getObjMsg();
+
+        }
+
+        function getObjMsg(){
             $.ajax({
                 type:"POST",
                 url: "{{ url_for('user.hichat') }}",
                 data: { senderID : "{{ current_user.id|string }}", receiverID : chatObjectID},
                 success: function(data) {
-                    messageInfos = JSON.parse(data);
+                    let messageInfos = JSON.parse(data);
                     for (messageInfo in messageInfos) {
                         appendMessage(messageInfos[messageInfo]);
                     }
