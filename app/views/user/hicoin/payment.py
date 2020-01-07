@@ -14,7 +14,7 @@ from app.models.payment import Payment
 class PaymentView(MethodView):
     def get(self):
         form = PaymentForm(payment=100)
-        return render_template('user/account/payment.html', form=form, hicoin=current_user.hicoin)
+        return render_template('user/hicoin/payment.html', form=form, hicoin=current_user.hicoin)
     
     def post(self):
         form = PaymentForm()

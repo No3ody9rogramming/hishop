@@ -43,7 +43,7 @@
             <a href="#pocket" class="list-group-item collapsed bg-warning text-muted font-weight-bold" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down text-dark">我的Hi幣</span> </a>
             <div class="collapse" id="pocket">
                 <a href="{{ url_for('user.payment') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#pocket">儲值Hi幣</a>
-                <a href="#" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#pocket">交易紀錄</a>
+                <a href="{{ url_for('user.record') }}" class="list-group-item text-center list-group-item-warning text-muted" data-parent="#pocket">交易紀錄</a>
             </div>
             
             <a href="#question" class="list-group-item collapsed bg-warning text-muted font-weight-bold" data-toggle="collapse" data-parent="#sidebar" aria-expanded="false"> <span class="hidden-sm-down text-dark">問題回報</span> </a>

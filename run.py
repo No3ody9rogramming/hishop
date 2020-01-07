@@ -20,7 +20,6 @@ from app.views.auth.verification import VerificationView
 
 from app.views.user.account.profile import ProfileView
 from app.views.user.account.password import PasswordView
-from app.views.user.account.payment import PaymentView, PaymentConfirmView
 from app.views.user.account.cart import CartView
 from app.views.user.account.cartOperation import CartOperationView
 from app.views.user.product.like import LikeView
@@ -31,9 +30,11 @@ from app.views.user.selling.edit import EditView
 from app.views.user.selling.bidding import BiddingView
 from app.views.user.selling.list import SellingListView
 from app.views.user.selling.order import OrderListView
+from app.views.user.hicoin.payment import PaymentView, PaymentConfirmView
+from app.views.user.hicoin.record import RecordView
 from app.views.user.question.report import ReportView
 from app.views.user.question.list import QuestionListView
-from app.views.user.coupon.coupon import CouponView
+from app.views.user.coupon.list import CouponView
 
 from app.views.admin.account.password import AdminPasswordView
 from app.views.admin.management.account import AccountView
@@ -71,7 +72,7 @@ app.add_url_rule(rule='/normal/<string:product_id>', endpoint='show_normal', vie
 app.add_url_rule(rule='/bidding/<string:product_id>', endpoint='show_bidding', view_func=ShowBiddingView.as_view('show_bidding_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/like/<string:product_id>', endpoint='product_like', view_func=ProductLikeView.as_view('product_like_view'), methods=['POST'])
 app.add_url_rule(rule='/cart', endpoint='cart', view_func=login_required(check_activate(CartView.as_view('cart_view'))), methods=['GET', 'POST'])
-app.add_url_rule(rule='/cart/opration', endpoint='cartOperation', view_func=login_required(check_activate(CartOperationView.as_view('cartOperation_view'))), methods=['POST'])
+app.add_url_rule(rule='/cart/opration', endpoint='cartOperation', view_func=login_required(check_activate(CartOperationView.as_view('cartOperation_view'))), methods=['GET', 'POST'])
 
 app.add_url_rule(rule='/registration', endpoint='registration', view_func=RegisterView.as_view('register_view'), methods=['GET', 'POST'])
 app.add_url_rule(rule='/login', endpoint='login', view_func=LoginView.as_view('login_view'), methods=['GET', 'POST'])
@@ -83,8 +84,10 @@ app.add_url_rule(rule='/password/reset/<string:reset_token>', endpoint='reset', 
 user = Blueprint('user', __name__)
 user.add_url_rule(rule='/account/profile', endpoint='profile', view_func=login_required(check_activate(ProfileView.as_view('profile_view'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/account/password', endpoint='password', view_func=login_required(check_activate(PasswordView.as_view('password_view'))), methods=['GET', 'POST'])
-user.add_url_rule(rule='/account/payment', endpoint='payment', view_func=login_required(check_activate(PaymentView.as_view('payment_view'))), methods=['GET', 'POST'])
-user.add_url_rule(rule='/account/payment/confirm', endpoint='payment_confirm', view_func=login_required(check_activate(PaymentConfirmView.as_view('payment_confirm_view'))), methods=['GET'])
+
+user.add_url_rule(rule='/hicoin/payment', endpoint='payment', view_func=login_required(check_activate(PaymentView.as_view('payment_view'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/hicoin/payment/confirm', endpoint='payment_confirm', view_func=login_required(check_activate(PaymentConfirmView.as_view('payment_confirm_view'))), methods=['GET'])
+user.add_url_rule(rule='/hicoin/record', endpoint='record', view_func=login_required(check_activate(RecordView.as_view('record_view'))), methods=['GET'])
 
 user.add_url_rule(rule='/product/list', endpoint='purchase_list', view_func=login_required(check_activate(PurchaseListView.as_view('purchase_list_view'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/product/like', endpoint='like', view_func=login_required(check_activate(LikeView.as_view('like_view'))), methods=['GET', 'POST'])
@@ -96,7 +99,7 @@ user.add_url_rule(rule='/selling/list', endpoint='selling_list', view_func=login
 user.add_url_rule(rule='/selling/order', endpoint='order_list', view_func=login_required(check_activate(OrderListView.as_view('order_list_view'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/selling/edit', endpoint='edit', view_func=login_required(check_activate(EditView.as_view('edit_view'))), methods=['GET', 'POST'])
 
-user.add_url_rule(rule='/coupon/coupon', endpoint='coupon', view_func=login_required(check_activate(CouponView.as_view('coupon_view'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/coupon/list', endpoint='coupon', view_func=login_required(check_activate(CouponView.as_view('coupon_view'))), methods=['GET', 'POST'])
 
 user.add_url_rule(rule='/question/report', endpoint='report', view_func=login_required(check_activate(ReportView.as_view('report_view'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/question/list', endpoint='question_list', view_func=login_required(check_activate(QuestionListView.as_view('question_list_view'))), methods=['GET'])

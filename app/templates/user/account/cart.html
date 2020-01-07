@@ -122,6 +122,45 @@
 			return false;
 		}
 
+		function getCoupon(select) {
+			console.log(select);
+			$.ajax({
+				type:"GET",
+				url: "{{ url_for('cartOperation') }}",
+				data: "",
+				success: function(data) {
+					var coupons = JSON.parse(data)['coupons'];
+					for (var idx in coupons) {
+						var coupon = JSON.parse(coupons[idx]);
+						var option = document.createElement("option");
+						option.text = coupon.title;
+						select.add(option);
+					}
+					$(select).change();
+				}
+			});
+		}
+
+		$(function(){ // let all dom elements are loaded
+			$(".modal").on('show.bs.modal', function (e) {
+				var modal = $(this);
+				$.ajax({
+					type:"GET",
+					url: "{{ url_for('cartOperation') }}",
+					data: "",
+					success: function(data) {
+						var coupons = JSON.parse(data)['coupons'];
+						var s = "";
+						for (var idx in coupons) {
+							var coupon = JSON.parse(coupons[idx]);
+							s += "<p>" + coupon.title + "</p>";
+						}
+						modal.find('.modal-body').html(s);
+					}
+				});
+			});
+	    });
+
 	</script>
 {% endblock scripts %}
 
@@ -139,7 +178,7 @@
 				      		<th scope="col">商品</th>
 				      		<th scope="col">賣家</th>
 				      		<th scope="col">售價</th>
-				      		<th scope="col">折價券</th>
+				      		<th scope="col">優惠券</th>
 				      		<th scope="col">移出購物車</th>
 				    	</tr>
 				  	</thead>
@@ -152,7 +191,7 @@
 				  		{% for product in products %}
 					    	<tr>
 								<td class="align-middle">
-									<input type="checkbox" value="{{product.id}}" name="productCheck"  id="{{product.id}}" price="{{product.price}}" productname="{{product.name}}">
+									<input type="checkbox" value="{{ product.id }}" name="productCheck"  id="{{ product.id }}" price="{{ product.price }}" productname="{{ product.name }}">
 								</td>
 								<th scope="row" class="align-middle" name="productname">
 									<img class="productImg" src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}"> 
@@ -160,8 +199,33 @@
 								</th>
 					      		<td class="align-middle">{{product.seller_id.name}}</td>
 					      		<td class="align-middle" name="productprice">{{product.price}}</td>
-					      		<td class="align-middle">select option</td>
-					      		<td class="align-middle"><button value="{{ product.id }}" onclick="return moveCart(this)" class="btn btn-sencondary">移出購物車</button></td>
+					      		<td class="align-middle">
+					      			<select id="{{ product.id }}_coupon" name="{{ product.id }}" class="form-control" onfocus="getCoupon(this);">
+					      				<option value="" disabled selected hidden>選擇優惠券</option>
+					      			</select>
+					      			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{ product.id|string }}_modal">
+									  	選擇
+									</button>
+					      			<div id="{{ product.id|string }}_modal" class="modal" tabindex="-1" role="dialog">
+										<div class="modal-dialog modal-lg" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title">選擇優惠券</h5>
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+												</div>
+											</div>
+										</div>
+									</div>
+					      		</td>
+					      		<td class="align-middle"><button value="{{ product.id }}" onclick="return moveCart(this)" class="btn btn-secondary">移出購物車</button></td>
 					    	</tr>
 						{% endfor %}
 				  	</tbody>
@@ -213,8 +277,8 @@
 					</div>
 					
 					<div class="modal-footer">
-						 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						 <button type="button" class="btn btn-first float-right" id="formBtn">結帳</button>	
+						 <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+						 <button type="button" class="btn btn-primary float-right" id="formBtn">結帳</button>	
 						
 					</div>
 		  		</div>

@@ -2,6 +2,7 @@ import datetime
 
 from app.models.product import Product
 from app.models.user import User
+from app.models.coupon import Coupon
 from app import db
 
 #移交中 領收中 已完成 已取消 全部
@@ -10,6 +11,7 @@ ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "1", "COMPLETE" : "2", "CANC
 class Order(db.Document):
     buyer_id = db.ReferenceField(User, required=True)
     product_id = db.ReferenceField(Product, required=True)
+    coupon_id = db.ReferenceField(Coupon, null=True)
     buyer_rating = db.IntField(null=True, min_value=1, max_value=5)
     buyer_comment = db.StringField(null=True)
     seller_rating = db.IntField(null=True, min_value=1, max_value=5)
