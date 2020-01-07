@@ -42,7 +42,6 @@ class AccountView(MethodView):
 			user = User.objects(id=form.user_id.data, status__in=[ACCOUNT_STATUS["ACTIVE"], ACCOUNT_STATUS["LOCK"]]).first()
 			if user.status == ACCOUNT_STATUS["ACTIVE"]:
 				user.status = ACCOUNT_STATUS["LOCK"]
-				print(user.to_json())
 				user.save()
 				return "解凍"
 			elif user.status == ACCOUNT_STATUS["LOCK"]:

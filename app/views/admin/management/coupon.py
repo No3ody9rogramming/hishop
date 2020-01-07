@@ -8,10 +8,10 @@ from wtforms.fields.html5 import DateField
 from wtforms.validators import InputRequired, Length, EqualTo, ValidationError, NumberRange
 
 from app.models.user import User, check_admin
-from app.models.coupon import Coupon
+from app.models.coupon import Coupon, COUPON_STATUS
+import datetime
 import time
 
-COUPON_STATUS = {"ACTIVE": 0, "NO_ACTIVE": 1, "ALL": 2}
 class AdminCouponView(MethodView):
 	def get(self):
 		addForm = CouponForm()
@@ -32,8 +32,22 @@ class AdminCouponView(MethodView):
 		if addForm.validate_on_submit():
 			coupon = Coupon(title=addForm.title.data, detail=addForm.detail.data, discount=addForm.discount.data,
 						 begin_time=addForm.begin_time.data, due_time=addForm.due_time.data)
-
 			coupon.save()
+			return redirect(url_for("admin.coupon"))
+
+		if form.validate_on_submit():
+			coupon = Coupon.objects(id=form.coupon_id.data, due_time__gte=datetime.datetime.utcnow()+datetime.timedelta(hours=8)).first()
+			print(coupon)
+			if coupon == None:
+				return "error"
+			if coupon.status == COUPON_STATUS["ACTIVE"]:
+				coupon.status = COUPON_STATUS["NO_ACTIVE"]
+				coupon.save()
+				return "發放"
+			elif coupon.status == COUPON_STATUS["NO_ACTIVE"]:
+				coupon.status = COUPON_STATUS["ACTIVE"]
+				coupon.save()
+				return "停發"
 		'''
 		form = CouponManageForm()
 

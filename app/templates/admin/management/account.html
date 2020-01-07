@@ -65,11 +65,11 @@
 										<td  class="align-middle">
 											{{ user.products }}
 										</td>
-										<td id="{{ user.id }}"  class="align-middle">
+										<td class="align-middle">
 											{% if user.status == ACCOUNT_STATUS['NO_ACTIVE'] %}
-												<div style="color: red;">未認證</div>
+												<div id="{{ user.id }}" style="color: red;">未認證</div>
 											{% elif user.status == ACCOUNT_STATUS['ACTIVE'] %}
-												<div style="color: #00A600;">已認證</div>
+												<div id="{{ user.id }}" style="color: #00A600;">已認證</div>
 											{% else %}
 												已凍結
 											{% endif %}

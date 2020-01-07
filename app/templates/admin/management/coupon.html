@@ -10,6 +10,7 @@
 			var url = form.attr('action');
 
 			if (form.attr('id') != "addForm") {
+				
 				$.ajax({
 					type:"POST",
 					url: url,
@@ -18,10 +19,11 @@
 						if (data != "error") {
 							form.children("input#submit").val(data);
 
-							if (data == "凍結")
-								$("#" + form.find("input[id=coupon_id]").val()).text("已認證");
-							else if (data == "解凍")
-								$("#" + form.find("input[id=coupon_id]").val()).text("已凍結");
+							if (data == "發放")
+								$("#" + form.find("input[id=coupon_id]").val()).text("發放");
+							else if (data == "停發")
+								$("#" + form.find("input[id=coupon_id]").val()).text("停發");
+							
 						}
 					}
 				});
@@ -121,12 +123,12 @@
 							<tbody>
 								{% for coupon in coupons %}
 								    <tr>
-										<td>{{ coupon.title }}</td>
-										<td>{{ coupon.begin_time.strftime('%Y-%m-%d') }}</td>
-										<td>
+										<td class="align-middle">{{ coupon.title }}</td>
+										<td class="align-middle">{{ coupon.begin_time.strftime('%Y-%m-%d') }}</td>
+										<td class="align-middle">
 											{{ coupon.due_time.strftime('%Y-%m-%d') }}
 										</td>
-										<td id="{{ coupon.id }}">
+										<td id="{{ coupon.id }}" class="align-middle">
 											{% if coupon.status == COUPON_STATUS['NO_ACTIVE'] %}
 												停止發放
 											{% elif coupon.status == COUPON_STATUS['ACTIVE'] %}
@@ -135,7 +137,7 @@
 												已凍結
 											{% endif %}
 										</td>
-										<td>
+										<td class="align-middle">
 											<form action="{{ url_for('admin.coupon') }}" method="POST">
 												{{ form.csrf_token }}
 												{{ form.coupon_id(value=coupon.id|string) }}
