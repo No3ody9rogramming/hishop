@@ -49,7 +49,8 @@ from app.socketioService import socketServiceOn
 
 from flask_mail import Message
 from flask import render_template, Blueprint
-from apscheduler.schedulers.background import BackgroundScheduler
+# from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.gevent import GeventScheduler
 
 socketServiceOn()
 
@@ -106,8 +107,17 @@ user.add_url_rule(rule='/notification_load', endpoint='notification_load', view_
 user.add_url_rule(rule='/notification_count', endpoint='notification_count', view_func=login_required(check_activate(NotificationCount.as_view('notification_count'))), methods=['GET', 'POST'])
 app.register_blueprint(user, url_prefix='/user')
 
+
+def p():
+    import time
+    while(True):
+        print("bbbbbbbbb")
+        time.sleep(1)
+
+
 if __name__ == '__main__':
-	scheduler = BackgroundScheduler()
-	scheduler.add_job(func=check_time)
-	#scheduler.start()
-	socketio.run(app, debug=True, host='0.0.0.0', use_reloader=False)
+    scheduler = GeventScheduler()
+    # scheduler.add_job(func=check_time)
+    scheduler.add_job(func=p)
+    scheduler.start()
+    socketio.run(app, debug=True, host='0.0.0.0')
