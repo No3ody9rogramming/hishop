@@ -102,7 +102,7 @@ user.add_url_rule(rule='/question/report', endpoint='report', view_func=login_re
 user.add_url_rule(rule='/question/list', endpoint='question_list', view_func=login_required(check_activate(QuestionListView.as_view('question_list_view'))), methods=['GET'])
 user.add_url_rule(rule='/hichat', endpoint='hichat', view_func=login_required(check_activate(HiChatView.as_view('hichat_view'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/hichat_update', endpoint='hichat_update', view_func=login_required(check_activate(HiChatUpdate.as_view('hichat_update'))), methods=['POST'])
-user.add_url_rule(rule='/notification', endpoint='notification', view_func=login_required(check_activate(Notification.as_view('notification'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/notification_load', endpoint='notification_load', view_func=login_required(check_activate(Notification.as_view('notification_load'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/notification_count', endpoint='notification_count', view_func=login_required(check_activate(NotificationCount.as_view('notification_count'))), methods=['GET', 'POST'])
 app.register_blueprint(user, url_prefix='/user')
 

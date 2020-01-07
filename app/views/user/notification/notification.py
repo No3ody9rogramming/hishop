@@ -30,18 +30,14 @@ class Notification(MethodView):
 class NotificationCount(MethodView):
     def get(self):
         print("AAAAAAAAAAAAAAAAAAAAAAAAAAA")
-        msgCount = Message.objects(
-            (Q(sender_id=current_user) &
-             Q(receiver_id__ne=app.config["HISHOP_UID"])) |
+        msgCount = Message.objects(            
             (Q(sender_id__ne=app.config["HISHOP_UID"]) &
-             Q(receiver_id=current_user))
+             Q(receiver_id=current_user)), isRead=False
             ).count()
 
         ntfCount = Message.objects(
-            (Q(sender_id=current_user) &
-             Q(receiver_id=app.config["HISHOP_UID"])) |
             (Q(sender_id=app.config["HISHOP_UID"]) &
-             Q(receiver_id=current_user))
+             Q(receiver_id=current_user)), isRead=False
             ).count()
 
         return {'msgCount': msgCount, 'ntfCount': ntfCount}
