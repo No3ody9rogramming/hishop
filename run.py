@@ -110,4 +110,4 @@ if __name__ == '__main__':
 	scheduler = BackgroundScheduler()
 	scheduler.add_job(func=check_time)
 	#scheduler.start()
-	socketio.run(app, debug=True, host='0.0.0.0', use_reloader=False)
+	socketio.run(app, host='0.0.0.0')
