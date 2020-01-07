@@ -40,7 +40,7 @@
 			max-height: 90%;
 		}
 
-        .dot {
+        .Ntfdot {
             height: 5px;
             width: 5px;
             background-color: blue;
@@ -76,19 +76,34 @@
 		else
 	      	socket = io.connect({path: "{{config['REVERSE_PROXY_PATH']}}/socket.io"}); // for server deployment
 	</script>
+    <!--
     <script>
         var getNotificationUrl = "{{ url_for('user.notification') }}";
         var HISHOP_UID = '{{ config.HISHOP_UID }}';
         var currentUser = '{{ current_user.id|string }}';
         //this is a test of global variable of following js;
     </script>
-    <script src="{{ url_for('static', filename = 'scripts/notification.js') }}">
+    <script src="{{ url_for('static', filename = 'scripts/notification.js') }}">-->
     </script>
     <script>
 
-        /*
+        var messageCount;
+        var notificationCount;
+
+         //load notification
         $(function () {
 
+            
+
+            socket.on('{{ config.HISHOP_UID }}To{{ current_user.id|string }}', function(data){                
+                prependNotification(data);
+            });
+            loadNtf();
+            showMsgNtfCount();
+
+        });
+
+        function loadNtf(){
             $.ajax({
                 type:"GET",
                 url: "{{ url_for('user.notification') }}",
@@ -99,12 +114,10 @@
                     }
                 }
             });
+        }
 
-            socket.on('{{ config.HISHOP_UID }}To{{ current_user.id|string }}', function(data){                
-                prependNotification(data);
-            });
-        });
-        */
+        
+        
 
         $( window ).resize(resizeNotification);
 
@@ -122,7 +135,7 @@
             var isRead = notification.isRead;
             var message = notification.message;
             if(!isRead){
-                message = '<span class="dot"></span> ' + message;
+                message = '<span class="Ntfdot"></span> ' + message;
             }
             var newLI = '<div class="text-break text-mute pl-2 pr-1" isread=' + isRead + '>' +
                         message + '</div>' +                   
@@ -139,7 +152,7 @@
         }
 
         function removeUnreadSign(){
-            $("span.dot").remove();
+            $("span.Ntfdot").remove();
         }
 
         function resizeNotification(){            
@@ -148,6 +161,17 @@
             var notificationDropdown = $("#notificationDropdown")
             dropdownWindow.css("maxHeight", windowObj.innerHeight() / 2);
             dropdownWindow.outerWidth(windowObj.innerWidth() - notificationDropdown.position().left - 16)
+        }
+
+        function showMsgNtfCount(){
+            $.ajax({
+                type:"POST",
+                url: "{{ url_for('user.notification_count') }}",
+                data: { senderID : "{{ config.HISHOP_UID }}", receiverID : "{{ current_user.id|string }}"}
+                success: function(data){
+                    console.log(data);
+                }
+            });
         }
 
     </script>

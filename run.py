@@ -42,7 +42,7 @@ from app.views.admin.management.question import AdminQuestionView
 from app.views.admin.management.coupon import AdminCouponView
 
 from app.views.user.hiChat.view import HiChatView, HiChatUpdate
-from app.views.user.notification.notification import Notification
+from app.views.user.notification.notification import Notification, NotificationCount
 # from app.views.user.hiChat.update import HiChatUpdate
 
 from app.socketioService import socketServiceOn
@@ -103,6 +103,7 @@ user.add_url_rule(rule='/question/list', endpoint='question_list', view_func=log
 user.add_url_rule(rule='/hichat', endpoint='hichat', view_func=login_required(check_activate(HiChatView.as_view('hichat_view'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/hichat_update', endpoint='hichat_update', view_func=login_required(check_activate(HiChatUpdate.as_view('hichat_update'))), methods=['POST'])
 user.add_url_rule(rule='/notification', endpoint='notification', view_func=login_required(check_activate(Notification.as_view('notification'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/notification_count', endpoint='notification_count', view_func=login_required(check_activate(NotificationCount.as_view('notification_count'))), methods=['GET', 'POST'])
 app.register_blueprint(user, url_prefix='/user')
 
 if __name__ == '__main__':

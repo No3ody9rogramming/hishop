@@ -25,3 +25,22 @@ class Notification(MethodView):
             (Q(sender_id=receiverID) & Q(receiver_id=current_user))
             ).order_by("+create_time")
         return messages.to_json()
+
+
+class NotificationCount(MethodView):
+    def get(self):
+        msgCount = Message.objects(
+            (Q(sender_id=current_user) &
+             Q(receiver_id__ne=app.config["HISHOP_UID"])) |
+            (Q(sender_id__ne=app.config["HISHOP_UID"]) &
+             Q(receiver_id=current_user))
+            ).count()
+
+        ntfCount = Message.objects(
+            (Q(sender_id=current_user) &
+             Q(receiver_id=app.config["HISHOP_UID"])) |
+            (Q(sender_id=app.config["HISHOP_UID"]) &
+             Q(receiver_id=current_user))
+            ).count()
+
+        return {msgCount: msgCount, ntfCount: ntfCount}
