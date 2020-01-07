@@ -2,7 +2,7 @@ from app.models.product import Product
 from app import db
 
 #發放 停發 全部
-COUPON_STATUS = {"ACTIVE": 0, "NO_ACTIVE": 1, "ALL": 2}
+COUPON_STATUS = {"ACTIVE": 0, "NO_ACTIVE": 1, "EXPIRED": 2, "ALL": 3}
 
 class Coupon(db.Document):
     title = db.StringField(required=True, max_length=20)

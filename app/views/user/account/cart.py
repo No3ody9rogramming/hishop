@@ -26,6 +26,8 @@ class CartView(MethodView):
         form = CartForm()
         checkedProducts = request.form.getlist("productCheck")
 
+        print(checkedProducts)
+        '''
         information = Information.objects(user_id=current_user.id).first()
         products = Product.objects(id__in=checkedProducts, seller_id__ne=current_user.id, status=0, bidding=False)
         total_price = sum(product['price'] for product in products)
@@ -38,6 +40,7 @@ class CartView(MethodView):
                 product.save()
                 information.cart.remove(product)
                 information.save()
+        '''
 
         return redirect(url_for('user.purchase_list', status='4'));
 
