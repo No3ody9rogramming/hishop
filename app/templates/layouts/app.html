@@ -164,6 +164,7 @@
         }
 
         function showMsgNtfCount(){
+            console.log("a");
             $.ajax({
                 type:"GET",
                 url: "{{ url_for('user.notification_count') }}",
