@@ -29,6 +29,7 @@ class Notification(MethodView):
 
 class NotificationCount(MethodView):
     def get(self):
+        print("AAAAAAAAAAAAAAAAAAAAAAAAAAA")
         msgCount = Message.objects(
             (Q(sender_id=current_user) &
              Q(receiver_id__ne=app.config["HISHOP_UID"])) |
@@ -43,4 +44,7 @@ class NotificationCount(MethodView):
              Q(receiver_id=current_user))
             ).count()
 
-        return {msgCount: msgCount, ntfCount: ntfCount}
+        return {'msgCount': msgCount, 'ntfCount': ntfCount}
+
+    def post(self):
+        pass
