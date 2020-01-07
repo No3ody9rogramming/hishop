@@ -169,7 +169,10 @@
                 url: "{{ url_for('user.notification_count') }}",
                 data: { senderID : "{{ config.HISHOP_UID }}", receiverID : "{{ current_user.id|string }}"},
                 success: function(data){
-                    console.log(data);
+                    if(data['msgCount'] > 0)
+                        $("#msgCount").text(data['msgCount']);
+                    if(data['ntfCount'])
+                        $("#ntfCount").text(data['ntfCount']);
                 }
             });
         }

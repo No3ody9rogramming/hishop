@@ -111,7 +111,7 @@ app.register_blueprint(user, url_prefix='/user')
 def p():
     import time
     while(True):
-        print("bbbbbbbbb")
+        # print("bbbbbbbbb")
         time.sleep(1)
 
 
