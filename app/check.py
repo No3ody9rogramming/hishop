@@ -48,6 +48,8 @@ def sellBiddingNtf(product, operation):
         userSellingRomovedUrl = url_for('user.selling_list',
                                         status=operation)
 
+    userSellingRomovedUrl = app.config['REVERSE_PROXY_PATH'] + userSellingRomovedUrl
+
     operationNtfs = {
         PRODUCT_STATUS["REMOVE"]: "過期了, 系統自動結標",
         PRODUCT_STATUS["SOLD"]: "已賣出, 買家確認中!!"
@@ -69,6 +71,7 @@ def boughtNtf(product, operation):
     with app.app_context(), app.test_request_context():
         userSellingRomovedUrl = url_for('user.purchase_list',
                                         status=operation)
+    userSellingRomovedUrl = app.config['REVERSE_PROXY_PATH'] + userSellingRomovedUrl
 
     operationNtfs = {
         ORDER_STATUS["ORDER_STATUS['TRANSFERING']"]: "已得標, 請繼續完成領收",
@@ -90,6 +93,7 @@ def soldProduct(product):
     with app.app_context(), app.test_request_context():
         userSellingRomovedUrl = url_for('user.order_list',
                                         status=ORDER_STATUS["COMPLETE"])
+    userSellingRomovedUrl = app.config['REVERSE_PROXY_PATH'] + userSellingRomovedUrl
 
     message = ('<div class="d-inline">你的競標商品<a href="' +
                userSellingRomovedUrl + '">' +
