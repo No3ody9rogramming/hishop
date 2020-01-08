@@ -4,6 +4,7 @@ from flask_login import current_user, login_required
 
 from app.models.order import Order
 from app.models.product import Product
+from app.models.user import User
 
 from wtforms.validators import InputRequired
 from wtforms import SubmitField, HiddenField
@@ -12,7 +13,7 @@ from flask_wtf import FlaskForm
 import datetime
 
 #移交中 領收中 已完成 已取消 全部
-PRODUCT_STATUS = {"SELLING" : "0", "SOLD" : "1", "FROZEN" : "2", "REMOVE" : "3", "ALL" : "4"}
+PRODUCT_STATUS = {"SELLING" : 0, "SOLD" : 1, "FROZEN" : 2, "REMOVE" : 3, "ALL" : 4}
 class SellingListView(MethodView):
     def get(self):
         form = SellingListForm()
@@ -36,10 +37,23 @@ class SellingListView(MethodView):
         form = SellingListForm()
         #for delete request
         if form.validate_on_submit:
+            
             product = Product.objects(id=form.product_id.data,seller_id=current_user.id).first()
             try:
                 if product != None:
+                    #print(product.status)
+                    #print("AAAAAAAAAAAAAAAAAAAAAAAAAA")
+                    #print(PRODUCT_STATUS['SELLING'])
                     if product.status == PRODUCT_STATUS['SELLING']:
+                        #print("valid")
+                        if product.bidding == True: #if it is bidding, need to pay back money
+                            #print("it is bidding")
+                            if product.bid.buyer_id != None: #if it has a buyer, need to pay back money
+                                #print(product.bid.buyer_id.id)
+                                buyer = User.objects(id=product.bid.buyer_id.id).first()
+                                print(product.bid.buyer_id.id)
+                                buyer.hicoin += product.bid.now_price
+                                buyer.save()
                         product.status = PRODUCT_STATUS['REMOVE']
                         product.save()
                 else:

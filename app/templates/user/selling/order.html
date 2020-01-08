@@ -146,7 +146,15 @@
 										<tr>
 											<td><img class="productImg" src="{{url_for('static', filename = 'image/'+order.product_id.id|string +'/' + order.product_id.image)}}"></td>
 											<td>{{ order.product_id.name }}</td>
-											<td>$ {{ order.product_id.price }}</td>
+											<td>
+												{% if order.product_id.bidding == True and order.product_id.bid.buyer_id == None %}
+													未出價
+												{% elif order.product_id.bidding == True %}
+													$ {{ order.product_id.bid.now_price }}
+												{% else %}
+													$ {{ order.product_id.price }}
+												{% endif %}
+											</td>
 											<td>
 												{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
 													<!-- Button trigger modal -->

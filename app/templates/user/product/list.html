@@ -156,7 +156,15 @@
 												<img class="productImg" src="{{url_for('static', filename = 'image/'+order.product_id.id|string +'/' + order.product_id.image)}}">
 											</td>
 											<td style="width: fit-content;">{{ order.product_id.name }}</td>
-											<td>$ {{ order.product_id.price }}</td>
+											<td>
+												{% if order.product_id.bidding == True and order.product_id.bid.buyer_id == None %}
+													未出價
+												{% elif order.product_id.bidding == True %}
+													$ {{ order.product_id.bid.now_price }}
+												{% else %}
+													$ {{ order.product_id.price }}
+												{% endif %}
+											</td>
 											<td>
 												{% if order.status|string == ORDER_STATUS['TRANSFERING'] %}
 													移交中
@@ -173,9 +181,15 @@
 													<p style="color: #00A600;">已評價</p>
 												{% elif order.status|string == ORDER_STATUS['RECEIPTING'] %}
 													<!-- Button trigger modal -->
+													{% if order.bidding == False %}
 													<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong" onclick="comment( '{{ order.product_id.name }}', '{{order.product_id.id}}', '{{order.product_id.image}}', '{{order.product_id.price}}','{{order.product_id.seller_id.account}}' )">
 															未評價
-													</button>	
+													</button>
+													{% else %}
+													<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong" onclick="comment( '{{ order.product_id.name }}', '{{order.product_id.id}}', '{{order.product_id.image}}', '{{order.product_id.bid.now_price}}','{{order.product_id.seller_id.account}}' )">
+														未評價
+													</button>
+													{% endif %}
 												{% else %}
 													<p style="color: red;">未評價</p>
 												{%  endif %}

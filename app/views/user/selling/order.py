@@ -45,7 +45,10 @@ class OrderListView(MethodView):
                         order.status = ORDER_STATUS['CANCEL']
                         order.save()
                         buyer = User.objects(id=order.buyer_id).first()
-                        buyer.hicoin += order.product_id.price
+                        if order.product_id.bidding:
+                            buyer.hicoin += order.product_id.bid.now_price
+                        else:
+                            buyer.hicoin += order.product_id.price
                         buyer.save()
 
                     else:
