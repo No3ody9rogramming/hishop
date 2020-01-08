@@ -182,7 +182,11 @@
 			<h3>{{ product.name }}</h3>
 			<p>已有 {{ product.view}} 人觀看此商品</p>
 			<h5 id="productprice">$ {{ product.price}} </h5>
-			<h5>商品分類: {{ product.categories_id }}</h5>
+			<h5>商品分類: 
+				{% for category in product.categories %} 
+					{{category.category}}
+				{% endfor%}
+			</h5>
 			<br>
 			<form id="form" role="form" style="margin-top: 10px;"> 
 				{{ form.csrf_token }}
