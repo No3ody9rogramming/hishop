@@ -38,6 +38,39 @@
 			color: #E63F00;
 		}
 
+		.stars-outer {
+			display: inline-block;
+			position: relative;
+			font-family: FontAwesome;
+		}
+			
+		.stars-outer::before {
+			content: "\f006 \f006 \f006 \f006 \f006";
+		}
+			
+		.stars-inner {
+			position: absolute;
+			top: 0;
+			left: 0;
+			white-space: nowrap;
+			overflow: hidden;
+			width: 0;
+		}
+			
+		.stars-inner::before {
+			content: "\f005 \f005 \f005 \f005 \f005";
+			color: #f8ce0b;
+		}
+
+		.stars-inner {
+			width: 50%;
+		}
+
+		p {  
+			margin-top: 0em; margin-bottom: 0em; 
+		}
+
+
 	</style>
 {% endblock styles %}
 
@@ -158,9 +191,9 @@
 				{% elif product.status|string == PRODUCT_STATUS['REMOVE']%}
 					<p style="position:absolute; bottom:0; right:50px;">商品已下架</p>
 				{% elif current_user.status == 2%}
-					<button id="remove" name="remove" type="submit" class="btn btn-sencondary" style="position:absolute; bottom:0; right:50px;">{{remove}}</button>
+					<button id="remove" name="remove" type="submit" class="btn btn-primary" style="position:absolute; bottom:0; right:50px;">{{remove}}</button>
 				{% else %}
-					<button id="cart" name="cart" type="submit" class="btn btn-sencondary" style="position:absolute; bottom:0; right:50px;" >{{ cart }}</button>
+					<button id="cart" name="cart" type="submit" class="btn btn-primary" style="position:absolute; bottom:0; right:50px;" >{{ cart }}</button>
 					<a name="like" onclick="javascript:like(this, '{{ product.id }}')" class="btn btn-link" style="color: red; position:absolute; bottom:0; right:0;" ><i class="{{ like }}"></i></a>
 				{% endif %}
 				
@@ -170,7 +203,8 @@
 
 	<div id="row" class="row">
 		<div class="col-md-12">
-			賣家資訊 : {{ product.seller_id.name }}
+			賣家資訊 : <a href="https://csesa.csie.ntou.edu.tw/hishop/user/hichat#{{ product.seller_id.id }}"    target="_blank">{{ product.seller_id.name }}</a>
+			{{ product.seller_id.id }}
 		</div>
 	</div>
 
@@ -189,13 +223,20 @@
 		<div class="col-md-12">
 			賣家評價 :						
 			{% for order in orders %}
-			<div class="row">
 				{%if order.seller_rating != None and order.seller_comment != None%}
-				<p>商品名稱 : {{order.product_id.name}}</p>
-				<p>評價 : {{order.seller_rating}}</p>
-				<p>評論 : {{order.seller_comment}}</p>
+					<br>
+					<div class="card">
+						<div class="card-header text-black font-weight-bold" style="height: auto;">{{order.product_id.name}}</div>
+						<div class="card-body">
+							<div id="hotProductIndicators" class="carousel slide" data-ride="carousel" data-interval="8000">
+								<div class="carousel-inner">
+									<p>{{order.seller_rating}}顆星</p>	
+									<p>評論 : {{order.seller_comment}}</p>					
+								</div>
+							</div>
+						</div>
+					</div>		
 				{%endif%}
-			</div>
 			{%endfor%}
 		</div>
 	</div>
