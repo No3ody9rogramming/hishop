@@ -54,7 +54,7 @@ class SellingListView(MethodView):
                                 print(product.bid.buyer_id.id)
                                 buyer.hicoin += product.bid.now_price
                                 buyer.save()
-                        product.status = PRODUCT_STATUS['REMOVE']
+                        product.status = int(PRODUCT_STATUS['REMOVE'])
                         product.save()
                 else:
                     abort(404)
