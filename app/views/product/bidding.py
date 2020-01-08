@@ -13,7 +13,7 @@ from app.models.product import Product
 from app.models.category import Category
 from app.models.information import Information, History
 from app.models.order import Order
-from app.socketioService import updatePriceViaSocketIO
+from app.socketioService import updatePriceViaSocketIO, sendMessageViaSocketIO
 
 PRODUCT_STATUS = {"SELLING" : "0", "SOLD" : "1", "FROZEN" : "2", "REMOVE" : "3", "ALL" : "4"}
 
@@ -57,7 +57,6 @@ class ShowBiddingView(MethodView):
             abort(404)
 
         if form.remove.data == True:
-            print('23231')
             remove = "商品已下架"
             product = Product.objects(id=product_id, bidding=False).first()
             product.status = PRODUCT_STATUS['REMOVE']
@@ -89,7 +88,8 @@ class ShowBiddingView(MethodView):
                             pre_buyer.hicoin += product.bid.now_price
                             pre_buyer.save()
                             flash('出價成功', 'success')
-
+                    if product.bid.due_time - (datetime.datetime.utcnow() + datetime.timedelta(hours=8)) < datetime.timedelta(seconds=30):
+                        product.bid.due_time += datetime.timedelta(minutes=3)
                     product.bid.buyer_id = current_user.id
                     if your_price >= product.price:
                         Order(buyer_id=current_user.id, product_id=product_id).save()
