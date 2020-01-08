@@ -44,7 +44,7 @@ class SellingListView(MethodView):
                     #print(product.status)
                     #print("AAAAAAAAAAAAAAAAAAAAAAAAAA")
                     #print(PRODUCT_STATUS['SELLING'])
-                    if product.status == PRODUCT_STATUS['SELLING']:
+                    if str(product.status) == PRODUCT_STATUS['SELLING']:
                         #print("valid")
                         if product.bidding == True: #if it is bidding, need to pay back money
                             #print("it is bidding")
