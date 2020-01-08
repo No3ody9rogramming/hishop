@@ -31,8 +31,6 @@ def check_time():
             products[i].save()
             discount_list.append(idx)
 
-    print(app.config['DISCOUNT_COUNTER'])
-
     products = Product.objects(status=PRODUCT_STATUS["SELLING"], bid__due_time__lte=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
 
     for product in products:
