@@ -2,11 +2,12 @@ from flask import url_for
 
 from app.models.product import Product, PRODUCT_STATUS
 from app.models.order import Order, ORDER_STATUS
+from app.models.coupon import Coupon, COUPON_STATUS
 from app.models.user import User
 from app.socketioService import sendMessageViaSocketIO
 from app import app
 import datetime
-
+import threading
 
 def check_time():
     products = Product.objects(status=PRODUCT_STATUS["SELLING"], bid__due_time__lte=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
@@ -42,6 +43,10 @@ def check_time():
         soldProduct(order.product_id, ORDER_STATUS["COMPLETE"])
         boughtNtf(order.product_id, ORDER_STATUS["COMPLETE"])
 
+    coupons = Coupon.objects(status__ne=COUPON_STATUS["EXPIRED"], due_time__lte=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
+    for coupon in coupons:
+      coupon.status = COUPON_STATUS["EXPIRED"]
+      coupon.save()
 
 def sellBiddingNtf(product, operation):
     # use with for prevent an error about url_for should not be use before run
