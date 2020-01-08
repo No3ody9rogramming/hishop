@@ -67,14 +67,13 @@ def sellBiddingNtf(product, operation):
 
 
 def boughtNtf(product, operation):
-    print(operation)
     with app.app_context(), app.test_request_context():
         userSellingRomovedUrl = url_for('user.purchase_list',
                                         status=operation)
     userSellingRomovedUrl = app.config['REVERSE_PROXY_PATH'] + userSellingRomovedUrl
 
     operationNtfs = {
-        ORDER_STATUS["TRANSFERING"]: "已得標, 請繼續完成領收",  # 0
+        ORDER_STATUS["TRANSFERING"]: "已得標, 等待賣家確認",  # 0
         ORDER_STATUS["COMPLETE"]: "評論時間過期, 系統已自動評分賣家並完成交易!!"  # 2
     }
 
@@ -82,8 +81,6 @@ def boughtNtf(product, operation):
                userSellingRomovedUrl + '">' +
                str(product.name) + '</a>' +
                operationNtfs[str(operation)] + '</div>')
-
-    print(product.bid.buyer_id.id)
 
     sendMessageViaSocketIO(app.config["HISHOP_UID"],
                            str(product.bid.buyer_id.id),
@@ -98,7 +95,7 @@ def soldProduct(product, operation):
     userSellingRomovedUrl = app.config['REVERSE_PROXY_PATH'] + userSellingRomovedUrl
 
     operationNtfs = {
-        ORDER_STATUS["TRANSFERING"]: "已賣出, 買家確認中!!",  # 0
+        ORDER_STATUS["TRANSFERING"]: "已賣出, 請完成移交確認!!",  # 0
         ORDER_STATUS["COMPLETE"]: ('--買家已完成交易, 本次交易獲得' +
                                    str(int(product.price * 0.88)) +
                                    'hicoin')  # 2

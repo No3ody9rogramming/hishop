@@ -8,7 +8,7 @@ from wtforms.validators import InputRequired, Length, ValidationError
 
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate, CarouselColumn, CarouselTemplate, URITemplateAction
+from linebot.models import MessageEvent, FollowEvent, TextMessage, TextSendMessage, TemplateSendMessage, ButtonsTemplate, CarouselColumn, CarouselTemplate, URITemplateAction
 
 from app.models.keyword import Keyword
 from app.models.product import Product
@@ -48,8 +48,10 @@ class CatSearchView(MethodView):
         way = "normal"
         return render_template('search.html', products=products, way=way, now=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
 
+
 line_bot_api = LineBotApi(app.config['LINE_CHATBOT_ACCESS_TOKEN'])
 handler = WebhookHandler(app.config['LINE_CHATBOT_SECRET'])
+
 
 class LineChatbotSearch(MethodView):
     def post(self):
@@ -69,6 +71,7 @@ class LineChatbotSearch(MethodView):
 
         return 'OK'
 
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text == None:
@@ -85,7 +88,7 @@ def handle_message(event):
         #   image = imagePath
         # else:
         #   image = "https://miro.medium.com/max/2834/0*f81bU2qWpP51WWWC.jpg"
-        filePath = 'image/' + str(product.id) + '/' + product.image        
+        filePath = 'image/' + str(product.id) + '/' + product.image
         if(product.bidding):
             price = "Last Bid: NT$" + str(product.bid.now_price)
             showMethod = 'show_bidding'
@@ -102,7 +105,7 @@ def handle_message(event):
                         label='Take a look!',
                         uri=request.host_url[:-1] + url_for(showMethod, product_id=product.id)
                     )
-                ]               
+                ]
             ))
         count += 1
         if count > 5:
@@ -113,20 +116,21 @@ def handle_message(event):
             alt_text="請到 "+ request.url_root[:-1] + url_for('search', keyword=event.message.text) + " 或",
             template=CarouselTemplate(columns=carouselColumns)
         )
-    else:       
+    else:
         message = TextSendMessage(text="找不到相關商品")
     line_bot_api.reply_message(event.reply_token, message)
 
-# @LineChatbotSearch.handler.add(MessageEvent, message=TextMessage)
-# def handle_message(event):
-#     line_bot_api.reply_message(
-#         event.reply_token,
-#         TextSendMessage(text=event.message.text))
+
+@handler.add(FollowEvent)
+def handle_follow(event):
+    print("Someone follows hishop Line Chatbot!")
+    message = TextMessage(text="太誇張! 小資女用Hishop賺到人生的第一桶金!")
+    line_bot_api.reply_message(event.reply_token, message)
+
 
 class CompSearch(MethodView):
     def get(self):
-        
-       
+
         if request.args.get('way') == "bidding":
             products = Product.objects(name__icontains=request.args.get('keyword'), bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8), status=0, bidding=True)
             way = "bidding"
