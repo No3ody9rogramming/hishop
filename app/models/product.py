@@ -27,3 +27,5 @@ class Product(db.Document):
     bidding = db.BooleanField(requried=True)
     status = db.IntField(requried=True, default=0)
     create_time = db.DateTimeField(default=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
+
+RATE = 0.88

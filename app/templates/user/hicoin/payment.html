@@ -1,0 +1,40 @@
+{% extends "layouts/app.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block page %}
+	<div class="row">
+		<div class="col-auto">
+			<br>
+			{% include "layouts/user.html" %}
+		</div>
+
+	    <div class="col-md-9">
+			<br>
+
+			<div class="card">
+				<div class="card-header text-center bg-warning p-2 border border-dark"> 儲值Hi幣 </div>
+				<div class="card-body border border-dark">
+
+					<p>目前有 {{ hicoin }} hicoin</p>
+					{{ wtf.quick_form(form, method="post", action=url_for("user.payment")) }}
+					
+					<div class="row justify-content-center align-items-center"></div>
+					<div class="col-auto ">
+						<div class="row justify-content-center">
+							<div class="alert alert-warning alert-dismissible fade show" role="alert">
+								<strong>注意</strong> 儲值金額最小為1，最大為100000
+								<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+        </div>
+
+		</div>
+		
+	</div>
+{% endblock page %}

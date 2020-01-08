@@ -18,17 +18,36 @@ class AdminCouponView(MethodView):
 		form = CouponManageForm()
 
 		coupons = Coupon.objects()
-
-		status = 2
+		status = COUPON_STATUS["ALL"]
+		if request.args.get("status") == str(COUPON_STATUS["ACTIVE"]):
+			coupons = Coupon.objects(status=COUPON_STATUS["ACTIVE"])
+			status = COUPON_STATUS["ACTIVE"]
+		elif request.args.get("status") == str(COUPON_STATUS["NO_ACTIVE"]):
+			coupons = Coupon.objects(status=COUPON_STATUS["NO_ACTIVE"])
+			status = COUPON_STATUS["NO_ACTIVE"]
+		elif request.args.get("status") == str(COUPON_STATUS["EXPIRED"]):
+			coupons = Coupon.objects(status=COUPON_STATUS["EXPIRED"])
+			status = COUPON_STATUS["EXPIRED"]
 
 		return render_template('admin/management/coupon.html', addForm=addForm, form=form, coupons=coupons, status=status, COUPON_STATUS=COUPON_STATUS)
 
 	def post(self):
 		addForm = CouponForm()
 		form = CouponManageForm()
-		coupons = Coupon.objects()
 
-		status = 2
+		coupons = Coupon.objects()
+		status = COUPON_STATUS["ALL"]
+		if request.args.get("status") == str(COUPON_STATUS["ACTIVE"]):
+			coupons = Coupon.objects(status=COUPON_STATUS["ACTIVE"])
+			status = COUPON_STATUS["ACTIVE"]
+		elif request.args.get("status") == str(COUPON_STATUS["NO_ACTIVE"]):
+			coupons = Coupon.objects(status=COUPON_STATUS["NO_ACTIVE"])
+			status = COUPON_STATUS["NO_ACTIVE"]
+		elif request.args.get("status") == str(COUPON_STATUS["EXPIRED"]):
+			coupons = Coupon.objects(status=COUPON_STATUS["EXPIRED"])
+			status = COUPON_STATUS["EXPIRED"]
+
+		
 		if addForm.validate_on_submit():
 			coupon = Coupon(title=addForm.title.data, detail=addForm.detail.data, discount=addForm.discount.data,
 						 begin_time=addForm.begin_time.data, due_time=addForm.due_time.data)
@@ -37,10 +56,10 @@ class AdminCouponView(MethodView):
 
 		if form.validate_on_submit():
 			coupon = Coupon.objects(id=form.coupon_id.data, due_time__gte=datetime.datetime.utcnow()+datetime.timedelta(hours=8)).first()
-			print(coupon)
+
 			if coupon == None:
 				return "error"
-			if coupon.status == COUPON_STATUS["ACTIVE"]:
+			elif coupon.status == COUPON_STATUS["ACTIVE"]:
 				coupon.status = COUPON_STATUS["NO_ACTIVE"]
 				coupon.save()
 				return "發放"
@@ -48,22 +67,9 @@ class AdminCouponView(MethodView):
 				coupon.status = COUPON_STATUS["ACTIVE"]
 				coupon.save()
 				return "停發"
-		'''
-		form = CouponManageForm()
+			else:
+				return "error"
 
-		if form.validate_on_submit():
-			user = User.objects(id=form.user_id.data, status__in=[ACCOUNT_STATUS["ACTIVE"], ACCOUNT_STATUS["LOCK"]]).first()
-			if user.status == ACCOUNT_STATUS["ACTIVE"]:
-				user.status = ACCOUNT_STATUS["LOCK"]
-				print(user.to_json())
-				user.save()
-				return "解凍"
-			elif user.status == ACCOUNT_STATUS["LOCK"]:
-				user.status = ACCOUNT_STATUS["ACTIVE"]
-				user.save()
-				return "凍結"
-		return "error"
-		'''
 		return render_template('admin/management/coupon.html', addForm=addForm, form=form, coupons=coupons, status=status, COUPON_STATUS=COUPON_STATUS)
 
 class CouponForm(FlaskForm):

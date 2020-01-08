@@ -6,14 +6,24 @@ from flask_wtf import FlaskForm
 from wtforms import IntegerField, SubmitField
 from wtforms.validators import InputRequired, NumberRange
 
-import uuid, json, requests, shelve
+import uuid, json, requests, shelve, datetime
 
 from app import app
 from app.models.product import Product
 from app.models.information import Information
+from app.models.order import Order
 
 
 class CartOperationView(MethodView):
+    def get(self):
+        coupons = list()
+        temp_coupons = Information.objects(user_id=current_user.id).first().coupon
+
+        now = datetime.datetime.utcnow()+datetime.timedelta(hours=8)
+        for temp_coupon in temp_coupons:
+            if now > temp_coupon.begin_time and now < temp_coupon.due_time and Order.objects(buyer_id=current_user.id, coupon_id=temp_coupon.id).first() == None:
+                coupons.append(temp_coupon.to_json())
+        return json.dumps({'coupons': coupons})
     def post(self):
         product_id = request.values['product_id']
         product = Product.objects(id=product_id).first()

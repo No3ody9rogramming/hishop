@@ -20,9 +20,9 @@
 							form.children("input#submit").val(data);
 
 							if (data == "發放")
-								$("#" + form.find("input[id=coupon_id]").val()).text("發放");
+								$("#" + form.find("input[id=coupon_id]").val()).text("停止發放");
 							else if (data == "停發")
-								$("#" + form.find("input[id=coupon_id]").val()).text("停發");
+								$("#" + form.find("input[id=coupon_id]").val()).text("正在發放");
 							
 						}
 					}
@@ -108,14 +108,14 @@
 		    			<a class="btn btn-primary {% if status == COUPON_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('admin.coupon') }}">全部</a>
 		    			<a class="btn btn-primary {% if status == COUPON_STATUS['ACTIVE'] %} active {% endif %}" href="{{ url_for('admin.coupon', status=COUPON_STATUS['ACTIVE']) }}">正在發放</a>
 		    			<a class="btn btn-primary {% if status == COUPON_STATUS['NO_ACTIVE'] %} active {% endif %}" href="{{ url_for('admin.coupon', status=COUPON_STATUS['NO_ACTIVE']) }}">停止發放</a>
+		    			<a class="btn btn-primary {% if status == COUPON_STATUS['EXPIRED'] %} active {% endif %}" href="{{ url_for('admin.coupon', status=COUPON_STATUS['EXPIRED']) }}">已截止</a>
 		            </div>
 					<div class="table-responsive-lg">
 						<table class="table table-striped table-border">
 							<thead>
 								<tr>
 									<th scope="col">名稱</th>
-									<th scope="col">開始時間</th>
-									<th scope="col">截止時間</th>
+									<th scope="col">使用期間</th>
 									<th scope="col">狀態</th>
 									<th scope="col">操作</th>
 								</tr>
@@ -124,17 +124,16 @@
 								{% for coupon in coupons %}
 								    <tr>
 										<td class="align-middle">{{ coupon.title }}</td>
-										<td class="align-middle">{{ coupon.begin_time.strftime('%Y-%m-%d') }}</td>
 										<td class="align-middle">
-											{{ coupon.due_time.strftime('%Y-%m-%d') }}
+											{{ coupon.begin_time.strftime('%Y-%m-%d') }} 至 {{ coupon.due_time.strftime('%Y-%m-%d') }}
 										</td>
 										<td id="{{ coupon.id }}" class="align-middle">
 											{% if coupon.status == COUPON_STATUS['NO_ACTIVE'] %}
 												停止發放
 											{% elif coupon.status == COUPON_STATUS['ACTIVE'] %}
 												正在發放
-											{% else %}
-												已凍結
+											{% elif coupon.status == COUPON_STATUS['EXPIRED'] %}
+												已截止
 											{% endif %}
 										</td>
 										<td class="align-middle">
@@ -142,9 +141,9 @@
 												{{ form.csrf_token }}
 												{{ form.coupon_id(value=coupon.id|string) }}
 												{% if coupon.status == COUPON_STATUS["ACTIVE"] %}
-													{{ form.submit(class="btn btn-secondary", value="凍結")}}
-												{% elif coupon.status == COUPON_STATUS["LOCK"] %}
-													{{ form.submit(class="btn btn-secondary", value="解凍")}}
+													{{ form.submit(class="btn btn-secondary", value="停發")}}
+												{% elif coupon.status == COUPON_STATUS["NO_ACTIVE"] %}
+													{{ form.submit(class="btn btn-secondary", value="發放")}}
 												{% endif %}
 											</form>
 										</td>
