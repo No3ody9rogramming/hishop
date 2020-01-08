@@ -53,8 +53,13 @@ class OrderListView(MethodView):
                         else:
                             buyer.hicoin += order.product_id.price
                         buyer.save()
-                        message = ('<div class="d-inline"> <商品名> ' +
-                        str(order.product_id.name) + " 已被取消"
+                        userSellingRomovedUrl = url_for('user.purchase_list',
+                                        status=ORDER_STATUS['CANCEL'])
+                        #userSellingRomovedUrl = app.config['REVERSE_PROXY_PATH'] + userSellingRomovedUrl
+
+                        message = ('<div class="d-inline"><商品名><a href="' +
+               userSellingRomovedUrl + '">' +
+                        str(order.product_id.name)+ '</a>' + " 已被取消"
                          '</div>')
                         if message is not None:
                             try:
