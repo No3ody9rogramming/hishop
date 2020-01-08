@@ -80,7 +80,7 @@
 
         $(function () {
             resizeMessageWindow();
-            appendUnforeSeenUser();
+            selectChatobjectByHash();
 
             $('form').submit(function(e){
                 e.preventDefault(); // prevents page reloading\
@@ -154,8 +154,6 @@
                 if(secondChild.length == 1)
                     secondChild.text(newMessage);
                 else if (secondChild.length ==0) {
-                    console.log(newMessage);
-                    console.log($(newMessage).text);
                     var senderDIV = '<div class="text-muted small text-break d-none d-md-block">' + newMessage + '</div>';
                     chatObjectLI.append(senderDIV);
                 }
@@ -165,15 +163,32 @@
             }
         }
 
-        function appendUnforeSeenUser(){
+        function appendUnforeSeenUser(userid){
             var allUserList = [{% for user in Tusers %}{id: '{{user.id}}', name: '{{ user.name }}'}, {% endfor %}];
-            for (u in allUserList) {
-                let chatObjectLI = $("#" + allUserList[u].id);
+            userPos = allUserList.map(function(e) {return e.id}).indexOf(userid)
+            if(userPos >= 0) {
+                let chatObjectLI = $("#" + allUserList[userPos].id);
                 if(chatObjectLI.length == 0) {
-                    let newUser = '<li id="' + allUserList[u].id + '" username="' + allUserList[u].name + '" class="list-group-item pointer hover-bg" onclick="changeObject(this)"><div>' + allUserList[u].name + '</div></li>'
-                    $("#usersList").append(newUser);
+                    let newUser = '<li id="' + allUserList[userPos].id + '" username="' + allUserList[userPos].name + '" class="list-group-item pointer hover-bg" onclick="changeObject(this)"><div>' + allUserList[userPos].name + '</div></li>'
+                    $("#usersList").prepend(newUser);
+                    return true;
                 }
             }
+            return false;
+        }
+
+        function selectChatobjectByHash(){
+            if(window.location.hash != ""){
+                let userid = window.location.hash.substr(1);
+                appendUnforeSeenUser(userid);
+                if($(window.location.hash).length > 0){
+                    $(window.location.hash).click();
+                    window.location.hash = '';
+                    return true;
+                }
+                window.location.hash = '';
+            }
+            return false;
         }
 
         function changeObject(obj) {
