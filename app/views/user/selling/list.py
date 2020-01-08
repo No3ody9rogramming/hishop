@@ -13,7 +13,7 @@ from flask_wtf import FlaskForm
 import datetime
 
 #移交中 領收中 已完成 已取消 全部
-PRODUCT_STATUS = {"SELLING" : 0, "SOLD" : 1, "FROZEN" : 2, "REMOVE" : 3, "ALL" : 4}
+PRODUCT_STATUS = {"SELLING" : "0", "SOLD" : "1", "FROZEN" : "2", "REMOVE" : "3", "ALL" : "4"}
 class SellingListView(MethodView):
     def get(self):
         form = SellingListForm()
