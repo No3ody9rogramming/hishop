@@ -112,15 +112,14 @@ app.register_blueprint(user, url_prefix='/user')
 
 
 def p():
-    import time
-    while(True):
-        # print("bbbbbbbbb")
-        time.sleep(1)
+    # import time
+    # while(True):
+    print("bbbbbbbbb")
+    # time.sleep(1)
 
 
 if __name__ == '__main__':
     scheduler = GeventScheduler()
-    # scheduler.add_job(func=check_time)
-    scheduler.add_job(func=p)
+    scheduler.add_job(check_time, 'interval', seconds=1)
     scheduler.start()
     socketio.run(app, debug=True, host='0.0.0.0')

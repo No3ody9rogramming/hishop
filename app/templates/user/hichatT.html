@@ -154,6 +154,8 @@
                 if(secondChild.length == 1)
                     secondChild.text(newMessage);
                 else if (secondChild.length ==0) {
+                    console.log(newMessage);
+                    console.log($(newMessage).text);
                     var senderDIV = '<div class="text-muted small text-break d-none d-md-block">' + newMessage + '</div>';
                     chatObjectLI.append(senderDIV);
                 }
