@@ -23,6 +23,7 @@ def check_time():
             Order(buyer_id=user.id, product_id=product.id, status=ORDER_STATUS["TRANSFERING"]).save()
             user.save()
             product.save()
+            soldProduct(product, ORDER_STATUS["TRANSFERING"])
             boughtNtf(product, ORDER_STATUS["TRANSFERING"])
 
     orders = Order.objects(status=ORDER_STATUS["RECEIPTING"], transfer_time__lte=datetime.datetime.utcnow()+datetime.timedelta(hours=-64))
@@ -38,7 +39,7 @@ def check_time():
             user.hicoin += int(order.product_id.price * 0.88)
         order.save()
         user.save()
-        soldProduct(order.product_id)
+        soldProduct(order.product_id, ORDER_STATUS["COMPLETE"])
         boughtNtf(order.product_id, ORDER_STATUS["COMPLETE"])
 
 
@@ -51,8 +52,7 @@ def sellBiddingNtf(product, operation):
     userSellingRomovedUrl = app.config['REVERSE_PROXY_PATH'] + userSellingRomovedUrl
 
     operationNtfs = {
-        PRODUCT_STATUS["REMOVE"]: "過期了, 系統自動結標",
-        PRODUCT_STATUS["SOLD"]: "已賣出, 買家確認中!!"
+        PRODUCT_STATUS["REMOVE"]: "過期了, 系統自動結標",  # 3
     }
 
     message = ('<div class="d-inline">你的競標商品<a href="' +
@@ -67,40 +67,48 @@ def sellBiddingNtf(product, operation):
 
 
 def boughtNtf(product, operation):
-
+    print(operation)
     with app.app_context(), app.test_request_context():
         userSellingRomovedUrl = url_for('user.purchase_list',
                                         status=operation)
     userSellingRomovedUrl = app.config['REVERSE_PROXY_PATH'] + userSellingRomovedUrl
 
     operationNtfs = {
-        ORDER_STATUS["ORDER_STATUS['TRANSFERING']"]: "已得標, 請繼續完成領收",
-        ORDER_STATUS["COMPLETE"]: "評論時間過期, 系統已自動評分賣家並完成交易!!"
+        ORDER_STATUS["TRANSFERING"]: "已得標, 請繼續完成領收",  # 0
+        ORDER_STATUS["COMPLETE"]: "評論時間過期, 系統已自動評分賣家並完成交易!!"  # 2
     }
 
     message = ('<div class="d-inline">你競標的商品<a href="' +
                userSellingRomovedUrl + '">' +
                str(product.name) + '</a>' +
-               operationNtfs + '</div>')
+               operationNtfs[str(operation)] + '</div>')
+
+    print(product.bid.buyer_id.id)
 
     sendMessageViaSocketIO(app.config["HISHOP_UID"],
-                           str(product.buyer_id.id),
+                           str(product.bid.buyer_id.id),
                            message)
 
 
-def soldProduct(product):
+def soldProduct(product, operation):
 
     with app.app_context(), app.test_request_context():
         userSellingRomovedUrl = url_for('user.order_list',
-                                        status=ORDER_STATUS["COMPLETE"])
+                                        status=operation)
     userSellingRomovedUrl = app.config['REVERSE_PROXY_PATH'] + userSellingRomovedUrl
+
+    operationNtfs = {
+        ORDER_STATUS["TRANSFERING"]: "已賣出, 買家確認中!!",  # 0
+        ORDER_STATUS["COMPLETE"]: ('--買家已完成交易, 本次交易獲得' +
+                                   str(int(product.price * 0.88)) +
+                                   'hicoin')  # 2
+    }
 
     message = ('<div class="d-inline">你的競標商品<a href="' +
                userSellingRomovedUrl + '">' +
                str(product.name) + '</a>' +
-               '-買家已完成交易, 本次交易獲得' +
-               int(product.price * 0.88) +
-               'hicoin</div>')
+               operationNtfs[str(operation)] +
+               '</div>')
 
     sendMessageViaSocketIO(app.config["HISHOP_UID"],
                            str(product.seller_id.id),
