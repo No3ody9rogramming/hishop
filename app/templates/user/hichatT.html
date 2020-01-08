@@ -45,7 +45,7 @@
 {% endblock styles %}
 
 {% block page %}
-  <div class="row" id="content">
+  <div class="row" id="rowContent">
 
     <div id="usersWindow" class="col-4 overflow-auto">
         <ul id="usersList" class="list-group">
@@ -119,7 +119,16 @@
             $.ajax({
                 type:"POST",
                 url: "{{ url_for('user.hichat_update') }}",
-                data: { senderID : chatObjectID, receiverID : "{{ current_user.id|string }}"}
+                data: { senderID : chatObjectID, receiverID : "{{ current_user.id|string }}"},
+                success: function(data){
+                    loadhMsgNtfCount();
+                    /*
+                    count = parseInt(data)
+                    if(chatObjectID != "{{ config.HISHOP_UID }}"){
+                        //reduceMsgCount(count); //defined in app.html // not used because this function is not useful if user open more than one window
+                        console.log(count);
+                    }*/
+                }
             });
         }
 
@@ -130,6 +139,7 @@
             var messageWindow = $("#messageWindow");
             messageWindow.innerHeight(windowHeight- formHeight - navHeight);
             $("#usersWindow").height(windowHeight - navHeight);
+            $("#rowContent").height(windowHeight - navHeight);
         }
 
         function prependUser(userID, message, senderName){

@@ -123,10 +123,11 @@ class HiChatUpdate(MethodView):
         if receiverID != str(current_user.id):
             abort(403)
 
-        Message.objects.filter(
+        count = Message.objects.filter(
             sender_id=senderID,
             receiver_id=receiverID,
             isRead=False).update(isRead=True)
 
         socketio.emit(receiverID + "updateTo" + senderID, broadcast=True)
-        return ""
+
+        return str(count)

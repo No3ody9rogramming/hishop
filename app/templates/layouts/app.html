@@ -87,19 +87,24 @@
     </script>
     <script>
 
-        var messageCount;
-        var notificationCount;
+        var msgCount = 0;
+        var ntfCount = 0;
 
          //load notification
         $(function () {
-
-            
-
-            socket.on('{{ config.HISHOP_UID }}To{{ current_user.id|string }}', function(data){                
-                prependNotification(data);
-            });
             loadNtf();
-            showMsgNtfCount();
+            loadhMsgNtfCount();
+
+            socket.on('messageTo{{ current_user.id|string }}', function(data){
+                if(data.sender_id.$oid == "{{ config.HISHOP_UID }}") {
+                    prependNotification(data);
+                    ntfCount += 1;
+                }
+                else {
+                    msgCount += 1;
+                }
+                showMsgNtfCount();
+            });
 
         });
 
@@ -116,13 +121,15 @@
             });
         }
 
-        
-        
+        //call by setMessageToRead in hichat.html //not now because this function is not useful if user open more than one window
+        function reduceMsgCount(count){
+            msgCount -= count;
+            showMsgNtfCount();
+        }       
 
         $( window ).resize(resizeNotification);
 
         $('#notificationDropdown').on({
-            'shown.bs.dropdown': resizeNotification,
             'shown.bs.dropdown': setNotificationToRead,
             'hide.bs.dropdown': removeUnreadSign
         });
@@ -149,6 +156,8 @@
                 url: "{{ url_for('user.hichat_update') }}",
                 data: { senderID : "{{ config.HISHOP_UID }}", receiverID : "{{ current_user.id|string }}"}
             });
+            ntfCount = 0;
+            showMsgNtfCount();
         }
 
         function removeUnreadSign(){
@@ -163,18 +172,29 @@
             dropdownWindow.outerWidth(windowObj.innerWidth() - notificationDropdown.position().left - 16)
         }
 
-        function showMsgNtfCount(){
+        function loadhMsgNtfCount(){
             $.ajax({
                 type:"GET",
                 url: "{{ url_for('user.notification_count') }}",
                 data: { senderID : "{{ config.HISHOP_UID }}", receiverID : "{{ current_user.id|string }}"},
                 success: function(data){
-                    if(data['msgCount'] > 0)
-                        $("#msgCount").text(data['msgCount']);
-                    if(data['ntfCount'])
-                        $("#ntfCount").text(data['ntfCount']);
+                    msgCount = data['msgCount'];
+                    ntfCount = data['ntfCount'];
+                    showMsgNtfCount();
                 }
             });
+        }
+
+        function showMsgNtfCount(){
+            if(msgCount > 0)
+                $("#msgCount").text(msgCount);
+            else 
+                $("#msgCount").text("");
+
+            if(ntfCount > 0)
+                $("#ntfCount").text(ntfCount);
+            else
+                $("#ntfCount").text("");
         }
 
     </script>

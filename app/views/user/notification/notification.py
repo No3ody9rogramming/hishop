@@ -29,7 +29,6 @@ class Notification(MethodView):
 
 class NotificationCount(MethodView):
     def get(self):
-        print("aaaaaaaaaa")
         msgCount = Message.objects(
             (Q(sender_id__ne=app.config["HISHOP_UID"]) &
              Q(receiver_id=current_user)), isRead=False
