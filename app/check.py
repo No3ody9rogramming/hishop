@@ -30,7 +30,7 @@ def check_time():
     for order in orders:
         order.finish_time = datetime.datetime.utcnow()+datetime.timedelta(hours=8)
         order.buyer_rating = 5
-        order.comment = ""
+        order.buyer_comment = ""
         order.status = ORDER_STATUS["COMPLETE"]
         user = User.objects(id=order.product_id.seller_id.id).first()
         if order.product_id.bidding is True:
