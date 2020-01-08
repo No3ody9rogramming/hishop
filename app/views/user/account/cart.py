@@ -42,10 +42,10 @@ class CartView(MethodView):
             except:
                 coupon = None
             if coupon in information.coupon and Order.objects(buyer_id=current_user.id, coupon_id=coupon.id, status__ne=ORDER_STATUS["CANCEL"]).first() == None:
-                total_price += max(0, product.price - coupon.discount)
+                total_price += max(0, int(product.price * product.discount - coupon.discount))
                 coupon_dict[product.id] = coupon.id
             else:
-                total_price += product.price
+                total_price += int(product.price * product.discount)
                 coupon_dict[product.id] = None
 
         

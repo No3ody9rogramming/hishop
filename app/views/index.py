@@ -19,11 +19,13 @@ class IndexView(MethodView):
         normal_products = Product.objects(bidding=False, status=0).order_by('-create_time')[:12]
         bidding_products = Product.objects(bid__due_time__gt=datetime.datetime.utcnow()+datetime.timedelta(hours=8),
                          bidding=True, status=0).order_by('-create_time')[:12]
+        discount_products = Product.objects(bidding=False, status=0, discount__lt=1).order_by('-create_time')
 
         return render_template('index.html', form=form,
         				popular_products=popular_products,
          				normal_products=normal_products,
          				bidding_products=bidding_products,
+                        discount_products=discount_products,
                         now=datetime.datetime.utcnow() + datetime.timedelta(hours=8))
         
 class SearchForm(FlaskForm):
