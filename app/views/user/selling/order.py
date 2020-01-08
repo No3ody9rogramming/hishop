@@ -57,7 +57,10 @@ class OrderListView(MethodView):
                         str(order.product_id.name) + " 已被取消"
                          '</div>')
                         if message is not None:
-                            sendMessageViaSocketIO(app.config['HISHOP_UID'], str(order.buyer_id.id), message)
+                            try:
+                                sendMessageViaSocketIO(app.config['HISHOP_UID'], str(order.buyer_id.id), message)
+                            except:
+                                print("something went wrong...")
                     else:
                         abort(404)
         else:
