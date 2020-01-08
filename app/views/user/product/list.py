@@ -57,13 +57,13 @@ class PurchaseListView(MethodView):
             if order == None:
                 abort(404)
             else:
-                if order.status != ORDER_STATUS['RECEIPTING']:
+                if str(order.status) != ORDER_STATUS['RECEIPTING']:
                     abort(404)
                 else:
                     #order implementaion
                     order.buyer_comment = form.detail.data      
                     order.buyer_rating = request.values['score']  
-                    order.status = ORDER_STATUS['COMPLETE']
+                    order.status = int(ORDER_STATUS['COMPLETE'])
                     order.save()
                     #seller implementation
                     seller = User.objects(id=order.product_id.seller_id.id).first()

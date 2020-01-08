@@ -37,14 +37,14 @@ class OrderListView(MethodView):
         if 'cancelOrderID' in request.form:
             if form.validate_on_submit:
                 print(request.values['cancelOrderID'])
-                order = Order.objects(id=request.values['cancelOrderID'],product_id=(Product.objects(seller_id=current_user.id))).first()
+                order = Order.objects(id=request.values['cancelOrderID'],product_id__in=(Product.objects(seller_id=current_user.id))).first()
                 if(order==None):
                     abort(404)
                 else:
-                    if order.status == ORDER_STATUS['TRANSFERING']:
-                        order.status = ORDER_STATUS['CANCEL']
+                    if str(order.status) == ORDER_STATUS['TRANSFERING']:
+                        order.status = int(ORDER_STATUS['CANCEL'])
                         order.save()
-                        buyer = User.objects(id=order.buyer_id).first()
+                        buyer = User.objects(id=order.buyer_id.id).first()
                         if order.product_id.bidding:
                             buyer.hicoin += order.product_id.bid.now_price
                         else:
@@ -59,12 +59,12 @@ class OrderListView(MethodView):
             
 
             if form.validate_on_submit and 'score' in request.form:
-                order = Order.objects(product_id=Product.objects(id=request.values['ProductID'],seller_id=current_user.id)).first()
+                order = Order.objects(product_id__in=Product.objects(id=request.values['ProductID'],seller_id=current_user.id)).first()
                 print(request.values['ProductID'])
                 if order == None:
                     abort(404)
                 else:
-                    if order.status !=ORDER_STATUS["TRANSFERING"]:
+                    if str(order.status) !=ORDER_STATUS["TRANSFERING"]:
                         abort(404)
                     else:
                         order.seller_comment = form.detail.data      # correct
