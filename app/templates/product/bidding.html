@@ -89,9 +89,24 @@
 
 		$("#bidding").click(function(e){
 			var bla = $('#price').val();
-			bla.toString();
-			console.log(bla)
-			$('#pricetext').text(bla);
+			var totalprice="{{ product.price }}";
+			var perprice="{{product.bid.per_price}}";
+			var nowprice="{{ product.bid.now_price }}";
+			var biddingprice = bla*perprice;
+			
+			console.log(nowprice)
+			if (bla<=0){
+				$('#pricetext').text("請輸入正確金額");
+			}
+			else if(isNaN(bla)){
+				$('#pricetext').text("請輸入正確金額");
+			}
+			else if(biddingprice>totalprice){
+				$('#pricetext').text("超過競標價格將會以直購價$"+totalprice+"購買");
+			}
+			else{
+				$('#pricetext').text("輸入刀數為: "+bla+ " 金額為: "+biddingprice);
+			}
 		});
 
 		
@@ -119,6 +134,30 @@
 
 			return false;
 		}
+
+		var countDownDate = new Date($("#dueday").attr('dueday')).getTime();
+		console.log(countDownDate);
+			var x = setInterval(function() {
+				// Get today's date and time
+				var now = new Date().getTime();
+				
+				// Find the distance between now and the count down date
+				var distance = countDownDate - now;
+				
+				// Time calculations for days, hours, minutes and seconds
+				var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+				var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+				var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+				var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+				
+				// Output the result in an element with id="demo"
+				document.getElementById("dueday").innerHTML = days + "d " + hours + "h "
+				+ minutes + "m " + seconds + "s ";
+				
+				// If the count down is over, write some text 
+				if (distance < 0) {
+				}
+		}, 1000);
 	</script>
 {% endblock scripts %}
 
@@ -132,7 +171,8 @@
 			<h3>{{ product.name }}</h3>
 			<p>已有 {{ product.view}} 人觀看此商品</p>
 			<h5 id="productprice">$ {{ product.price }} </h5>
-			<p>剩餘時間：{{"%s days"|format(( product.bid.due_time - now).days)}}</p>
+			<p>剩餘時間：<span id="dueday" dueday="{{product.bid.due_time}}"></span></p>
+
 			<p>起標價 : {{ product.bid.low_price }}</p>
 			<p>目前價格 : <span id="currentPrice" >{{ product.bid.now_price }}</span></p>
 			<p>{{product.bid.per_price}}/一刀(輸入格內為刀數)</p>
@@ -145,7 +185,7 @@
 					{% elif product.status|string == PRODUCT_STATUS['REMOVE']%}
 						<p style="position:absolute; bottom:0; right:50px;">商品已下架</p>
 					{% elif current_user.status == 2%}
-						<button id="remove" name="remove" type="submit" class="btn btn-sencondary" style="position:absolute; bottom:0; right:50px;">{{remove}}</button>
+						<button id="remove" name="remove" type="submit" class="btn btn-primary" style="position:absolute; bottom:0; right:50px;">{{remove}}</button>
 					{% else%}
 						{% if form.price.errors %}
 							<input id="price" name="price" type="number" class="form-control is-invalid" placeholder="請輸入價格" value="{{ form.price.data }}" required>
@@ -164,10 +204,10 @@
 								  </button>
 								</div>
 								<div class="modal-body">
-								  <p>輸入刀數為: <span id="pricetext" name="pricetext"></span></p>
+								  <p><span id="pricetext" name="pricetext"></span></p>
 								</div>
-								<div class="modal-footer">
-									{{ form.submit(class="btn btn-sencondary") }}
+								<div class="modal-footer" id="modal-footer">
+									{{ form.submit(class="btn btn-primary") }}
 								    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 								</div>
 							  </div>
@@ -233,7 +273,7 @@
 
 	<div id="row" class="row">
 		<div class="col-md-12">
-			賣家資訊 : {{ product.seller_id.name }}
+			賣家資訊 : {{ product.seller_id.name }}<a href="https://csesa.csie.ntou.edu.tw/hishop/user/hichat#{{ product.seller_id.id }}" target="_blank"><i class="fas fa-comment-dots"></i></a>
 		</div>
 	</div>
 
@@ -252,13 +292,20 @@
 		<div class="col-md-12">
 			賣家評價 :						
 			{% for order in orders %}
-			<div class="row">
 				{%if order.seller_rating != None and order.seller_comment != None%}
-				<p>商品名稱 : {{order.product_id.name}}</p>
-				<p>評價 : {{order.seller_rating}}</p>
-				<p>評論 : {{order.seller_comment}}</p>
+					<br>
+					<div class="card">
+						<div class="card-header text-black font-weight-bold" style="height: auto;">{{order.product_id.name}}</div>
+						<div class="card-body">
+							<div id="hotProductIndicators" class="carousel slide" data-ride="carousel" data-interval="8000">
+								<div class="carousel-inner">
+									<p>{{order.seller_rating}}顆星</p>	
+									<p>評論 : {{order.seller_comment}}</p>					
+								</div>
+							</div>
+						</div>
+					</div>		
 				{%endif%}
-			</div>
 			{%endfor%}
 		</div>
 	</div>
