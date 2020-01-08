@@ -64,6 +64,7 @@ class PurchaseListView(MethodView):
                     order.buyer_comment = form.detail.data      
                     order.buyer_rating = request.values['score']  
                     order.status = int(ORDER_STATUS['COMPLETE'])
+                    order.finish_time = datetime.datetime.utcnow()+datetime.timedelta(hours=8)
                     order.save()
                     #seller implementation
                     seller = User.objects(id=order.product_id.seller_id.id).first()
