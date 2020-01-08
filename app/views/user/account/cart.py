@@ -41,13 +41,12 @@ class CartView(MethodView):
                 coupon = Coupon.objects(id=request.form.get(str(product.id))).first()
             except:
                 coupon = None
-            if coupon in information.coupon and Order.objects(buyer_id=current_user.id, coupon_id=coupon.id).first() == None:
+            if coupon in information.coupon and Order.objects(buyer_id=current_user.id, coupon_id=coupon.id, status__ne=ORDER_STATUS["CANCEL"]).first() == None:
                 total_price += max(0, product.price - coupon.discount)
                 coupon_dict[product.id] = coupon.id
             else:
                 total_price += product.price
                 coupon_dict[product.id] = None
-            print(total_price)
 
         
         if current_user.hicoin >= total_price:
