@@ -9,6 +9,9 @@ from app.models.order import Order, ORDER_STATUS
 from app.models.product import Product
 from app.models.user import User
 
+from app import app
+from app.socketioService import sendMessageViaSocketIO
+
 import datetime
 class OrderListView(MethodView):
     def get(self):
@@ -50,7 +53,11 @@ class OrderListView(MethodView):
                         else:
                             buyer.hicoin += order.product_id.price
                         buyer.save()
-
+                        message = ('<div class="d-inline"> <商品名> ' +
+                        str(order.product_id.name) + " 已被取消"
+                         '</div>')
+                        if message is not None:
+                            sendMessageViaSocketIO(app.config['HISHOP_UID'], str(order.buyer_id.id), message)
                     else:
                         abort(404)
         else:
