@@ -47,16 +47,16 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                            <a class="nav-link" href="{{url_for('user.hichat')}}" target="_blank">
+                            <a id="msgIcon" class="nav-link" href="{{url_for('user.hichat')}}" target="_blank">
                                 <i class='far fa-comment'></i>
-                                <span id="msgCount" class="position-relative" style="top: -10px;"></span>
+                                <span id="msgCount" class="px-1 position-relative rounded-pill text-light bg-danger d-none" style="top: -10px;"></span>
                             </a>
                     </li>
                     <li class="nav-item">
                         <div id="notificationDropdown" class="dropdown">
                             <button id="notificationBtn" class="btn nav-link" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="far fa-bell" aria-hidden="true"></i>
-                                <span id="ntfCount" class="position-relative" style="top: -10px;"></span>
+                                <span id="ntfCount" class="px-1 position-relative rounded-pill text-light bg-danger d-none" style="top: -10px;"></span>
                             </button>
                             <div id="dropdownWindow" class="dropdown-menu overflow-auto" aria-labelledby="notificationBtn">
                                 <div class="text-break text-mute pl-2 pr-1" isRead="true">Welcome to Hishop</div>

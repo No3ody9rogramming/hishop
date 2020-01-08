@@ -26,12 +26,6 @@ def updatePriceViaSocketIO(product_id, newPrice):
 def sendMessageViaSocketIO(senderID, receiverID, message):
     sender = User.objects.get(id=senderID)
 
-    if message == "test.test":
-        from app.check import biddingRemoveNtf
-        from app.models.product import Product
-        product = Product.objects(id="5dd64e966cc1cd06f5563108").first()
-        biddingRemoveNtf(product)
-
     messageDocument = Message(
         sender_id=sender,
         receiver_id=receiverID,
