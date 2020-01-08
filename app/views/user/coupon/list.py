@@ -7,6 +7,8 @@ from wtforms.validators import InputRequired, Length, ValidationError
 from wtforms import SubmitField, HiddenField
 from app.models.information import Information
 from app.models.coupon import Coupon, COUPON_STATUS
+from app.models.order import Order, ORDER_STATUS
+from app.models.user import User
 
 from bson.objectid import ObjectId
 import datetime
@@ -15,7 +17,10 @@ class CouponView(MethodView):
     def get(self):
         form = CouponForm()
         if request.args.get('status') == str(COUPON_STATUS["ALL"]):
-            coupons = Information.objects(user_id=current_user.id).first().coupon
+            coupons = list(Information.objects(user_id=current_user.id).first().coupon)
+            for i in range(len(coupons) - 1, -1, -1):
+                if coupons[i].status == COUPON_STATUS["EXPIRED"] or Order.objects(buyer_id=current_user.id, coupon_id=coupons[i].id, status__ne=ORDER_STATUS["CANCEL"]).first() != None:
+                    del coupons[i]
             status = COUPON_STATUS["ALL"]
         else:
             coupons = Coupon.objects(id__nin=[coupon.id for coupon in Information.objects(user_id=current_user.id).first().coupon],
