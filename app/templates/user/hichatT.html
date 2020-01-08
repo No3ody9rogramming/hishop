@@ -112,6 +112,9 @@
                 message: message,
                 isRead: "false"
             }
+            if(chatObjectID == "{{ current_user.id|string }}") {
+                setMessageToRead();
+            }
             appendMessage(data);
         }
 

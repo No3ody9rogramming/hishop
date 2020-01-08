@@ -40,7 +40,7 @@
 			max-height: 90%;
 		}
 
-        .Ntfdot {
+        .ntfDot {
             height: 5px;
             width: 5px;
             background-color: blue;
@@ -142,9 +142,9 @@
             var isRead = notification.isRead;
             var message = notification.message;
             if(!isRead){
-                message = '<span class="Ntfdot"></span> ' + message;
+                message = '<span class="ntfDot"></span> ' + message;
             }
-            var newLI = '<div class="text-break text-mute pl-2 pr-1" isread=' + isRead + '>' +
+            var newLI = '<div class="text-break pl-2 pr-1" isread=' + isRead + '>' +
                         message + '</div>' +                   
                         '<hr>';
             $('#dropdownWindow').prepend(newLI);            
@@ -161,7 +161,7 @@
         }
 
         function removeUnreadSign(){
-            $("span.Ntfdot").remove();
+            $("span.ntfDot").remove();
         }
 
         function resizeNotification(){            
