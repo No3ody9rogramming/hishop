@@ -163,6 +163,10 @@
 													$ {{ order.product_id.bid.now_price }}
 												{% else %}
 													$ {{ order.product_id.price }}
+													{% if order.coupon_id != None %}
+														<br>
+														(折{{order.coupon_id.discount}})
+													{% endif %}
 												{% endif %}
 											</td>
 											<td>
