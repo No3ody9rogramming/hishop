@@ -69,8 +69,6 @@
 		p {  
 			margin-top: 0em; margin-bottom: 0em; 
 		}
-
-
 	</style>
 {% endblock styles %}
 
@@ -211,7 +209,7 @@
 		</div>
 	</div>
 
-	<div id="row" class="row">
+	<div id="row" class="row" style="overflow-y:scroll; max-height:600px;"> 
 		<div class="col-md-12">
 			商品詳情 :
 		</div>
@@ -222,7 +220,7 @@
 
 	</div>
 
-	<div id="row" class="row">
+	<div id="row" class="row" style="overflow-y:scroll; max-height:600px;">
 		<div class="col-md-12">
 			賣家評價 :						
 			{% for order in orders %}
