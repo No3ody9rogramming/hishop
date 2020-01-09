@@ -69,7 +69,7 @@ class HiChatView(MethodView):
                         '$push':  {
                             'message': "$message",
                             'isRead': "$isRead",
-                            'sender': "$userS.name"
+                            'sender': "$userS"
                         }
                     }
                 }
