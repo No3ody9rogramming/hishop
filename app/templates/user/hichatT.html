@@ -9,14 +9,14 @@
         }
 
         .list-group-item.active {
-            background-color: Coral;
-            color: white;
+            background-color: gold;
+            color: black;
         }
 
         .pointer {cursor: pointer;}
 
         .hover-bg:hover {
-            background-color: Khaki;
+            background-color: #fff6cc;
             cursor: pointer;
         }
 
@@ -40,6 +40,13 @@
             margin-top: 20px;
         }
         
+        .msgDot {
+            height: 5px;
+            width: 5px;
+            background-color: blue;
+            border-radius: 50%;
+            display: inline-block;
+        }
 
 	</style>
 {% endblock styles %}
@@ -51,9 +58,14 @@
         <ul id="usersList" class="list-group">
             {% for u in users %}
                 <li id="{{u['_id'][0]['_id']}}" username="{{u['_id'][0]['name']}}" class="list-group-item hover-bg" onclick="changeObject(this)">
-                    <div class="text-break">{{u['_id'][0]['name']}}</div>
-                    <div class="text-muted small text-break d-none d-md-block">
-                        {{u['messages'][0]['sender'][0]}}: <div name="previewMsg" class="d-inline">{{u['messages'][0]['message'] | safe }}</div>
+                    <span class="msgDot 
+                    {% if u['messages'][0]['sender'][0]['_id'] == current_user.id or u['messages'][0]['isRead'] == True %}
+                        d-none
+                    {% endif %}
+                    "></span>
+                    <div class="text-break d-inline">{{u['_id'][0]['name']}}</div>
+                    <div class="text-muted small text-break d-none d-md-block">                        
+                        {{u['messages'][0]['sender'][0]['name']}}: <div name="previewMsg" class="d-inline">{{u['messages'][0]['message'] | safe }}</div>
                     </div>
                 </li>
             {% endfor %}
@@ -100,6 +112,9 @@
 
             socket.on('messageTo{{ current_user.id|string }}', function(data){
                 prependUser(data.sender_id.$oid, data.message, data.sender_id.name);
+                if(data.sender_id.$oid != "{{ current_user.id | string }}"){
+                    $("#" + data.sender_id.$oid + " .msgDot").removeClass("d-none");
+                }
             });
 
 
@@ -160,7 +175,7 @@
             var chatObjectLI = $("#" + userID);
             if(chatObjectLI.length == 1) {
                 $("#usersList").prepend(chatObjectLI)
-                var secondChild = chatObjectLI.children().eq(1);
+                var secondChild = chatObjectLI.children().eq(2);
                 var newMessage = senderName + ": " + message;
                 if(secondChild.length == 1)
                     secondChild.text(newMessage);
@@ -215,7 +230,8 @@
 
             $(".active").removeClass("active");
             $("#" + chatObjectID).addClass("active");
-             $("#" + chatObjectID).removeClass("hover-bg");
+            $("#" + chatObjectID).removeClass("hover-bg");
+            $("#" + chatObjectID + " .msgDot").addClass("d-none");
 
             socket.on(chatObjectID + 'To{{ current_user.id|string }}', function(data){                
                 appendMessage(data);
