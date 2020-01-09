@@ -98,7 +98,7 @@ user.add_url_rule(rule='/selling/normal', endpoint='normal', view_func=login_req
 user.add_url_rule(rule='/selling/bidding', endpoint='bidding', view_func=login_required(check_activate(BiddingView.as_view('bidding_view'))), methods=['GET', 'POST'])
 user.add_url_rule(rule='/selling/list', endpoint='selling_list', view_func=login_required(check_activate(SellingListView.as_view('selling_list_view'))), methods=['GET','POST'])
 user.add_url_rule(rule='/selling/order', endpoint='order_list', view_func=login_required(check_activate(OrderListView.as_view('order_list_view'))), methods=['GET', 'POST'])
-user.add_url_rule(rule='/selling/edit', endpoint='edit', view_func=login_required(check_activate(EditView.as_view('edit_view'))), methods=['GET', 'POST'])
+user.add_url_rule(rule='/selling/edit/<string:product_id>', endpoint='edit', view_func=login_required(check_activate(EditView.as_view('edit_view'))), methods=['GET', 'POST'])
 
 user.add_url_rule(rule='/coupon/list', endpoint='coupon', view_func=login_required(check_activate(CouponView.as_view('coupon_view'))), methods=['GET', 'POST'])
 
