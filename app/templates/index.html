@@ -16,6 +16,10 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="row">
+                                    {% if discount_products == none%}
+                                </div>
+                            </div>
+                                    {% endif %}
                                     {% for product in discount_products %}
 
                                         <div class="col-md-3 col-6">
@@ -44,8 +48,6 @@
 
                                     {% endfor %}
                             
-                                </div>
-                            </div>
                         </div>
 
                     </div>
