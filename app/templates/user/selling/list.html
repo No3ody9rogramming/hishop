@@ -119,7 +119,6 @@
 													</form>
 													{% if product.bidding == False %}
 													<form method="GET" action="{{ url_for('user.edit') }}" style="margin: 5px;"> 
-														{{ form.csrf_token }}
 														{{form.product_id(value=product.id|string)}}
 														
 														{{form.edit(class="btn btn-primary")}}
