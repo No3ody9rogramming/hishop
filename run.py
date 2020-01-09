@@ -122,4 +122,4 @@ if __name__ == '__main__':
     scheduler = GeventScheduler()
     scheduler.add_job(check_time, 'interval', seconds=1)
     scheduler.start()
-    socketio.run(app, debug=True, host='0.0.0.0', port=80)
+    socketio.run(app, debug=True, host='0.0.0.0')
