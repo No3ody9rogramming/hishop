@@ -117,9 +117,9 @@
 														{{form.remove(class="btn btn-primary")}}
 														
 													</form>
-													
+													{% if product.bidding ==False %}
 													<a href="{{ url_for('user.edit', product_id=product.id|string) }}" class="btn btn-primary" style="margin: 5px;">編輯商品</a>
-
+													{% endif %}
 												{% else %}
 													None
 												{% endif %}
