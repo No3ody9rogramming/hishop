@@ -26,7 +26,7 @@ def check_time():
 			discount_list = []
 			while len(discount_list) < 4:
 				products = list(products)
-				idx = random.randint(0, len(products))
+				idx = random.randint(0, len(products) - 1)
 				if idx not in discount_list:
 					products[idx].discount = 0.85
 					products[idx].save()
