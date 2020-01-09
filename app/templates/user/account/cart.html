@@ -201,14 +201,14 @@
 				  		{% for product in products %}
 					    	<tr>
 								<td class="align-middle">
-									<input type="checkbox" value="{{ product.id }}" name="productCheck"  id="{{ product.id }}" price="{{ product.price }}" productname="{{ product.name }}">
+									<input type="checkbox" value="{{ product.id }}" name="productCheck"  id="{{ product.id }}" price="{{ (product.price * product.discount) | int }}" productname="{{ product.name }}">
 								</td>
 								<th scope="row" class="align-middle" name="productname">
 									<img class="productImg" src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}"> 
 									<a href="{{ url_for('show_normal', product_id=product.id|string) }}" target=_blank >{{product.name}}</a>
 								</th>
 					      		<td class="align-middle">{{product.seller_id.name}}</td>
-					      		<td class="align-middle" name="productprice">{{product.price}}</td>
+					      		<td class="align-middle" name="productprice">{{product.price}}{% if product.discount < 1 %}(特價{{ (product.price * product.discount) | int }}元){% endif %}</td>
 					      		<td class="align-middle">
 					      			<select id="{{ product.id }}_coupon" name="{{ product.id }}" class="form-control coupon" onchange="getCoupon(this);">
 					      				<option value="0">選擇優惠券</option>

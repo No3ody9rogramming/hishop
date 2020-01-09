@@ -8,8 +8,29 @@ from app.socketioService import sendMessageViaSocketIO
 from app import app
 import datetime
 import threading
+import random
 
 def check_time():
+    app.config['DISCOUNT_COUNTER'] -= 1
+    if app.config['DISCOUNT_COUNTER'] <= 0:
+      app.config['DISCOUNT_COUNTER'] = 300
+      products = Product.objects(bidding=False, status=PRODUCT_STATUS["SELLING"])
+      for product in products:
+        product.discount = 1
+        product.save()
+      if len(list(products)) <= 4:
+        for product in products:
+          product.discount = 0.85
+          product.save()
+      else:
+        discount_list = []
+        while len(discount_list) <= 4:
+          idx = random.randint(0, len(list(products)))
+          if idx not in discount_list:
+            products[i].discount = 0.85
+            products[i].save()
+            discount_list.append(idx)
+
     products = Product.objects(status=PRODUCT_STATUS["SELLING"], bid__due_time__lte=datetime.datetime.utcnow()+datetime.timedelta(hours=8))
 
     for product in products:

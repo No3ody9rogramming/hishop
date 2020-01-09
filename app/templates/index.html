@@ -9,6 +9,49 @@
         </div>
         <div class="col-md-10">
             <br>
+                        <div class="card">
+                <div class="card-header text-white bg-danger font-weight-bold" style="height: auto;">優惠商品(85折)</div>
+                <div class="card-body">
+                    <div id="hotProductIndicators" class="carousel slide" data-ride="carousel" data-interval="8000">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="row">
+                                    {% for product in discount_products %}
+
+                                        <div class="col-md-3 col-6">
+                                            <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
+                                            <img class="card-img-top" src="{{url_for('static', filename = 'imageLoading.gif')}}" lsrc="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
+                                            </a>
+                                            <div>
+                                                <a style="display: inline-block; width: 55%; overflow: hidden; text-overflow: ellipsis; white-space:nowrap; background-color: #e0e0e0; color: black; text-decoration:none;" href="{{ url_for('show_normal', product_id=product.id|string) }}">{{product.name}}</a>
+                                                <a style="display: inline-block; width: 45%; float: right; text-align: center; text-decoration:none;" class="bg-secondary text-white" href="{{ url_for('show_normal', product_id=product.id|string) }}">${{product.price}}</a>
+                                            </div>
+                                        </div>
+
+                                    {% if loop.index % 4 == 0 and loop.index > 1 %}
+                                </div>
+                            </div>
+                                        {% if loop.index != loop.length %}
+                            <div class="carousel-item">
+                                <div class = "row">
+                                        {% endif %}
+                                    {% endif %}
+
+                                    {% if loop.length % 4 != 0 and loop.index == loop.length%}
+                                </div>
+                            </div>
+                                    {%endif%}
+
+                                    {% endfor %}
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
             <div class="card">
                 <div class="card-header text-white bg-secondary font-weight-bold" style="height: auto;">熱門商品</div>
                 <div class="card-body">
@@ -45,14 +88,7 @@
                                     {% endfor %}
 
                         </div>
-                        <a class="carousel-control-prev" href="#hotProductIndicators" role="button" data-slide="prev" style="width: auto;">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#hotProductIndicators" role="button" data-slide="next" style="width: auto;">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
+
                     </div>
                 </div>
             </div>

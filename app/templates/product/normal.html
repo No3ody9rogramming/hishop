@@ -181,7 +181,7 @@
 		<div class="col-md-6">
 			<h3>{{ product.name }}</h3>
 			<p>已有 {{ product.view}} 人觀看此商品</p>
-			<h5 id="productprice">$ {{ product.price}} </h5>
+			<h5 id="productprice">$ {{ product.price }}{% if product.discount < 1 %}(特價{{ (product.price * product.discount) | int }}元){% endif %}</h5>
 			<h5>商品分類: 
 				{% for category in product.categories %} 
 					{{category.category}}
