@@ -117,12 +117,7 @@
 														{{form.remove(class="btn btn-primary")}}
 														
 													</form>
-													<form method="GET" action="{{ url_for('user.edit') }}" style="margin: 5px;"> 
-														{{ form.csrf_token }}
-														{{form.product_id(value=product.id|string)}}
-														
-														{{form.edit(class="btn btn-primary")}}
-													</form>
+													<a href="{{ url_for('user.edit', product_id=product.id|string) }}" class="btn btn-primary" style="margin: 5px;">編輯商品</a>
 												{% else %}
 													None
 												{% endif %}

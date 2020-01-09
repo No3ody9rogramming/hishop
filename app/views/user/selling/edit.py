@@ -1,4 +1,4 @@
-from flask import redirect, render_template, url_for, request
+from flask import redirect, render_template, url_for, request, abort
 from flask.views import MethodView
 from flask_login import current_user
 from flask_ckeditor import CKEditorField
@@ -10,7 +10,7 @@ from wtforms.fields.html5 import DateTimeLocalField
 from wtforms.validators import InputRequired, Length, EqualTo, ValidationError, NumberRange, Optional
 
 from app import bcrypt
-from app.models.product import Product, Bid
+from app.models.product import Product, Bid, PRODUCT_STATUS
 from app.models.category import Category
 
 from app import app
@@ -18,11 +18,12 @@ import os
 
 
 class EditView(MethodView):
-    def get(self):
+    def get(self, product_id):
         form = EditForm()
 
-        product = Product.objects(id=request.values["product_id"]).first()
-        form.product_id.data = request.values["product_id"]
+        product = Product.objects(id=product_id, seller_id=current_user.id, status=PRODUCT_STATUS["SELLING"]).first()
+        if product == None:
+            abort(404)
         form.price.data = product.price
         form.name.data = product.name
         
@@ -31,11 +32,11 @@ class EditView(MethodView):
 
         return render_template('user/selling/edit.html', form=form, categories=categories,product=product)
     
-    def post(self):
+    def post(self, product_id):
     
         form = EditForm()
         categories = Category.objects()
-        product = Product.objects(id=form.product_id.data).first()
+        product = Product.objects(id=product_id).first()
 
         if form.validate_on_submit() :
             product.name=form.name.data
@@ -52,9 +53,11 @@ class EditView(MethodView):
                 except:
                     print(e)
                 product.image = "product." + form.image.data.filename.split('.')[-1].lower()  #上傳成功設定圖片名稱
+                
                 form.image.data.save(os.path.join(image_path, product.image)) #儲存上傳的檔案
                 #response.headers['Cache-Control'] = 'public, max-age=0'
-                
+            categories = Category.objects(id__in=request.form.getlist("categories"))
+            product.categories = categories
 
             product.save()
 
@@ -69,7 +72,6 @@ def add_header(response):
     return response
 
 class EditForm(FlaskForm):
-    product_id = HiddenField("", validators=[InputRequired()])
     image = FileField("商品照片", validators=[Optional(), FileAllowed(['jpeg', 'jpg', 'png', 'gif'], '只能上傳圖片(.jpg, .jpeg, .png, .gif)')])
     name = StringField("商品名稱", validators=[InputRequired("商品名稱不得為空"), Length(max=30, message="商品名稱不得超過30個字")])
     price = IntegerField("商品價格", validators=[InputRequired("商品價格不得為空"), NumberRange(min=1, max=100000, message="商品價格介於1~100000")])
