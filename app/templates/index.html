@@ -16,12 +16,14 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="row">
-                                    {% if discount_products == none%}
+
+                                    {% if discount_products | length == 0 %}
                                 </div>
                             </div>
                                     {% endif %}
-                                    {% for product in discount_products %}
 
+                                    {% for product in discount_products %}
+                                        
                                         <div class="col-md-3 col-6">
                                             <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
                                             <img class="card-img-top" src="{{url_for('static', filename = 'imageLoading.gif')}}" lsrc="{{url_for('static', filename = 'image/'+ product.id|string +'/'+ product.image|string)}}" alt="Product_picture" height="180px">
