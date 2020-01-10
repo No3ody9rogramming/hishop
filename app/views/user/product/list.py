@@ -9,6 +9,9 @@ from app.models.order import Order, ORDER_STATUS
 from app.models.product import Product, PRODUCT_STATUS
 from app.models.user import User
 
+from app import app
+from app.socketioService import sendMessageViaSocketIO
+
 import datetime
 
 #移交中 領收中 已完成 已取消 全部
@@ -76,10 +79,16 @@ class PurchaseListView(MethodView):
                         seller.hicoin += order.product_id.price*0.88
                     seller.save()
                     
-            print(request.values['score'])   
-             
-        return render_template('user/product/list.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status, form=form)
+                    print(request.values['score'])   
         
+                    #return render_template('user/product/list.html', orders=orders, ORDER_STATUS=ORDER_STATUS, status=status, form=form)
+        return redirect(url_for('user.purchase_list',status='4'))
+        
+#update the browser cache, let the image be correct on window 
+@app.after_request
+def add_header(response):
+    response.cache_control.max_age = 0
+    return response
 
 # for comment
 class PerchaseListForm(FlaskForm):
