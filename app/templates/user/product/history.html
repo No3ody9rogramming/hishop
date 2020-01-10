@@ -267,11 +267,11 @@
 						{% else %}
 						<td class="align-middle d-none" id="{{ products.index(product)+1 }}" name="tableItem">
 						{% endif %}
-							{% if  product.product.status|string  == PRODUCT_STATUS['SELLING'] %}
+							{% if  product.product.status  == PRODUCT_STATUS['SELLING'] %}
 								販賣中
-							{% elif  product.product.status|string  == PRODUCT_STATUS['SOLD'] %}
+							{% elif  product.product.status  == PRODUCT_STATUS['SOLD'] %}
 								已賣出
-							{% elif  product.product.status|string  == PRODUCT_STATUS['FROZEN'] %}
+							{% elif  product.product.status  == PRODUCT_STATUS['FROZEN'] %}
 								凍結中
 							{% else %}
 								已下架
