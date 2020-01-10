@@ -224,15 +224,15 @@
 		<div class="col-md-12">
 			賣家評價 :						
 			{% for order in orders %}
-				{%if order.seller_rating != None and order.seller_comment != None%}
+				{%if order.buyer_rating != None and order.buyer_comment != None%}
 					<br>
 					<div class="card">
 						<div class="card-header text-black font-weight-bold" style="height: auto;">商品名稱: {{order.product_id.name}}</div>
 						<div class="card-body">
 							<div id="hotProductIndicators" class="carousel slide" data-ride="carousel" data-interval="8000">
 								<div class="carousel-inner">
-									<p>{{order.seller_rating}}顆星</p>	
-									<p>評論 : {{order.seller_comment}}</p>					
+									<p>{{order.buyer_rating}}顆星</p>	
+									<p>評論 : {{order.buyer_comment}}</p>					
 								</div>
 							</div>
 						</div>
