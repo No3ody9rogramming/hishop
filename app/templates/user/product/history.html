@@ -267,6 +267,7 @@
 						{% else %}
 						<td class="align-middle d-none" id="{{ products.index(product)+1 }}" name="tableItem">
 						{% endif %}
+							
 							{% if  product.product.status  == PRODUCT_STATUS['SELLING'] %}
 								販賣中
 							{% elif  product.product.status  == PRODUCT_STATUS['SOLD'] %}

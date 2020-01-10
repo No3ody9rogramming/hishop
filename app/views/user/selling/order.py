@@ -6,7 +6,7 @@ from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, InputRequired, Length, EqualTo, ValidationError
 
 from app.models.order import Order, ORDER_STATUS
-from app.models.product import Product
+from app.models.product import Product, PRODUCT_STATUS
 from app.models.user import User
 
 from app import app
@@ -41,12 +41,16 @@ class OrderListView(MethodView):
             if form.validate_on_submit:
                 print(request.values['cancelOrderID'])
                 order = Order.objects(id=request.values['cancelOrderID'],product_id__in=(Product.objects(seller_id=current_user.id))).first()
+                
                 if(order==None):
                     abort(404)
                 else:
                     if str(order.status) == ORDER_STATUS['TRANSFERING']:
                         order.status = int(ORDER_STATUS['CANCEL'])
                         order.save()
+                        product = Product.Objects(id=order.product_id.id)
+                        product.status = PRODUCT_STATUS["REMOVE"]
+                        product.save()
                         buyer = User.objects(id=order.buyer_id.id).first()
                         if order.product_id.bidding:
                             buyer.hicoin += order.product_id.bid.now_price
