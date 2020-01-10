@@ -40,6 +40,7 @@ class ProfileView(MethodView):
 
         if(count_buyer_orders + count_seller_orders!=0):
             rating /= count_buyer_orders + count_seller_orders
+            rating = round(rating, 1)
         else:
             rating = 0
 
