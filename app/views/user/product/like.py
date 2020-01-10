@@ -57,6 +57,8 @@ class LikeView(MethodView):
             #sorted(rating_dict.items(), key=lambda d: d[0])
             #products = sorted(products, key=lambda k: k.product.seller_id.rating, reverse=False)
 
+            
+
         return render_template('user/product/like.html', products=products,PRODUCT_STATUS=PRODUCT_STATUS,SORT_STATUS=SORT_STATUS)
     def post(self):
     	pass

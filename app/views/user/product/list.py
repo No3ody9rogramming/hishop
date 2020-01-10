@@ -6,8 +6,10 @@ from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, InputRequired, Length, EqualTo, ValidationError
 
 from app.models.order import Order, ORDER_STATUS
-from app.models.product import Product
+from app.models.product import Product, PRODUCT_STATUS
 from app.models.user import User
+
+import datetime
 
 #移交中 領收中 已完成 已取消 全部
 #ORDER_STATUS = {"TRANSFERING" : "0", "RECEIPTING" : "1", "COMPLETE" : "2", "CANCEL" : "3", "ALL" : "4"}
