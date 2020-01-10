@@ -20,7 +20,7 @@ class PasswordView(MethodView):
             current_user.save()
             flash('修改成功', 'success')
 
-            return redirect(url_for('login'))
+            return redirect(url_for('user.password'))
         return render_template('user/account/password.html', form=form)
 
 
