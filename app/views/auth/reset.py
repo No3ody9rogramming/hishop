@@ -34,6 +34,7 @@ class ResetPasswordView(MethodView):
                     user.password = bcrypt.generate_password_hash(form.password.data).decode()
                     user.save()
                     flash('密碼修改成功', 'success')
+                    return redirect(url_for('login'))
 
         return render_template('auth/reset.html', form=form, reset_token=reset_token, account=request.args.get('account'))
         
