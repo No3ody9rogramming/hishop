@@ -12,6 +12,181 @@
 	</style>
 {% endblock styles %}
 
+{% block scripts %}
+	{{super()}}
+	<script>
+	
+
+	function select(target)
+	{
+		var pageItems = document.getElementsByName("pageItem")
+		var tableItem
+		var tableItems = document.getElementsByName("tableItem")
+		var next = document.getElementsByName("next")
+		var prev = document.getElementsByName("Previous")
+		var lastItem = document.getElementById("Last")
+		var firstItem = document.getElementById("First")
+		
+		//check next button
+		if(target.id >= {{(products|length/10)|int +1}})
+		{
+			//console.log(target.id)
+			if('href' in next[0])
+				next[0].removeAttribute('href')
+			if('href' in lastItem)
+				lastItem.removeAttribute('href')
+			firstItem.setAttribute("href","#")
+		}
+		else if(target.id ==1)
+		{
+			next[0].setAttribute("href","#")
+			lastItem.setAttribute("href","#")
+			if('href' in lastItem)
+				firstItem.removeAttribute('href')
+		}
+		else
+		{
+			next[0].setAttribute("href","#")
+			lastItem.setAttribute("href","#")
+			firstItem.setAttribute("href","#")
+		}
+
+		//check previous botton
+		if(target.id ==1)
+		{
+			//console.log(target.id)
+			if('href' in prev[0])
+				prev[0].removeAttribute('href')
+		}
+		else
+		{
+			prev[0].setAttribute("href","#")
+		}
+
+		//disable all page
+		for(var i=0; i<pageItems.length; i++) 
+		{
+
+			pageItems[i].className = "page-item"
+			pageItems[i].children[0].setAttribute("href","#")
+		}
+		
+		//select this page
+		target.parentNode.className = "page-item active"
+		if('href' in target)
+			target.removeAttribute('href')
+		
+		//hidden all table
+		for(var k=0; k<tableItems.length; k++) 
+		{
+
+			tableItems[k].className = tableItems[k].className + " d-none"
+		}
+		
+		//show this table
+		for(var k=0; k<tableItems.length; k++) 
+		{
+
+			if(tableItems[k].id > (target.innerText-1)*10 && tableItems[k].id <= target.innerText*10)
+				while(tableItems[k].className.match("d-none"))
+					tableItems[k].className = tableItems[k].className.replace("d-none"," ")
+		}
+	}
+
+	function next(pageNum,target)
+	{
+		var pageItemsActive = document.getElementsByClassName("page-item active")
+		var now_num = pageItemsActive[0].children[0].id
+		//if it is the last page
+		if(pageItemsActive[0].children[0].id >= pageNum)
+		{
+			if('href' in target)
+				target.removeAttribute('href')
+			return
+		}
+		else
+		{
+			console.log("next page")
+			var pageItems = document.getElementsByName("pageItem")
+			for(var i=0;i<pageItems.length;i++)
+			{
+				
+				if(now_num == pageItems[i].children[0].id)
+					{
+						
+						select(pageItems[i+1].children[0])
+					}
+			}
+		}
+	}
+
+	function previous(target)
+	{
+		var pageItemsActive = document.getElementsByClassName("page-item active")
+		var now_num = pageItemsActive[0].children[0].id
+		//if it is the last page
+		if(pageItemsActive[0].children[0].id ==1)
+		{
+			if('href' in target)
+				target.removeAttribute('href')
+			return
+		}
+		else
+		{
+			console.log("next page")
+			var pageItems = document.getElementsByName("pageItem")
+			for(var i=0;i<pageItems.length;i++)
+			{
+				
+				if(now_num == pageItems[i].children[0].id)
+					{
+						
+						select(pageItems[i-1].children[0])
+					}
+			}
+		}
+	}
+
+	function last(pageNum,target)
+	{
+		var pageItems = document.getElementsByName("pageItem")
+		//var lastItem = document.getElementById("Last")
+		for (var i = 0;i<pageItems.length;i++)
+		{
+			if(pageItems[i].children[0].id==pageNum)
+			{
+				select(pageItems[i].children[0])
+				if('href' in target)
+					target.removeAttribute('href')
+				
+			}
+		}
+		
+	}
+
+	function first(target)
+	{
+		var pageItems = document.getElementsByName("pageItem")
+		//var lastItem = document.getElementById("Last")
+		for (var i = 0;i<pageItems.length;i++)
+		{
+			
+			if(pageItems[i].children[0].id==1)
+			{
+				console.log(pageItems[i].children[0])
+				select(pageItems[i].children[0])
+				if('href' in target)
+					target.removeAttribute('href')
+				
+			}
+		}
+		
+	}
+
+
+	</script>
+{% endblock scripts %}
+
 {% block page %}
 	<div class="row">
 		<div class="col-auto">
@@ -54,12 +229,47 @@
 						<th scope="col">售價</th>
 						</tr>
 					</thead>
+					<tfoot>
+						<th scope="col" colspan="4">
+							<nav aria-label="Page navigation example" >
+								<ul class="pagination pagination-circle pg-blue justify-content-center">
+								<li class="page-item "><a class="page-link" id="First" onclick="first(this)">First</a></li>
+								<li class="page-item">
+									<a class="page-link" name="Previous" aria-label="Previous" onclick="previous(this)">
+									<span aria-hidden="true">&laquo;</span>
+									<span class="sr-only">Previous</span>
+									</a>
+								</li>
+								<li class="page-item active" name="pageItem"><a class="page-link" onclick="select(this)" id="1">1</a></li>
+								{% for i in range((products|length/10)|int) %} 
+								<li class="page-item" name="pageItem"><a class="page-link" onclick="select(this)" href="#" id={{i+2}}>{{ i+2 }}</a></li>
+								
+								{% endfor %}
+								<li class="page-item">
+									<a class="page-link" name="next" aria-label="Next"  href="#" onclick="next({{(products|length/10)|int +1}},this)">
+									<span aria-hidden="true">&raquo;</span>
+									<span class="sr-only">Next</span>
+									</a>
+								</li>
+								<li class="page-item"><a class="page-link" id="Last" href="#" onclick="last({{(products|length/10)|int +1}},this)">Last</a></li>
+								</ul>
+							</nav>
+						</th>
+					</tfoot>
 					{% for product in products %}
 						<tbody>
-							<th scope="row" class="align-middle">
+							{% if products.index(product) < 10 %}
+							<th scope="row" class="align-middle " id="{{ products.index(product)+1 }}" name="tableItem">
+							{% else %}
+							<th scope="row" class="align-middle d-none " id="{{ products.index(product)+1 }}" name="tableItem">
+							{% endif %}
 								<img class="productImg" src="{{url_for('static', filename = 'image/'+product.id|string +'/' + product.image)}}">
 							</th>
-							<td class="align-middle">
+							{% if products.index(product) < 10 %}
+							<td class="align-middle" id="{{ products.index(product)+1 }}" name="tableItem">
+							{% else %}
+							<td class="align-middle d-none" id="{{ products.index(product)+1 }}" name="tableItem">
+							{% endif %}
 								{% if  product.status|string  == PRODUCT_STATUS['SELLING'] %}
 									販賣中
 								{% elif  product.status|string  == PRODUCT_STATUS['SOLD'] %}
@@ -70,15 +280,31 @@
 									已下架
 								{% endif %}
 							</td>
-							<td class="align-middle">
+							{% if products.index(product) < 10 %}
+							<td class="align-middle" id="{{ products.index(product)+1 }}" name="tableItem">
+							{% else %}
+							<td class="align-middle d-none " id="{{ products.index(product)+1 }}" name="tableItem">
+							{% endif %}
 								{% if  product.bid  == None %}
 									<a href="{{ url_for('show_normal', product_id=product.id|string) }}" target=_blank>{{product.name}}</a>
 								{% else %}
 									<a href="{{ url_for('show_bidding', product_id=product.id|string) }}" target=_blank>{{product.name}}</a>
 								{% endif %}
 							</td>
-							<td class="align-middle">{{product.seller_id.name}}</td>
-							<td class="align-middle">{{product.price}}</td>	    
+							{% if products.index(product) < 10 %}
+							<td class="align-middle" id="{{ products.index(product)+1 }}" name="tableItem">
+							{% else %}
+							<td class="align-middle d-none " id="{{ products.index(product)+1 }}" name="tableItem">
+							{% endif %}
+								{{product.seller_id.name}}
+							</td>
+							{% if products.index(product) < 10 %}
+							<td class="align-middle" id="{{ products.index(product)+1 }}" name="tableItem">
+							{% else %}
+							<td class="align-middle d-none " id="{{ products.index(product)+1 }}" name="tableItem">
+							{% endif %}
+								{{product.price}}
+							</td>	    
 						</tbody>
 					{% endfor %}
 				</table>
