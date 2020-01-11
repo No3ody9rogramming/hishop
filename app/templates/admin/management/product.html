@@ -16,14 +16,21 @@
 					if (data != "error") {
 						form.children("input#submit").val(data);
 
-						if (data == "凍結")
+						if (data == "凍結"){
 							$("#" + form.find("input[id=product_id]").val()).text("販賣中");
+							$("#" + form.find("input[id=user_id]").val()).css("color", "#00A600");
+						}
 						else if (data == "解凍")
 							$("#" + form.find("input[id=product_id]").val()).text("已凍結");
+							$("#" + form.find("input[id=user_id]").val()).css("color", "red");
 					}
 				}
 			});
 			e.preventDefault();
+		});
+
+		$(".t1").click(function(){
+			$(this).toggleClass("btn-danger btn-secondary");
 		});
 	</script>
 {% endblock scripts %}
@@ -81,13 +88,13 @@
 												<form id="form" action="{{ url_for('admin.product') }}">
 													{{ form.csrf_token }}
 													{{ form.product_id(value=product.id|string) }}
-													{{ form.submit(class="btn btn-secondary", value="凍結") }}
+													{{ form.submit(class="btn btn-secondary t1", value="凍結") }}
 												</form>
 											{% elif product.status == PRODUCT_STATUS['FROZEN'] %}
 												<form id="form" action="{{ url_for('admin.product') }}">
 													{{ form.csrf_token }}
 													{{ form.product_id(value=product.id|string) }}
-													{{ form.submit(class="btn btn-danger", value="解凍") }}
+													{{ form.submit(class="btn btn-danger t1", value="解凍") }}
 												</form>
 											{% else %}
 												無
