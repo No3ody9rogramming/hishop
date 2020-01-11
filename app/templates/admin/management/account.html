@@ -17,14 +17,22 @@
 					if (data != "error") {
 						form.children("input#submit").val(data);
 
-						if (data == "凍結")
+						if (data == "凍結"){
 							$("#" + form.find("input[id=user_id]").val()).text("已認證");
-						else if (data == "解凍")
+							$("#" + form.find("input[id=user_id]").val()).css("color", "#00A600");
+						}
+						else if (data == "解凍"){
 							$("#" + form.find("input[id=user_id]").val()).text("已凍結");
+							$("#" + form.find("input[id=user_id]").val()).css("color", "red");
+						}
 					}
 				}
 			});
 			e.preventDefault();
+		});
+
+		$(".t1").click(function(){
+			$(this).toggleClass("btn-danger btn-secondary");
 		});
 	</script>
 {% endblock scripts %}
@@ -39,7 +47,7 @@
 	   	<div class="col-md-9">
 	    	<div class="card">
 	    		<div class="card-header text-center bg-warning p-2 border border-dark">
-	    			所有問題
+	    			帳號管理
 	    		</div>
 	    		<div class="card-body border border-dark">
 	    			<a class="btn btn-primary {% if status == ACCOUNT_STATUS['ALL'] %} active {% endif %}" href="{{ url_for('admin.account') }}">全部</a>
@@ -71,7 +79,7 @@
 											{% elif user.status == ACCOUNT_STATUS['ACTIVE'] %}
 												<div id="{{ user.id }}" style="color: #00A600;">已認證</div>
 											{% else %}
-												已凍結
+												<div id="{{ user.id }}">已凍結</div>
 											{% endif %}
 										</td>
 										<td  class="align-middle">
@@ -79,9 +87,9 @@
 												{{ form.csrf_token }}
 												{{ form.user_id(value=user.id|string) }}
 												{% if user.status == ACCOUNT_STATUS["ACTIVE"] %}
-													{{ form.submit(class="btn btn-secondary", value="凍結")}}
+													{{ form.submit(class="btn btn-secondary t1", value="凍結")}}
 												{% elif user.status == ACCOUNT_STATUS["LOCK"] %}
-													{{ form.submit(class="btn btn-danger", value="解凍")}}
+													{{ form.submit(class="btn btn-danger t1", value="解凍")}}
 												{% endif %}
 											</form>
 										</td>
