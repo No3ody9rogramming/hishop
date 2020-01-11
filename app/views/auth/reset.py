@@ -21,7 +21,7 @@ class ResetPasswordView(MethodView):
         form = ResetPasswordForm()
         if form.validate_on_submit():
             if request.args.get('account') == None:
-                flash('密碼修改失敗', 'danger')
+                flash('密碼修改失敗', 'error')
                 pass
             else:
                 user = User.objects(account=request.args.get('account'), reset_token=reset_token).first()
