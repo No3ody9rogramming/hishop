@@ -33,15 +33,14 @@ class ResetPasswordView(MethodView):
                     user.reset_token = None
                     user.password = bcrypt.generate_password_hash(form.password.data).decode()
                     user.save()
-                    flash('密碼修改成功', 'success')
                     return redirect(url_for('login'))
 
         return render_template('auth/reset.html', form=form, reset_token=reset_token, account=request.args.get('account'))
-        
+
 class ResetPasswordForm(FlaskForm):
-    password = PasswordField("密碼", validators=[InputRequired("密碼不得為空"), Length(min=6,max=20)])
+    password = PasswordField("密碼", validators=[InputRequired("密碼不得為空"), Length(min=6,max=20, message="密碼介於6~20個字")])
     confirm  = PasswordField("確認密碼", validators=[
-        InputRequired(),
+        InputRequired("確認密碼不得為空"),
         Length(min=6,max=20),
-        EqualTo('password', "密碼不一致")])
+        EqualTo('password', "密碼前後不一致")])
     submit = SubmitField('送出')
