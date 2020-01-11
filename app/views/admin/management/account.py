@@ -8,10 +8,10 @@ from wtforms.fields.html5 import DateTimeLocalField
 from wtforms.validators import InputRequired, Length, EqualTo, ValidationError, NumberRange
 
 from app.models.user import User, check_admin
-from app.models.product import Product
+from app.models.product import Product, PRODUCT_STATUS
+from app.models.order import Order, ORDER_STATUS
 import time
 
-PRODUCT_STATUS = {"FROZEN" : 2}
 ACCOUNT_STATUS = {"NO_ACTIVE": 0, "ACTIVE" : 1, "LOCK": 3, "ALL": 4}
 class AccountView(MethodView):
 	def get(self):
@@ -42,6 +42,33 @@ class AccountView(MethodView):
 			user = User.objects(id=form.user_id.data, status__in=[ACCOUNT_STATUS["ACTIVE"], ACCOUNT_STATUS["LOCK"]]).first()
 			if user.status == ACCOUNT_STATUS["ACTIVE"]:
 				user.status = ACCOUNT_STATUS["LOCK"]
+				orders = Order.objects(product_id__in=Product.objects(seller_id=form.user_id.data),
+					 status__in=[int(ORDER_STATUS["TRANSFERING"]), int(ORDER_STATUS["RECEIPTING"])])
+				for order in orders:
+					if order.product_id.bidding == False:
+						if order.coupon_id == None:
+							order.buyer_id.hicoin += order.product_id.price
+						else:
+							order.buyer_id.hicoin += max(0, order.product_id.price - order.coupon_id.discount)
+					else:
+						order.buyer_id.hicoin += order.product_id.bid.now_price
+					order.product_id.status = PRODUCT_STATUS["REMOVE"]
+					order.status = int(ORDER_STATUS["CANCEL"])
+					order.product_id.save()
+					order.buyer_id.save()
+					order.save()
+				normal_products = Product.objects(seller_id=form.user_id.data, bidding=False, status__ne=PRODUCT_STATUS["FROZEN"])
+				for product in normal_products:
+					product.status = PRODUCT_STATUS["REMOVE"]
+					product.save()
+				bidding_product = Product.objects(seller_id=form.user_id.data, bidding=True, bid__buyer_id__ne=None)
+				for product in bidding_product:
+					product.status = PRODUCT_STATUS["REMOVE"]
+					if product.bid.buyer_id == None:
+						pass
+					else:
+						product.bid.buyer_id.hicoin += product.bid.now_price
+					product.save()
 				user.save()
 				return "解凍"
 			elif user.status == ACCOUNT_STATUS["LOCK"]:
