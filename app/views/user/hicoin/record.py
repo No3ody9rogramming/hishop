@@ -24,7 +24,7 @@ class RecordView(MethodView):
 				if order.coupon_id == None:
 					record = Record("購買" + order.product_id.name, -1 * int(order.product_id.price * order.product_id.discount), order.create_time)
 				else:
-					record = Record("購買" + order.product_id.name, -1 * int(order.product_id.price * order.product_id.discount - order.coupon_id.discount), order.create_time)
+					record = Record("購買" + order.product_id.name, -1 * max(0, int(order.product_id.price * order.product_id.discount - order.coupon_id.discount)), order.create_time)
 			else:
 				record = Record("購買" + order.product_id.name, -1 * order.product_id.bid.now_price, order.create_time)
 			records.append(record)

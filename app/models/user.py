@@ -1,4 +1,4 @@
-from flask import abort
+from flask import abort, redirect, url_for
 from flask_login import UserMixin, current_user, logout_user
 import datetime
 
@@ -37,7 +37,7 @@ def check_activate(func):
     def wrap(*args, **kwargs):
         if current_user.status not in [1, 2]:
             logout_user()
-            return abort(403)
+            return redirect(url_for('login'))
         else:
             return func(*args, **kwargs)
     return wrap
