@@ -65,6 +65,12 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="row">
+
+                                    {% if popular_products | length == 0 %}
+                                </div>
+                            </div>
+                                    {% endif %}
+
                                     {% for product in popular_products %}
 
                                         <div class="col-md-3 col-6">
@@ -116,6 +122,12 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="row">
+
+                                    {% if normal_products | length == 0 %}
+                                </div>
+                            </div>
+                                    {% endif %}
+
                                     {% for product in normal_products %}
 
                                     <a href="{{ url_for('show_normal', product_id=product.id|string) }}">
@@ -166,6 +178,12 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <div class="row">
+
+                                    {% if bidding_products | length == 0 %}
+                                </div>
+                            </div>
+                                    {% endif %}
+
                                     {% for product in bidding_products %}
 
                                     <a href="{{ url_for('show_bidding', product_id=product.id|string) }}">
