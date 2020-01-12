@@ -36,6 +36,7 @@ https://csesa.csie.ntou.edu.tw/hishop/ <br>
 提升流程品質或系統品質的措施: <br>
   1.RWD <br>
   2.另外的一條thread來檢查拍賣的問題是否到期 <br>
+  3.透過nginx 回傳static檔案，減少flask因為只能用單一進程而達到CPU瓶頸<br>
   
 Demo問題回復: <br>
   1.凍結帳戶後，該用戶之商品會強制下架，訂單會強制取消，下架後若是競標或是訂單會退還已經扣款的錢 <br>
