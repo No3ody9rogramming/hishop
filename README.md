@@ -12,7 +12,7 @@ https://csesa.csie.ntou.edu.tw/hishop/ <br>
   7.能在google 搜尋到本網站 <br>
 
 分工說明: <br>
-  Trello : https://trello.com/b/iYkbrBNJ/%E8%BB%9F%E9%AB%94%E5%B7%A5%E7%A8%8B-hishop <br>
+  Trello : https://trello.com/b/iYkbrBNJ <br>
   github : https://github.com/HoKuanYu/hishop <br>
   
   分組- <br>
