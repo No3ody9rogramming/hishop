@@ -13,7 +13,7 @@ import random
 def check_time():
 	app.config['DISCOUNT_COUNTER'] -= 1
 	if app.config['DISCOUNT_COUNTER'] <= 0:
-		app.config['DISCOUNT_COUNTER'] = 300
+		app.config['DISCOUNT_COUNTER'] = 3600
 		products = Product.objects(bidding=False, status=PRODUCT_STATUS["SELLING"])
 		for product in products:
 			product.discount = 1
