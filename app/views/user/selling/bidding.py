@@ -13,7 +13,7 @@ from app import bcrypt
 from app.models.product import Product, Bid
 from app.models.category import Category
 
-import os
+import os, datetime
 
 class BiddingView(MethodView):
     def get(self):
@@ -28,7 +28,8 @@ class BiddingView(MethodView):
 
         categories = Category.objects()
         if form.validate_on_submit():
-            
+            print("in")
+            print(form.low_price)
             bid = Bid(per_price=form.per_price.data,
                       low_price=form.low_price.data,
                       now_price=form.low_price.data,
@@ -53,12 +54,20 @@ class BiddingView(MethodView):
         
         return render_template('user/selling/bidding.html', form=form, categories=categories)
 
+def validate_low_price(form, low_price):
+    if low_price.data > form.price.data:
+        raise ValidationError("起標價不得高於直購價")
+
+def validate_due_time(form, due_time):
+    if due_time.data < datetime.datetime.now():
+        raise ValidationError("結標時間不得小於現在")
+
 class BiddingForm(FlaskForm):
     image = FileField("商品照片", validators=[FileRequired(), FileAllowed(['jpeg', 'jpg', 'png', 'gif'], '只能上傳圖片(.jpg, .jpeg, .png, .gif)')])
     name = StringField("商品名稱", validators=[InputRequired("商品名稱不得為空"), Length(max=30, message="商品名稱不得超過30個字")])
     price = IntegerField("商品價格", validators=[InputRequired("商品價格不得為空"), NumberRange(min=1, max=100000, message="商品價格介於1~100000")])
-    low_price = IntegerField("起標價", validators=[InputRequired("起標價不得為空"), NumberRange(min=1, max=10000, message="起標價介於1~10000")])
+    low_price = IntegerField("起標價", validators=[InputRequired("起標價不得為空"), validate_low_price, NumberRange(min=1, max=10000, message="起標價介於1~10000")])
     per_price = IntegerField("每刀價格", validators=[InputRequired("每刀價格不得為空"), NumberRange(min=1, max=1000, message="每刀價格介於1~1000")])
-    due_time = DateTimeLocalField("結標時間", format="%Y-%m-%dT%H:%M", validators=[InputRequired("結標時間不得為空")])
+    due_time = DateTimeLocalField("結標時間", format="%Y-%m-%dT%H:%M", validators=[InputRequired("結標時間不得為空"), validate_due_time])
     detail = CKEditorField("商品詳情")
     submit = SubmitField('上架')
