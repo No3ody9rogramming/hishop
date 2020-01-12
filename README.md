@@ -2,6 +2,9 @@
 
 https://csesa.csie.ntou.edu.tw/hishop/ <br>
 
+影片連結:
+  https://drive.google.com/drive/folders/1IQG34FBDTZPx2NGyOEpvL-mg6qTL6PRs?usp=sharing
+
 網站特色: <br>
   1.為一專門為了海大師生設計的拍賣網站(海大信箱驗證) <br>
   2.功能完整 <br>
