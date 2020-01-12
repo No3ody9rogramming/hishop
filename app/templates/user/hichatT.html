@@ -113,7 +113,7 @@
             socket.on('messageTo{{ current_user.id|string }}', function(data){
                 prependUser(data.sender_id.$oid, data.message, data.sender_id.name);
                 if(data.sender_id.$oid != "{{ current_user.id | string }}"){
-                    $("#" + data.sender_id.$oid + " .msgDot").removeClass("d-none");
+                    $("#" + data.sender_id.$oid + " .msgDot").removeClass("d-none"); // show no read sign
                 }
             });
 
@@ -197,6 +197,8 @@
                 if(chatObjectLI.length == 0) {
                     let newUser = '<li id="' + allUserList[userPos].id + '" username="' + allUserList[userPos].name + '" class="list-group-item pointer hover-bg" onclick="changeObject(this)"><div>' + allUserList[userPos].name + '</div></li>'
                     $("#usersList").prepend(newUser);
+                    let unreadSign = '<span class="msgDot d-none"></span>';
+                    $("#" + allUserList[userPos].id).append(unreadSign);
                     return true;
                 }
             }
