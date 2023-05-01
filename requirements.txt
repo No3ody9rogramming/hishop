@@ -1,4 +1,4 @@
-Flask==1.1.1
+Flask==2.3.2
 Flask-Bootstrap4==4.0.2
 Flask-Bcrypt==0.7.1
 Flask-Login==0.4.1
